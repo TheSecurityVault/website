@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Reverse Tabnabbing</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Reverse Tabnabbing" />
+<meta property="og:description"
+  content="Reverse Tabnabbing or also known as Unsafe Target Blank is one of the most underrated vulnerability, and this is the one I like the most. It&rsquo;s really easy to find an exploitable web application and it&rsquo;s also quite easy to mitigate.
+So what is Reverse Tabnabbing? When you create a link that opens in a new tab (with target=&#39;_blank&#39;) the browsers injects two variables into the destination page, window.opener and window." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/reverse-tabnabbing/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/reverse-tabnabbing/images/banner.jpeg" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2019-06-26T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T11:06:28+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/reverse-tabnabbing/images/banner.jpeg" /><meta name="twitter:title" content="Reverse Tabnabbing" />
+<meta name="twitter:description"
+  content="Reverse Tabnabbing or also known as Unsafe Target Blank is one of the most underrated vulnerability, and this is the one I like the most. It&rsquo;s really easy to find an exploitable web application and it&rsquo;s also quite easy to mitigate.
+So what is Reverse Tabnabbing? When you create a link that opens in a new tab (with target=&#39;_blank&#39;) the browsers injects two variables into the destination page, window.opener and window." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/reverse-tabnabbing/images/banner.jpeg" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Reverse Tabnabbing</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jun 26, 2019</li>
+              <li class="text-secondary">3 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Reverse Tabnabbing or also known as Unsafe Target Blank is one of the most underrated vulnerability, and this is the one I like the most. It&rsquo;s really easy to find an exploitable web application and it&rsquo;s also quite easy to mitigate.</p>
+<h2 id="so-what-is-reverse-tabnabbing">So what is Reverse Tabnabbing?</h2>
+<p>When you create a link that opens in a new tab (with target='_blank') the browsers injects two variables into the destination page, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/opener">window.opener</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/referrer">window.referrer</a>.</p>
+<p>window.referrer just stores the website that opened the page.</p>
+<p>window.opener has a reference to the page that opened the new one.<br>
+Nowadays browsers prevent the access to most of the properties of this variable, since it posed many security risks, but there are still some properties that you can access/change, being the most important window.opener.location.</p>
+<p>Note that you cannot read window.opener.location, but you can change its value. If you need to get the url from where the user came from you can use document.referrer</p>
+<p>Lets work with the following code which contains a unsafe target blank implementation:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#8f5902;font-style:italic">&lt;!DOCTYPE HTML&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold">&gt;</span>TheSecurityVault - Reverse Tabnabbing<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">h1</span><span style="color:#000;font-weight:bold">&gt;</span>TheSecurityVault<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">h1</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">a</span> <span style="color:#c4a000">href</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;reverse_tabnabbing_malicious.html&#34;</span> <span style="color:#c4a000">target</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;_blank&#34;</span><span style="color:#000;font-weight:bold">&gt;</span>Click me<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">a</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold">&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>You can find the code and try it <a href="/reverse_tabnabbing.html">here</a></p>
+<p>Now if a victim opens this link, the &lsquo;malicious&rsquo; page can see where the user came from and even redirect him</p>
+<p>This is the malicious code:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#8f5902;font-style:italic">&lt;!DOCTYPE HTML&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold">&gt;</span>Hello World! Site Title<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">h1</span><span style="color:#000;font-weight:bold">&gt;</span>TheSecurityVault!<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">h1</span><span style="color:#000;font-weight:bold">&gt;</span>
+
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">script</span><span style="color:#000;font-weight:bold">&gt;</span>
+      <span style="color:#000">console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">log</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87">document</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">referrer</span><span style="color:#000;font-weight:bold">);</span> <span style="color:#8f5902;font-style:italic">//this doesn&#39;t work without a webserver
+</span><span style="color:#8f5902;font-style:italic"></span>      <span style="color:#204a87">window</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">opener</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">location</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;https://google.com&#34;</span><span style="color:#000;font-weight:bold">;</span>
+    <span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">script</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold">&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>If you test the above example and open the link, you will see that your previous tab gets redirected to google.</p>
+<h2 id="what-can-an-attacker-do">What can an attacker do?</h2>
+<p>A malicious page can first, get the page where you came from, lets say facebook. Then it redirects your other tab to a facebook phishing page. Just exactly like facebook, but you are not logged in. Maybe you could find it weird, and try to understand what is the problem, why you were logged out, but most of the users would just ignore it, as they <a href="https://nakedsecurity.sophos.com/2015/02/03/google-redesigns-security-warnings-after-70-of-chrome-users-ignore-them/">ignore invalid SSL warnings</a>, and try to log in. At this point an attackers gets the credentials you typed in, and game over.</p>
+<p>Another thing that can be done, is for websites to monitor from which page you came from, and build a profile for you, the sites you visit, and consequently your interests. This is awesome for targeted advertising for example.</p>
+<h2 id="how-to-protect-it">How to Protect it</h2>
+<p>The protection is quite easy. You just need to add to your link the rel attribute like so:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"><span style="color:#8f5902;font-style:italic">&lt;!DOCTYPE HTML&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold">&gt;</span>TheSecurityVault - Reverse Tabnabbing<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">title</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">head</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">h1</span><span style="color:#000;font-weight:bold">&gt;</span>TheSecurityVault<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">h1</span><span style="color:#000;font-weight:bold">&gt;</span>
+    <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">a</span> <span style="color:#c4a000">href</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;reverse_tabnabbing_malicious.html&#34;</span> <span style="color:#c4a000">target</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;_blank&#34;</span> <span style="color:#c4a000">rel</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;noopener noreferrer&#34;</span><span style="color:#000;font-weight:bold">&gt;</span>Click me<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">a</span><span style="color:#000;font-weight:bold">&gt;</span>
+  <span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">body</span><span style="color:#000;font-weight:bold">&gt;</span>
+<span style="color:#000;font-weight:bold">&lt;/</span><span style="color:#204a87;font-weight:bold">html</span><span style="color:#000;font-weight:bold">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This will ensure the new page will not have the window.opener nor window.referrer properties.</p>
+<p>You can test the prevention <a href="/reverse_tabnabbing_safe.html">here</a></p>
+<h2 id="for-javascript">For javascript</h2>
+<p>In javascript this is a little bit more tricky. I couldn&rsquo;t clear the referrer so I did some googling&hellip; Most of the sites ignore the referrer and the few I found mentioning it, their solutions didn&rsquo;t work either :(</p>
+<p>So what I recommend, if you really need to use javascript, generate a new link and add it to the DOM, you can do this by injecting a hidden link with the rel attribute, trigger a click, and finally remove it from the page like so:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#204a87;font-weight:bold">var</span> <span style="color:#000">a</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87">document</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">createElement</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;a&#34;</span><span style="color:#000;font-weight:bold">);</span>    
+<span style="color:#000">a</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">style</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">display</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;none&#34;</span><span style="color:#000;font-weight:bold">;</span>
+<span style="color:#000">a</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">setAttribute</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;href&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#4e9a06">&#34;reverse_tabnabbing_malicious.html&#34;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">a</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">setAttribute</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;rel&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#4e9a06">&#34;noopener noreferrer&#34;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">a</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">setAttribute</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;target&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#4e9a06">&#34;_blank&#34;</span><span style="color:#000;font-weight:bold">);</span>
+
+<span style="color:#204a87">document</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">body</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">appendChild</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">a</span><span style="color:#000;font-weight:bold">);</span>
+
+<span style="color:#000">a</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">click</span><span style="color:#000;font-weight:bold">();</span>
+
+<span style="color:#000">a</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">remove</span><span style="color:#000;font-weight:bold">()</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/insecure-deserialization-in-java/">&lArr; Previous Post<br><b>Insecure Deserialization in Java</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/hardcoded-passwords/"> Next Post &rArr;<br><b>Hardcoded Passwords</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

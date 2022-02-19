@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Breaking C# SecureString</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Breaking C# SecureString" />
+<meta property="og:description"
+  content="As discussed previously in Heap Inspection post keeping passwords and other sensitive data in memory may be insecure as they can be inspected or dumped.
+Although it is almost impossible to completely mitigate Heap Inspection there are several techniques to reduce the time frame sensitive data keeps in memory, lowering the risk of exposure.
+Lets review some of them:
+ Don&rsquo;t store sensitive data as strings, Use char arrays, and override their values when not needed anymore Keep the data as less time as possible in memory keep data encrypted if needed Use as few instances of the data as possible  But besides these tricks there are also some constraints that will prevent you from doing it right:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/breaking_c_sharp_securestring/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/breaking_c_sharp_securestring//../images/banner.jpeg" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2020-01-18T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:11+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/breaking_c_sharp_securestring//../images/banner.jpeg" /><meta name="twitter:title" content="Breaking C# SecureString" />
+<meta name="twitter:description"
+  content="As discussed previously in Heap Inspection post keeping passwords and other sensitive data in memory may be insecure as they can be inspected or dumped.
+Although it is almost impossible to completely mitigate Heap Inspection there are several techniques to reduce the time frame sensitive data keeps in memory, lowering the risk of exposure.
+Lets review some of them:
+ Don&rsquo;t store sensitive data as strings, Use char arrays, and override their values when not needed anymore Keep the data as less time as possible in memory keep data encrypted if needed Use as few instances of the data as possible  But besides these tricks there are also some constraints that will prevent you from doing it right:" />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/breaking_c_sharp_securestring//../images/banner.jpeg" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Breaking C# SecureString</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jan 18, 2020</li>
+              <li class="text-secondary">8 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>As discussed previously in <a href="https://thesecurityvault.com/heap-inspection/">Heap Inspection post</a> keeping passwords and other sensitive data in memory may be insecure as they can be inspected or dumped.</p>
+<p>Although it is almost impossible to completely mitigate <a href="https://thesecurityvault.com/heap-inspection/">Heap Inspection</a> there are several techniques to reduce the time frame sensitive data keeps in memory, lowering the risk of exposure.</p>
+<p>Lets review some of them:</p>
+<ul>
+<li>Don&rsquo;t store sensitive data as strings,</li>
+<li>Use char arrays, and override their values when not needed anymore</li>
+<li>Keep the data as less time as possible in memory</li>
+<li>keep data encrypted if needed</li>
+<li>Use as few instances of the data as possible</li>
+</ul>
+<p>But besides these tricks there are also some constraints that will prevent you from doing it right:</p>
+<ul>
+<li>Most of libraries/frameworks are not prepared for this topic so they (only) use string parameters</li>
+<li>Webservers usually parse request data as strings so if you receive a password from an http request you are already done.</li>
+<li>Working with char arrays its much more complex and introduces a big development overhead</li>
+</ul>
+<p>At the end you will probably end up having a string somewhere.</p>
+<p>To try to help with this Microsoft introduced in .NET a feature called SecureString.</p>
+<h2 id="what-is-securestring">What is SecureString?</h2>
+<p>SecureString is a class that provides ways to keep sensitive information encrypted in memory in an easy way.</p>
+<p>Let&rsquo;s see how to use it:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#000">SecureString</span> <span style="color:#000">ss</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">SecureString</span><span style="color:#000;font-weight:bold">();</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;T&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;h&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;e&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;S&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;e&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;c&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;u&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;r&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;i&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;t&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;y&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;V&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;a&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;u&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;l&#39;</span><span style="color:#000;font-weight:bold">);</span>
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;t&#39;</span><span style="color:#000;font-weight:bold">);</span>
+
+<span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">MakeReadOnly</span><span style="color:#000;font-weight:bold">();</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="how-does-it-work">How does it work</h2>
+<p>This is the part that got me curious. If data is encrypted it needs to use a key to encrypt it, so where is the key saved? Can we get it? Can we find a way to decrypt the data?</p>
+<p>Here I started digging into Microsoft documentation about SecureString, looking at the source code, and so on, and I found some nice information.</p>
+<p>These are the main features of SecureString that are important to highlight:</p>
+<p><strong>Properly disposes data</strong><br>
+When data is not needed anymore SecureString clears the memory used, by zeroing it.</p>
+<p><strong>Keeps data in unmanaged memory</strong><br>
+This means that data in not kept in memory space managed by dotnet, which is good since GarbageCollector doesn&rsquo;t get to it.</p>
+<p><strong>SecureString only works in Windows</strong><br>
+It uses windows Crypto API so the encryption functionalities cannot be ported to other Operating Systems.</p>
+<p>Encryption is done by calling <a href="https://docs.microsoft.com/en-us/windows/win32/api/ntsecapi/nf-ntsecapi-rtlencryptmemory">RtlEncryptMemory</a> (in the classe&rsquo;s <a href="https://github.com/microsoft/referencesource/blob/3b1eaf5203992df69de44c783a3eda37d3d4cd10/mscorlib/system/security/securestring.cs">source code</a> you find it in a call to Win32Native.SystemFunction041) from Advapi32.h</p>
+<p>This is actually nice because you don&rsquo;t need to supply a password to it. Windows handles that for you. Otherwise you would need to worry with the encryption password in memory&hellip;</p>
+<p>So the question now is what/who can decrypt it?</p>
+<p>One of the parameters of the function call to encrypt the data specifies which processes can decrypt the encrypted data. This parameter has 3 options that mean:</p>
+<ul>
+<li>Any process can decrypt it</li>
+<li>Any process from the same user can decrypt it</li>
+<li>Only the same process can decrypt it</li>
+</ul>
+<p>SecureString sets this parameter so that only the current process can decrypt it. This is nice.</p>
+<h2 id="how-to-break-it">How to &ldquo;break&rdquo; it</h2>
+<p>Now that we have a good knowledge of how it works we can try to &ldquo;break&rdquo; it.</p>
+<p>Since the encrypted data can only be decrypted by the process that encrypted it (at the end we will see this is not 100% true) we need to trick the application to decrypt the SecureString for us.</p>
+<p>Lets see a simple application using a SecureString object, that we want to revert:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28"><a style="outline: none; text-decoration:none; color:inherit" href="#28">28</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29"><a style="outline: none; text-decoration:none; color:inherit" href="#29">29</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30"><a style="outline: none; text-decoration:none; color:inherit" href="#30">30</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="31"><a style="outline: none; text-decoration:none; color:inherit" href="#31">31</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="32"><a style="outline: none; text-decoration:none; color:inherit" href="#32">32</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="33"><a style="outline: none; text-decoration:none; color:inherit" href="#33">33</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="34"><a style="outline: none; text-decoration:none; color:inherit" href="#34">34</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="35"><a style="outline: none; text-decoration:none; color:inherit" href="#35">35</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#204a87;font-weight:bold">using</span> <span style="color:#000">System</span><span style="color:#000;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">using</span> <span style="color:#000">System.Security</span><span style="color:#000;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">namespace</span> <span style="color:#000">BreakingSecureString</span>
+<span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Program</span>
+    <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">string</span><span style="color:#a40000">\</span><span style="color:#000;font-weight:bold">[</span><span style="color:#a40000">\</span><span style="color:#000;font-weight:bold">]</span> <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span>
+        <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000">SecureString</span> <span style="color:#000">ss</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">SecureString</span><span style="color:#000;font-weight:bold">();</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;T&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;h&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;e&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;S&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;e&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;c&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;u&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;r&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;i&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;t&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;y&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;V&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;a&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;u&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;l&#39;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">AppendChar</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#39;t&#39;</span><span style="color:#000;font-weight:bold">);</span>
+
+            <span style="color:#000">ss</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">MakeReadOnly</span><span style="color:#000;font-weight:bold">();</span>
+
+            <span style="color:#000">Console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">WriteLine</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;Generated SecureString object&#34;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">Console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">WriteLine</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;Press any key to exit...&#34;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">Console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">ReadKey</span><span style="color:#000;font-weight:bold">();</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>As you can see, this is a really simple application that doesn&rsquo;t even have a method to get the cleartext password. So how can we do it?</p>
+<p>Well, one way is to inject code into the target application. We can do this with <a href="https://www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process">multiple code injection</a> techniques. For this case I chose DLL Injection.</p>
+<p><a href="images/dllinjection__0.gif"><img src="images/dllinjection__0.gif" alt="Dll Injection explanation."></a></p>
+<p>(Image taken from <a href="https://www.endgame.com/blog/technical-blog/ten-process-injection-techniques-technical-survey-common-and-trending-process">here</a>)</p>
+<p>Going into the details of how DLL Injection works is out of the scope of this post, but the source of the project that accomplishes this is at the end of the article, feel free to dig into it.</p>
+<p>So the idea is to inject a DLL that has the necessary code to decrypt the SecureString instances. Sounds good but how can we get the reference for the variables, since we just injected new code?</p>
+<p>Well, first thing that comes into mind is by using <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/reflection">Reflection</a>. Unfortunately you can&rsquo;t use it to get instances of a class.</p>
+<p>So I came up with the idea of using the same techniques as a debugger. And Microsoft has a library called &ldquo;<a href="https://github.com/microsoft/clrmd">CLR MD</a>&rdquo; for exactly that.</p>
+<p>We can use this library to get the pointer address of the SecureStrings of the target application.</p>
+<p>Then when invoking the DLL injected method we can send these pointers as parameters, get the object there and ask to decrypt the content.</p>
+<p><a href="images/securestrings2.gif"><img src="images/securestrings2.gif" alt="Decrypting the SecureString"></a></p>
+<p>.</p>
+<h3 id="explaining-the-code">Explaining the code</h3>
+<p>Since there&rsquo;re a few files of code to make this work, I will not put the code in the post content , but you can find a reference for the source code at the end of the article.</p>
+<p>There are 3 projects in the Solution:</p>
+<ul>
+<li><strong>VulnerableApp</strong> - This is the target app, that we want to trick into decrypting the SecureStrings for us</li>
+<li><strong>MaliciousApp</strong> - Name also speaks for itself. It injects the malicious DLL, uses the CLR MD to get the SecureString pointers, and invokes a method from the malicious DLL sending the pointers as parameters</li>
+<li><strong>DLLToInject</strong> - The malicious DLL that will be injected into the VulnerableApp</li>
+</ul>
+<p><strong>Important notes about the code:</strong></p>
+<p>Your antivirus may catch this project as malicious, since DLL Injection is commonly used for bad purposes. Or it may only block it from running after a few times. (If you&rsquo;re interested in how AV&rsquo;s work, check <a href="https://thesecurityvault.com/how-antivirus-works-and-bypass-techniques-part-1/">my post post here</a>).</p>
+<p>For you to inject into another process there are two important things to have in mind:</p>
+<ul>
+<li>Target process needs to be in the same architecture as malicious app and DLL (x64 or x86).</li>
+<li>You need to have full control of the process, if you don&rsquo;t have enough permissions it will not work. Administrator account should work for most of the cases.</li>
+</ul>
+<h3 id="is-securestring-recommended">Is SecureString recommended?</h3>
+<p>This is the question that really matters. If it&rsquo;s that easy to bypass its security should SecureString be used at all?</p>
+<p>Microsoft has the following statement in their docs:</p>
+<blockquote>
+<p>We don&rsquo;t recommend that you use the <code>SecureString</code> class for new development. For more information, see <a href="https://github.com/dotnet/platform-compat/blob/master/docs/DE0001.md">SecureString shouldn&rsquo;t be used</a> on GitHub.</p>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/api/system.security.securestring?view=netframework-4.8">Microsoft Docs</a></p>
+</blockquote>
+<p>There are a few reasons for this. The API&rsquo;s that SecureString uses underneath are Windows specific, which mean that now with .NET Core if you are using SecureString in another OS they won&rsquo;t be encrypted.</p>
+<p>And as we saw, the name can be misleading. SecureString is to be used as an extra security mecanism, where you don&rsquo;t store sensitive data in Strings, making it much easier to clean from memory, and thus, shortening the time for exploitation.</p>
+<p>The encryption is only a precaution so that if, for example, an application crashes and windows generates a memory dump, the content of password and other sensitive data is not written in plaintext to the logs.</p>
+<p>I believe that this note from Microsoft is due to the limitations that SecureString has in .NET Core. I see no problem using it as an <strong>extra</strong> security layer, as long as is not used to provide the needed security.</p>
+<h3 id="other-attack-vectors">Other attack vectors</h3>
+<p>There are already a few attack vectors for Windows Crypto API. For example NSA just recently disclosed <a href="https://www.schneier.com/blog/archives/2020/01/critical_window.html">a 0-Day</a> related with certificates.</p>
+<p>I just wanted to create a different attack vector, specific for SecureStrings, so I came out with the technique described in the article..</p>
+<p><a href="https://github.com/gentilkiwi/mimikatz">Mimikatz</a>, which is an awesome tool, can <a href="https://twitter.com/gentilkiwi/status/1152687433525407745?lang=ar">decrypt Powershell PSCredential</a> (which contains a SecureString) by getting the original password used to encrypt the data. Lets see a quick example on how to do it.</p>
+<p>First we need the Powershell SecureString object.</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#204a87">Get-Credential</span> <span style="color:#000;font-weight:bold">|</span><span style="color:#204a87">Export-CliXML</span> <span style="color:#000">-path</span> <span style="color:#4e9a06">&#39;securestring.xml&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now, after downloading mimikatz from <a href="https://github.com/gentilkiwi/mimikatz/releases">here</a> and running, type the following command:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28"><a style="outline: none; text-decoration:none; color:inherit" href="#28">28</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29"><a style="outline: none; text-decoration:none; color:inherit" href="#29">29</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30"><a style="outline: none; text-decoration:none; color:inherit" href="#30">30</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-powershell" data-lang="powershell"><span style="color:#000">dpapi</span><span style="color:#000;font-weight:bold">::</span><span style="color:#204a87">ps </span><span style="color:#000;font-weight:bold">/</span><span style="color:#204a87;font-weight:bold">in</span><span style="color:#a40000">:</span><span style="color:#000">PATH</span><span style="color:#000;font-weight:bold">\</span><span style="color:#000">_TO</span><span style="color:#000;font-weight:bold">\</span><span style="color:#000">_YOUR</span><span style="color:#000;font-weight:bold">\\</span><span style="color:#000">securestring</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">xml</span> <span style="color:#000;font-weight:bold">/</span><span style="color:#000">unprotect</span>
+
+<span style="color:#000">And</span> <span style="color:#000">here</span> <span style="color:#000">you</span> <span style="color:#000">have</span> <span style="color:#000">the</span> <span style="color:#000">output</span><span style="color:#a40000">:</span>
+
+<span style="color:#000">UserName</span><span style="color:#a40000">:</span> <span style="color:#000">TheSecurityVault</span>
+<span style="color:#000">Password</span><span style="color:#a40000">:</span> <span style="color:#000;font-weight:bold">\*\*</span><span style="color:#000">BLOB</span><span style="color:#000;font-weight:bold">\*\*</span>
+  <span style="color:#000">dwVersion</span>          <span style="color:#a40000">:</span> <span style="color:#000">00000001</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">1</span>
+  <span style="color:#000">guidProvider</span>       <span style="color:#a40000">:</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">df9d8cd0</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">1501</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">11d1</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">8c7a</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">00c04fc297eb</span><span style="color:#000;font-weight:bold">}</span>
+  <span style="color:#000">dwMasterKeyVersion</span> <span style="color:#a40000">:</span> <span style="color:#000">00000001</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">1</span>
+  <span style="color:#000">guidMasterKey</span>      <span style="color:#a40000">:</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">49bf61cf</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">7898</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">45a4</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">92a0</span><span style="color:#000;font-weight:bold">-</span><span style="color:#000">012cb70d1fe2</span><span style="color:#000;font-weight:bold">}</span>
+  <span style="color:#000">dwFlags</span>            <span style="color:#a40000">:</span> <span style="color:#000">00000000</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">0</span> <span style="color:#000;font-weight:bold">()</span>
+  <span style="color:#000">dwDescriptionLen</span>   <span style="color:#a40000">:</span> <span style="color:#000">00000002</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">2</span>
+  <span style="color:#000">szDescription</span>      <span style="color:#a40000">:</span>
+  <span style="color:#000">algCrypt</span>           <span style="color:#a40000">:</span> <span style="color:#000">00006603</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">26115</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">CALG</span><span style="color:#000;font-weight:bold">\</span><span style="color:#000">_3DES</span><span style="color:#000;font-weight:bold">)</span>
+  <span style="color:#000">dwAlgCryptLen</span>      <span style="color:#a40000">:</span> <span style="color:#000">000000c0</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">192</span>
+  <span style="color:#000">dwSaltLen</span>          <span style="color:#a40000">:</span> <span style="color:#000">00000010</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">16</span>
+  <span style="color:#000">pbSalt</span>             <span style="color:#a40000">:</span> <span style="color:#000">b70f39c018e17acda8c2a15fd0ef3c56</span>
+  <span style="color:#000">dwHmacKeyLen</span>       <span style="color:#a40000">:</span> <span style="color:#000">00000000</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">0</span>
+  <span style="color:#000">pbHmackKey</span>         <span style="color:#a40000">:</span>
+  <span style="color:#000">algHash</span>            <span style="color:#a40000">:</span> <span style="color:#000">00008004</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">32772</span> <span style="color:#000;font-weight:bold">(</span><span style="color:#000">CALG</span><span style="color:#000;font-weight:bold">\</span><span style="color:#000">_SHA1</span><span style="color:#000;font-weight:bold">)</span>
+  <span style="color:#000">dwAlgHashLen</span>       <span style="color:#a40000">:</span> <span style="color:#000">000000a0</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">160</span>
+  <span style="color:#000">dwHmac2KeyLen</span>      <span style="color:#a40000">:</span> <span style="color:#000">00000010</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">16</span>
+  <span style="color:#000">pbHmack2Key</span>        <span style="color:#a40000">:</span> <span style="color:#000">93d06c092b3bb6e3c71506f53511a28f</span>
+  <span style="color:#000">dwDataLen</span>          <span style="color:#a40000">:</span> <span style="color:#000">00000028</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">40</span>
+  <span style="color:#000">pbData</span>             <span style="color:#a40000">:</span> <span style="color:#000">e7039975bd1af687ed8e266172c1f99480e443e4921dc20e45be396a6e608c05aafcf2ee210875f5</span>
+  <span style="color:#000">dwSignLen</span>          <span style="color:#a40000">:</span> <span style="color:#000">00000014</span> <span style="color:#000;font-weight:bold">-</span> <span style="color:#000">20</span>
+  <span style="color:#000">pbSign</span>             <span style="color:#a40000">:</span> <span style="color:#000">5e6ab77d1c5ffa22946b122998264dd4796ea6a9</span>
+
+ <span style="color:#000;font-weight:bold">\*</span> <span style="color:#000">using</span> <span style="color:#000">CryptUnprotectData</span> <span style="color:#000">API</span>
+<span style="color:#000;font-weight:bold">&gt;&gt;</span> <span style="color:#000">cleartext</span><span style="color:#a40000">:</span> <span style="color:#000">InsecurePassword</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Since it&rsquo;s not directly using the same API&rsquo;s from Windows as SecureString it is not limited to the same process restriction.</p>
+<p>As mimikatz did this for PSCredential, the same techniques can be used for C# SecureStrings (although not supported)</p>
+<p>The source code for this project can be found on <a href="https://github.com/TheSecurityVault/BreakingSecureString">github</a>.</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/secure-password-hashing/">&lArr; Previous Post<br><b>Secure Password Hashing</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/security-of-the-npm-packages/"> Next Post &rArr;<br><b>Security of the NPM Packages</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

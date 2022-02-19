@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>We are making authentication systems wrong</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="We are making authentication systems wrong" />
+<meta property="og:description"
+  content="For a long time I&rsquo;ve been struggling with the way authentication systems work, as they don&rsquo;t protect your password as they should. If you search for login best practices, like in OWASP, they&rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.
+The Issue Although all of this is true and should be done, all of this has a huge fail: Users need to trust their password to the server." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/images/banner.jpeg" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2021-11-11T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T11:09:42+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/images/banner.jpeg" /><meta name="twitter:title" content="We are making authentication systems wrong" />
+<meta name="twitter:description"
+  content="For a long time I&rsquo;ve been struggling with the way authentication systems work, as they don&rsquo;t protect your password as they should. If you search for login best practices, like in OWASP, they&rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.
+The Issue Although all of this is true and should be done, all of this has a huge fail: Users need to trust their password to the server." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/images/banner.jpeg" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>We are making authentication systems wrong</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Nov 11, 2021</li>
+              <li class="text-secondary">5 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>For a long time I&rsquo;ve been struggling with the way authentication systems work, as they don&rsquo;t protect your password as they should. If you search for login best practices, like in <a href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html">OWASP</a>, they&rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.</p>
+<h2 id="the-issue">The Issue</h2>
+<p>Although all of this is true and should be done, all of this has a huge fail: <strong>Users need to trust their password to the server</strong>. In this common flow, the user needs to send the password to the server, and trust that the server will take good care of it. But saving it in the database its not all. In 2019 <a href="https://www.theverge.com/2019/3/21/18275837/facebook-plain-text-password-storage-hundreds-millions-users">facebook found millions of passwords being written in plaintext to the logs</a> for example. But even besides that, the server hashes and stores a protected version of the password in the DB, but what else can the server do with the unprotected version of the password?</p>
+<p>Users tend to <a href="https://services.google.com/fh/files/blogs/google_security_infographic.pdf">reuse passwords</a>, and yes this is a (really) bad practice, but most of users still do it, either because its easy, or just because they have no idea how bad that can be. What if the server has bad intentions and uses your plaintext password and your supplied username/email to try to get access to other services that use the same credentials? But most important, passwords are private so why should we need to trust them to the servers we are authenticating to?</p>
+<h2 id="sso-to-the-rescue">SSO to the rescue?</h2>
+<p>Using single sign-on systems can somehow reduce this risk, as you only need to trust your password to the SSO system, and all platforms that implement the SSO will never get your password. This works somehow but in a lot of the cases you still need to trust your password to the SSO server</p>
+<h2 id="password-less-approaches">Password-less Approaches</h2>
+<p>There are password-less alternatives but they usually require you to have some kind of specific hardware, which most of the times needs to be acquired separately, so asking a user to buy a device to be able to login into your application is not reliable, although it works.</p>
+<p>There are other approaches like emails with &ldquo;magic-links&rdquo; (for example slack), QR code scanning with a logged in app in the phone (web based whatsapp). Which work ok as well, but at least for me, these are more suitable for 2FA&rsquo;s.</p>
+<h2 id="other-alternatives">Other alternatives</h2>
+<p>There are a few ways to create a trustless system to deal with the authentication in a secure way, without receiving the user password. Lets see a few:</p>
+<h3 id="ecc">ECC</h3>
+<p>This is the flow that I created for some of my cases</p>
+<p>Elliptic curve cryptography. Asymmetric encryption is always a good solution as you have the private key in your side and a public key that can be stored in the server without need to worry. Unfortunately typing a private key on a website to login is not practical at all. That&rsquo;s where ecc comes into play.</p>
+<p>You can create a private key from basically any 32 byte sequence, and from there derive a public key. This can make our asymmetric approach feasible.</p>
+<p>The next image demonstrates the flow needed to implement this solution</p>
+<p><img src="images/image-1-1024x568.png" alt="ecc login example"></p>
+<p>In this solution as you can see, we create a private key based on the user password. At signup the public key is sent to the server and the server generates a secure salt for the PBKDF2 function.</p>
+<p>So every time the user wants to login the password is used to recalculate the private key based on the user password, and that private key is used to sign a unique challenge securely generated on the server. The user never sends his password to the server, and the server only stores a public key, which as the name suggests, is public.</p>
+<p>If you want to go the extra mile you can also generate a nonce in the frontend, and mix it in the signing method like <code>Sig = Sign(Challenge+Nonce, PrivKey)</code>. Both the Nonce and the Sig need be sent to the server. This way the user can enforce that a really random value is added (not trusting the Challenge).</p>
+<h3 id="double-hashing">Double Hashing</h3>
+<p>Another solution is to double hash the password, once in the frontend and once in the backend. This way, when the password gets to the server is already an &ldquo;unreversible&rdquo; hash. We need to hash it again because if the hashes from the database are dumped an attacker just needs to send the hash as is to be able to login (would be like if it was as plaintext). Hashing again in the backend invalidates this vector.</p>
+<p>Going with this approach needs to create two salts, one for each hashing.</p>
+<h3 id="secure-remote-password-srp">Secure Remote Password (SRP)</h3>
+<p><a href="https://datatracker.ietf.org/doc/html/rfc2945">SRP</a> is a really interesting proposal already being deployed by big players, which consists on generating and sending to the server a verifier with which the server can check that the user knows the actual password, without sending it. On top of that is possible to derive a shared secret key on both sides, without ever sending it over the network, just like <a href="https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange">Diffie Helmen</a>. <a href="https://github.com/mozilla/node-srp">This</a> implementation&rsquo;s docs do a great job explaining the logic</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/what-is-and-how-to-prevent-mass-assignment-vulnerabilities/">&lArr; Previous Post<br><b>What is and how to prevent Mass Assignment...</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

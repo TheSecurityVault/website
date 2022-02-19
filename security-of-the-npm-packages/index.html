@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Security of the NPM Packages</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Security of the NPM Packages" />
+<meta property="og:description"
+  content="Javascript (and typescript) is now one of the most used languages in new projects. It has an awesome performance, and Promises came to improve it even more. With it came tons of new tools and projects like Node and NPM. But not all is good, the security of the NPM packages is a worrying problem. Lets talk about it.
+NPM stands for &ldquo;Node Package Manager&rdquo; and its a really easy to use tool to get and install dependencies for our projects." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/security-of-the-npm-packages/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/security-of-the-npm-packages/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2020-03-27T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:25+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/security-of-the-npm-packages/images/banner.png" /><meta name="twitter:title" content="Security of the NPM Packages" />
+<meta name="twitter:description"
+  content="Javascript (and typescript) is now one of the most used languages in new projects. It has an awesome performance, and Promises came to improve it even more. With it came tons of new tools and projects like Node and NPM. But not all is good, the security of the NPM packages is a worrying problem. Lets talk about it.
+NPM stands for &ldquo;Node Package Manager&rdquo; and its a really easy to use tool to get and install dependencies for our projects." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/security-of-the-npm-packages/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Security of the NPM Packages</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Mar 27, 2020</li>
+              <li class="text-secondary">9 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Javascript (and typescript) is now one of the most used languages in new projects. It has an awesome performance, and Promises came to improve it even more. With it came tons of new tools and projects like Node and NPM. But not all is good, the security of the NPM packages is a worrying problem. Lets talk about it.</p>
+<p>NPM stands for &ldquo;Node Package Manager&rdquo; and its a really easy to use tool to get and install dependencies for our projects. But this ease of use can also be used by malicious users.</p>
+<p>Lets start by creating a simple project:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm init
+</code></pre></td></tr></table>
+</div>
+</div><p>I just created one with the default options and this is the package.json generated:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#000;font-weight:bold">{</span>
+  <span style="color:#204a87;font-weight:bold">&#34;name&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;thesecurityvault&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;version&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;1.0.0&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;description&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;main&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;index.js&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;scripts&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#204a87;font-weight:bold">&#34;test&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span>
+  <span style="color:#000;font-weight:bold">},</span>
+  <span style="color:#204a87;font-weight:bold">&#34;author&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;license&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;ISC&#34;</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now looking at the scripts option. You can create your own scripts to run. This means that you specify a set of commands to run, OS commands.</p>
+<p>I just added a new script:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#000;font-weight:bold">{</span>
+  <span style="color:#204a87;font-weight:bold">&#34;name&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;thesecurityvault&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;version&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;1.0.0&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;description&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;main&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;index.js&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;scripts&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#204a87;font-weight:bold">&#34;test&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;echo \&#34;Error: no test specified\&#34; &amp;&amp; exit 1&#34;</span><span style="color:#000;font-weight:bold">,</span>
+    <span style="color:#204a87;font-weight:bold">&#34;list:dir&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;ls&#34;</span>
+  <span style="color:#000;font-weight:bold">},</span>
+  <span style="color:#204a87;font-weight:bold">&#34;author&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;&#34;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#204a87;font-weight:bold">&#34;license&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;ISC&#34;</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>And if you run it, the ls command will be executed:</p>
+<p><a href="images/image-1.png"><img src="images/image-1.png" alt="running an npm script"></a></p>
+<h3 id="executing-commands-without-the-user-knowing">Executing commands without the user knowing</h3>
+<p>This is where things start to go south. You can create commands to do basically anything, but tricking an user of your module to run them is not that easy&hellip; first because they need to know the name of the script to run, and when they look at it they may find out that its doing something shady&hellip; But what if the user didn&rsquo;t had to run anything?</p>
+<p>Yes, that is possible due to the default script hooks available by NPM. The following are the available hooks accepted by NPM (took from the <a href="https://docs.npmjs.com/misc/scripts">docs</a>):</p>
+<ul>
+<li><strong>prepublish</strong>: Run BEFORE the package is packed and published, as well as on local <code>npm install</code> without any arguments. (See below)</li>
+<li><strong>prepare</strong>: Run both BEFORE the package is packed and published, on local <code>npm install</code> without any arguments, and when installing git dependencies (See below). This is run AFTER <code>prepublish</code>, but BEFORE <code>prepublishOnly</code>.</li>
+<li><strong>prepublishOnly</strong>: Run BEFORE the package is prepared and packed, ONLY on <code>npm publish</code>. (See below.)</li>
+<li><strong>prepack</strong>: run BEFORE a tarball is packed (on <code>npm pack</code>, <code>npm publish</code>, and when installing git dependencies)</li>
+<li><strong>postpack</strong>: Run AFTER the tarball has been generated and moved to its final destination.</li>
+<li><strong>publish</strong>, postpublish: Run AFTER the package is published.</li>
+<li><strong>preinstall</strong>: Run BEFORE the package is installed</li>
+<li><strong>install</strong>, postinstall: Run AFTER the package is installed.</li>
+<li><strong>preuninstall</strong>, uninstall: Run BEFORE the package is uninstalled.</li>
+<li><strong>postuninstall</strong>: Run AFTER the package is uninstalled.</li>
+<li><strong>preversion</strong>: Run BEFORE bumping the package version.</li>
+<li><strong>version</strong>: Run AFTER bumping the package version, but BEFORE commit.</li>
+<li><strong>postversion</strong>: Run AFTER bumping the package version, and AFTER commit.</li>
+<li><strong>pretest</strong>, test, posttest: Run by the <code>npm test</code> command.</li>
+<li><strong>prestop</strong>, stop, poststop: Run by the <code>npm stop</code> command.</li>
+<li><strong>prestart</strong>, start, poststart: Run by the <code>npm start</code> command.</li>
+<li><strong>prerestart</strong>, restart, postrestart: Run by the <code>npm restart</code> command. Note: <code>npm restart</code> will run the stop and start scripts if no <code>restart</code> script is provided.</li>
+<li><strong>preshrinkwrap, shrinkwrap, postshrinkwrap</strong>: Run by the <code>npm shrinkwrap</code> command.</li>
+</ul>
+<p>We can see some interesting callbacks here: <strong>preinstall</strong> and <strong>install</strong>. This hooks will run before installing the package, and after installing it (respectively). If we add the ls command on the install hook, everytime an user installs the package the ls command will run. Can you see the possible security problems here?</p>
+<h3 id="adding-javascript-to-the-mix">Adding Javascript to the mix</h3>
+<p>One of the things that Javascript does quite well is the sandbox. Javascript has a really secure sandbox, preventing you from accessing for example the FileSystem. On the other side, Node &ldquo;breaks&rdquo; all of this security, so you can access the filesystem or even execute commands through Node&rsquo;s API.</p>
+<p>Instead of just running OS commands (which is also good) you can leverage Javascript with the Node&rsquo;s API to have a more friendly language (well, at least for me :) )to write some malicious code. At the end you can call your script through node in the install hook.</p>
+<h3 id="some-npm-statistics">Some NPM Statistics</h3>
+<p>This already is a bit (a lot) scary, and thinking that there are more than one million packages and billions of downloads monthly gets even darker.</p>
+<p><a href="images/image-3.png"><img src="images/image-3.png" alt="npm packages and downloads statistics"></a></p>
+<p>You may be carefull when installing a package, and even review the source code of the package (I&rsquo;ll get back to this later) but what about all the dependencies that that package has? And when one of those gets updated, do you check the changes?</p>
+<p>The open source community is something awesome both for individuals and for companies, its a huge help for all developers, and everybody should contribute to it. But it is also a giant attack vector for people with bad intentions.</p>
+<h3 id="getting-into-the-packages-and-dependencies">Getting into the packages and dependencies</h3>
+<p>Lets see a real example, and understand the implications of the dependencies of a module.</p>
+<p>I really like to develop in angularjs and unfortunately I didn&rsquo;t have time (yet) to dig into React framework. But angularjs is an awesome example. You have &ldquo;angular&rdquo; which is the new versions of angular and in Typescript. And you have &ldquo;angularjs&rdquo; which is the initial version, for javascript which google stopped development in favor of &ldquo;angular&rdquo;. So the name of &ldquo;angularjs&rdquo;&rsquo;s package in NPM is &ldquo;angular&rdquo;.</p>
+<p>Yeah&hellip; not good, but worst than that, is that there&rsquo;s actually an angularjs package which the package description says its a &quot; Browerify angularjs shim&quot;. But you see the possibilities here right? How many people have installed this package by mistake? (I have to say that I installed it once).</p>
+<p>It&rsquo;s quite easy to make somebody install a different package because of a misused name, of a typo.</p>
+<p>I believe I made my point, moving on. Lets install express which is the &ldquo;standard&rdquo; package for a webserver</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install --save express@4.16.2
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-5.png">installing express</a>](images/image-5.png)</p>
+<p>As you can see from NPM&rsquo;s output, it installed 51 packages. And from my stats I god around 22 000 lines of code. Have in mind that this is not a problem just for NPM, it is for all package manager all across (specially) the open source community.</p>
+<h3 id="the-lock-file-and-the-package-versions">The .lock file and the package versions</h3>
+<p>I forced NPM to install a specific version, and by the time of this writing the actual version was 4.17.1. Let&rsquo;s tell in the package json that it can install from 4.16.2 and newer version:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json"><span style="color:#4e9a06">&#34;dependencies&#34;</span><span style="color:#a40000">:</span> <span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#204a87;font-weight:bold">&#34;express&#34;</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#4e9a06">&#34;^4.16.2&#34;</span>
+  <span style="color:#000;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>And then</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">npm install
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-6.png"><img src="images/image-6.png" alt="forcing express installation. nothing happens"></a></p>
+<p>Did you notice what changed? Nothing. This is because of the package.json.lock file. This file tells the exact versions of the packages used by developers so you can install the same ones. Well this has its up and down sides.</p>
+<p>So I installed the latest express version and did a <a href="https://github.com/TheSecurityVault/NPMTests/pull/1/files">pull request</a> to github. These are the changes:</p>
+<p><a href="images/image-7.png">changed package json pull request</a>](images/image-7.png)</p>
+<p>Can you see a problem here? No because it&rsquo;s hidden. Github by default hides the changes in package.json.lock because its a generated file and assumes its ok. It is not.</p>
+<p>As we just saw, NPM uses the lock file to get the exact versions to install. A malicious user can create a pull request just like I did, but in the lock change a version of the dependency to a vulnerable one.</p>
+<p>You can create a package that seems to be a legitime package with some nice functionalities but that has a dependency of another package which has some kind of vulnerability. Most of the times if dependencies are checked, only the direct dependencies are reviewed.</p>
+<h3 id="stealing-a-package">&ldquo;Stealing&rdquo; a package</h3>
+<p>Another problem is if an attacker manages to get control of a legitimate package which has already some reputation. This can happen due to some different reasons:</p>
+<ul>
+<li><strong>The owner doesn&rsquo;t want to maintain the package anymore</strong> - This is something common, but sometimes the owner &ldquo;gives&rdquo; the package to a dev that seems willing to keep the work</li>
+<li><strong>The keys to NPM are commited to the source code</strong> <strong>-</strong> And this one here is one of the most serious and common problems, specially when you have some CI/CD. Nowadays you can configure your pipelines to publish the packages through config files, that usually go into the source code repo. By mistake developers commit the keys in there, and even when they are removed, they are still in source control. An attacker can get access to one and release a new version.</li>
+</ul>
+<p>Check out my post about <a href="https://thesecurityvault.com/appsec/hardcoded-passwords/">hardcoded credentials</a> for more info.</p>
+<h3 id="npm-and-source-control">NPM And Source Control</h3>
+<p>Another issue is that you can do a version bump to your package, commit it to lets say, github, and there you&rsquo;ll see a tag with the new version, and then, do some more changes in the code locally and build/publish it to NPM. What this means is that you can bump a new version push the source code and then, with new commits, change that &ldquo;version&rdquo; code adding malicious code and send it to NPM. This is a common attack technique being widely used.</p>
+<p>If you want to review the source code of a package never do it on the official repo, install it first on a machine (without the NPM hooks) and check the source in the NPM package.</p>
+<h3 id="security-measures">Security Measures</h3>
+<p>To wrap up everything that was talked in this post, these are the security precautions you should have when working with NPM packages:</p>
+<ul>
+<li><strong>Avoid using unnecessary packages</strong> - You&rsquo;re increasing the likelihood of installing malicious or vulnerable code</li>
+<li><strong>Install well known packages -</strong> Although this is not a guarantee, big projects tend to have more people looking at them, as well as a tight security</li>
+<li><strong>Do not ignore the security issues</strong> - NPM has an audit features that tells you about known issues in the package versions you are using</li>
+<li><strong>Use a SCA service</strong> - SCA stands for Software Composition Analysis, and also checks for known vulnerabilities in the packages you use. I personally like to use <a href="https://snyk.io/">Snyk</a>. You can use it for free, its really good and they also have nice articles.</li>
+<li><strong>Ignore Script Hooks</strong> - If a package has an install script hook like we saw in the begining of this article, just by installing the package you may be in danger, so install packages without running its scripts: npm install &ndash;ignore-scripts &lt;package_name&gt;</li>
+</ul>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/breaking_c_sharp_securestring/">&lArr; Previous Post<br><b>Breaking C# SecureString</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/auth-token-in-localstorage/"> Next Post &rArr;<br><b>Auth Token in LocalStorage</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

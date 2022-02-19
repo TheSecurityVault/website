@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>How Antivirus works and bypass techniques - part 1</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="How Antivirus works and bypass techniques - part 1" />
+<meta property="og:description"
+  content="This time i&rsquo;m not going to talk about a specific vulnerability. Instead I&rsquo;m going to show how attackers disguise malware in order to bypass antivirus.
+Antivirus 101 To start, we need to understand how AV works.
+I&rsquo;m just going to touch on the basics, but they should be enough to understand the logic behind all of this.
+To know that a malware is actually a malware the AV checks an internal database where it stores what is called a signature." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/how-antivirus-works-and-bypass-techniques-part-1/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/how-antivirus-works-and-bypass-techniques-part-1/images/banner.jpeg" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2019-06-16T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T11:03:02+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/how-antivirus-works-and-bypass-techniques-part-1/images/banner.jpeg" /><meta name="twitter:title" content="How Antivirus works and bypass techniques - part 1" />
+<meta name="twitter:description"
+  content="This time i&rsquo;m not going to talk about a specific vulnerability. Instead I&rsquo;m going to show how attackers disguise malware in order to bypass antivirus.
+Antivirus 101 To start, we need to understand how AV works.
+I&rsquo;m just going to touch on the basics, but they should be enough to understand the logic behind all of this.
+To know that a malware is actually a malware the AV checks an internal database where it stores what is called a signature." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/how-antivirus-works-and-bypass-techniques-part-1/images/banner.jpeg" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>How Antivirus works and bypass techniques - part 1</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jun 16, 2019</li>
+              <li class="text-secondary">11 minutes</li>
+              
+              <li>pentest</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>This time i&rsquo;m not going to talk about a specific vulnerability. Instead I&rsquo;m going to show how attackers disguise malware in order to bypass antivirus.</p>
+<h3 id="antivirus-101">Antivirus 101</h3>
+<p>To start, we need to understand how AV works.<br>
+I&rsquo;m just going to touch on the basics, but they should be enough to understand the logic behind all of this.</p>
+<p>To know that a malware is actually a malware the AV checks an internal database where it stores what is called a signature. This signature is a peace of the malware, that should be unique to that program. In a lot of scenarios these signatures are strings or checksum hashes from the binaries.</p>
+<p>Lets see an example.<br>
+Someone writes ransomware that encrypts all the disk and at the end writes a file to the desktop with the content: &ldquo;Haha you are now a victim of TheGreatAndAwesomeRansonwareTheBestInTheWorld pay or loose everything&rdquo;. Nice file hum?<br>
+So an AV vendor may choose to add the print of this string as the virus signature. So if it finds it on a file, it will say that file is the TheGreatAndAwesomeRansonwareTheBestInTheWorld ransonware.</p>
+<p>The biggest disadvantage of this approach is that AV vendors need to know the malware, to flag it in the AV.<br>
+This is why they usually use what is called HoneyPots. A HoneyPot is a fake vulnerable public machine that is expected to be exploited. From the exploit the AV vendor can find new malware, and new techniques, then just need to add them to the AV.<br>
+Nowadays a lot of attackers also use HoneyPots, to mess with other attackers, to find themselves new malware, to learn new stuff, etc.</p>
+<h4 id="clamav">ClamAV</h4>
+<p>To reallyunderstand how an antivirus operates we need to see one working<br>
+I&rsquo;m going to use ClamAV to do demos since it is a free and opensource antivirus, and its awesome for testing this kind of stuff.</p>
+<p>In a bash terminal (debian based), you can install it like:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt-get install clamav
+sudo freshclam <span style="color:#8f5902;font-style:italic">#to update (first get gets all virus info)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>There is also a daemon to run it, but since we don&rsquo;t need it for tests, I&rsquo;m leaving it alone</p>
+<p>To do a quick test we are going to use the old ILOVEYOU virus.<br>
+Actually I dont recall it from my time (probably I was too young to hear about viruses) but I found the code on github, which I&rsquo;m trusting its the right one :)<br>
+I did a fork of it, and you can find it <a href="https://github.com/TheSecurityVault/ILOVEYOU">here</a></p>
+<p>Download it to your machine like so:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#204a87">cd</span> /tmp
+wget https://github.com/thesecurityvault/ILOVEYOU/blob/master/LOVE-LETTER-FOR-YOU.TXT.vbs
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="clamav-basics">ClamAV Basics</h5>
+<p>Since we need to understand how AV&rsquo;s work I&rsquo;m going to spend some time explaining ClamAV. Its opensource, there&rsquo;s (good) public documentation, and its really nice to see it working :)</p>
+<p>We need to get to the ClamAV databases so, lets see where they are.<br>
+Usually there&rsquo;s a file /etc/clamav/freshclam.conf that can tells us that. Cat it:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat /etc/clamav/freshclam.conf
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-6.png"><img src="images/image-6.png" alt="clamav&rsquo;s freshclam configuration file"></a></p>
+<p>You will get something like the image above. And the property &ldquo;DatabaseDirectory&rdquo; tells you where the db&rsquo;s are.</p>
+<p>You are going to find some files like:</p>
+<ul>
+<li>bytecode.cvd</li>
+<li>daily.cvd</li>
+<li>main.cvd</li>
+<li>mirrors.cvd</li>
+</ul>
+<p>For now lets focus on main.cvd and daily.cvd</p>
+<p>For us to be able to read the info from these files we need to extract them with a tool provided by ClamAV called sigtool like so:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sigtool -u /var/lib/clamav/main.cvd
+sigtool -u /var/lib/clamav/daily.cvd
+</code></pre></td></tr></table>
+</div>
+</div><p>You now have a lot of files with different extensions:</p>
+<p>I will cover some of them through this article, but if you want to get more information about it check official docs <a href="https://www.clamav.net/documents/creating-signatures-for-clamav">here</a>.</p>
+<p>All set, lets test the ILOVEYOU against ClamAV:</p>
+<p>clamscan LOVE-LETTER-FOR-YOU.TXT.vbs</p>
+<p>We get the following results:</p>
+<p><a href="images/image-12.png"><img src="images/image-12.png" alt="clamav results for ILOVEYOU"></a></p>
+<h5 id="clamav-signatures">ClamAV Signatures</h5>
+<p>Ok, so ClamAV identified ILOVEYOU worm, but how?<br>
+Lets see which signatures identified the virus<br>
+We can do it with sigtool as well, with the following command:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sigtool --find-sigs Win.Worm.LoveLetter-16
+</code></pre></td></tr></table>
+</div>
+</div><p>Where &ldquo;Win.Worm.LoveLetter-16&rdquo; is the identifier ClamAV gave us for ILOVEYOU</p>
+<p><a href="images/image-13.png"><img src="images/image-13.png" alt="clamav signature for ILOVEYOU"></a></p>
+<p>Right at the beginning we can see that the signature is stored in main.ndb but unfortunately the signature is in hex, which is not that pretty to look at.</p>
+<p>This is how AV&rsquo;s process files. They don&rsquo;t care about being human readable, in fact, they cannot be worried with that. If they are looking for a specific pattern in a binary file, they cannot translate it&hellip; That is why everything is in hex internally. An AV opens a file in hex, and compares their hex signatures.<br>
+Anyway, lets &ldquo;pretty print&rdquo; it:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sigtool --find-sigs Win.Worm.LoveLetter-16 <span style="color:#000;font-weight:bold">|</span> sigtool --decode-sigs
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-14.png"><img src="images/image-14.png" alt="LoveLetter signature"></a></p>
+<p>Much better now.<br>
+The interesting part is the &ldquo;DECODED SIGNATURE&rdquo; section</p>
+<p>This is the actual human readable ClamAV signature for the ILOVEYOU worm. In other words this is how ClamAV identifies the malicious file.<br>
+If you look at the code you will find this snippet in line 329.</p>
+<h5 id="bypassing-clamav-signature">Bypassing ClamAV signature</h5>
+<p>So if the AV uses this line to identify ILOVEYOU what about if we change it?<br>
+Replace that line (329) by the following two lines:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vb" data-lang="vb">    <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000">vbcrlf</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000">_</span> <span style="color:#4e9a06">&#34;If (window.screen)&#34;</span> 
+    <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000">vbcrlf</span> <span style="color:#ce5c00;font-weight:bold">&amp;</span> <span style="color:#000">_</span> <span style="color:#4e9a06">&#34;{var wi=screen.availWidth;var hi=screen.availHeight;window.moveTo(0,0);window.resizeTo(wi,hi);}&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The only thing done here, was separating the line in two separated lines, keeping the same behavior. Run it again through the anti virus:</p>
+<p><a href="images/image-15.png"><img src="images/image-15.png" alt="clamav bypass result for ILOVEYOU"></a></p>
+<p>We bypassed ClamAV but this does not necessarily mean that we bypassed any other AV. Each vendor has its own signatures, their own way of identifying malware.</p>
+<p>VirusTotal is a website that runs the supplied file through around 50 different AV products and shows their results. We can test ILOVEYOU there to see the results</p>
+<p>This is the result for ILOVEYOU worm:</p>
+<p><a href="images/image-16.png"><img src="images/image-16.png" alt="ILOVEYOU on virustotal"></a></p>
+<p><a href="https://www.virustotal.com/#/file/b6dc96d48ee73fda299a8f8dac2335ed4bf710f5166ce093aa8734256a205569/detection">VirusTotal Scan</a></p>
+<p>38 out of 55 AV solutions found ILOVEYOU</p>
+<p>If we now upload the changed version lets see what happens:</p>
+<p><a href="images/image-17.png"><img src="images/image-17.png" alt="changed ILOVEYOU on virustotal"></a></p>
+<p><a href="https://www.virustotal.com/#/file/ab76803503e9d51bd5e5f1c71e7b35700bfebc6696282c608830697dfbff1c26/detection">VirusTotal Scan</a></p>
+<p>Here we have it. 38 out of 57. Signatures are different on other AV&rsquo;s and that&rsquo;s why we could only bypass ClamAV.</p>
+<h5 id="clamav--eicar">ClamAV &amp; Eicar</h5>
+<p>Lets test a different scenario. For this we are going to use the EICAR test file. This is nothing more then a text file defined as a standard for testing AV&rsquo;s. This means that every compliant AV vendor added signatures for this file in their AV&rsquo;s even not being malicious. Again, is a way of testing if the AV is working properly.</p>
+<p>Lets download the file from its original source and scan it:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">wget https://secure.eicar.org/eicar_com.zip
+unzip eicar_com.zip
+clamscan eicar.com
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-18.png"><img src="images/image-18.png" alt="clamav findings for eicar"></a></p>
+<p>To get the signatures associated with this file (to be recognized) run sigtool again:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sigtool --find-sigs Eicar-Test-Signature
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-19-1.png"><img src="images/image-19-1.png" alt="clav signatures from eicar"></a></p>
+<p>As you can see there are a lot of signatures in all ClamAV files. I&rsquo;m just going to explain two of them, since the logic is similar to all.</p>
+<p>The first one is in daily.hdb and this file has the md5 hashes of the files. What this means is that ClamAV did an md5 checksum of the file, and found the same hash.</p>
+<p>We can make sure thats the case by using one of the following commands:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sigtool --md5 eicar.com
+md5sum eicar.com
+</code></pre></td></tr></table>
+</div>
+</div><p>They both, return the same hash: <code>44d88612fea8a8f36de82e1278abb02f</code><br>
+Now we have a different scenario from the first time. With ILOVEYOU the AV was looking for a specific file content while with eicar its looking for the signature of the file.<br>
+This means that if we change the file content, the checksum will be different, and so ClamAV wiill not find it.</p>
+<p>Open eicar.com and change it&rsquo;ts content. I just added an &lsquo;a&rsquo; at the begining. Then do the checksum again:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sigtool --md5 eicar.com
+md5sum eicar.com
+</code></pre></td></tr></table>
+</div>
+</div><p>And we have a new hash: <code>0ce164bf3975aa4b75bb5a5a15b73cbe</code></p>
+<p>Running a new scan, its not flagged anymore:</p>
+<p><a href="images/image-20.png"><img src="images/image-20.png" alt="bypassed eicar on clamav"></a></p>
+<h4 id="why-signatures-are-bad">Why signatures are bad</h4>
+<p>Using file hash as a signature may be quite effective if you don&rsquo;t have access to the code to manipulate it.</p>
+<p>If its like a c# application that you can easily reverse and rebuild that&rsquo;s not that great. Or if you have the source code of a known malware that you can just change.</p>
+<p>And that is exactly what happened to me at this point of writing.<br>
+I went to github, download the hidden tear ransomware, which is a nice open source project (with deliberated programming flaws, so it won&rsquo;t be that dangerous since its purpose is educational).</p>
+<p>I wanted to show on a real and nice example how to change a malware source code to bypass antivirus<br>
+So I downloaded the code and compiled it with Visual Studio. For my surprise ClamAV is using an Hash based Signature for hidden tear. Which means that it only stores the hash of the compiled binary. So when I compiled it and scan it it didn&rsquo;t find anything. The source code is the same, no changes, but if, for example, the .net framework version is different from the one used to create the signature the output executable will also be different. I had to do nothing to bypass this detection, good :)</p>
+<p>So I downloaded the code and compiled it with Visual Studio. For my surprise ClamAV is using an Hash based Signature for hidden tear. Which means that it only stores the hash of the compiled binary. So when I compiled it and scan it it didn&rsquo;t find anything. The source code is the same, no changes, but if, for example, the .net framework version is different from the one used to create the signature the output executable will also be different. I had to do nothing to bypass antivirus this time, good (or not):)</p>
+<p>Lets try to test this with another real and nice scenario then.</p>
+<h4 id="bypassing-meterpreter-signature">Bypassing Meterpreter signature</h4>
+<p>(if you don&rsquo;t know what is <a href="https://www.metasploit.com/">metasploit</a> and meterpreter you don&rsquo;t know what you are missing)</p>
+<p>Lets download meterpreter java payload and compile it. You can find the source code on <a href="https://github.com/rapid7/metasploit-payloads/">github</a>:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">git clone  https://github.com/rapid7/metasploit-payloads/ 
+<span style="color:#204a87">cd</span> metasploit-payloads/java
+mvn compile
+mvn package
+</code></pre></td></tr></table>
+</div>
+</div><p>Note: This payloads still use JDK 1.5, which was not supported with my current java version, so I had to replace all occurrences of 1.5 to 1.6 at least :)</p>
+<p>K, now we have our meterpreter payload at metasploit-payloads/java/javapayload/target</p>
+<p>To make sure it gets caught by ClamAV lets start scan it:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">clamscan javapayload/target/Metasploit-JavaPayload-1-SNAPSHOT.jar
+</code></pre></td></tr></table>
+</div>
+</div><p>Great, still vulnerable.<br>
+Now, how to bypass antivirus here?</p>
+<p>Just for context lets see what clamAV uses to flag this payload:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sigtool --find-sigs Win.Tool.MeterPreter-6294292-0 <span style="color:#000;font-weight:bold">|</span> sigtool --decode-sigs
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28"><a style="outline: none; text-decoration:none; color:inherit" href="#28">28</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29"><a style="outline: none; text-decoration:none; color:inherit" href="#29">29</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30"><a style="outline: none; text-decoration:none; color:inherit" href="#30">30</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="31"><a style="outline: none; text-decoration:none; color:inherit" href="#31">31</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="32"><a style="outline: none; text-decoration:none; color:inherit" href="#32">32</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="33"><a style="outline: none; text-decoration:none; color:inherit" href="#33">33</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="34"><a style="outline: none; text-decoration:none; color:inherit" href="#34">34</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="35"><a style="outline: none; text-decoration:none; color:inherit" href="#35">35</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="36"><a style="outline: none; text-decoration:none; color:inherit" href="#36">36</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="37"><a style="outline: none; text-decoration:none; color:inherit" href="#37">37</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="38"><a style="outline: none; text-decoration:none; color:inherit" href="#38">38</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="39"><a style="outline: none; text-decoration:none; color:inherit" href="#39">39</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="40"><a style="outline: none; text-decoration:none; color:inherit" href="#40">40</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="41"><a style="outline: none; text-decoration:none; color:inherit" href="#41">41</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="42"><a style="outline: none; text-decoration:none; color:inherit" href="#42">42</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="43"><a style="outline: none; text-decoration:none; color:inherit" href="#43">43</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="44"><a style="outline: none; text-decoration:none; color:inherit" href="#44">44</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="45"><a style="outline: none; text-decoration:none; color:inherit" href="#45">45</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="46"><a style="outline: none; text-decoration:none; color:inherit" href="#46">46</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="47"><a style="outline: none; text-decoration:none; color:inherit" href="#47">47</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="48"><a style="outline: none; text-decoration:none; color:inherit" href="#48">48</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-txt" data-lang="txt">VIRUS NAME: Win.Tool.MeterPreter-6294292-0
+TDB: Engine:51-255,Target:1
+LOGICAL EXPRESSION: 0&amp;1&amp;2&amp;3&amp;4&amp;5&amp;6&amp;7&amp;8
+ * SUBSIG ID 0
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+metsrv.dll
+ * SUBSIG ID 1
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+core_update_thread_token
+ * SUBSIG ID 2
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+core_update_desktop
+ * SUBSIG ID 3
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+packet_create
+ * SUBSIG ID 4
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+scheduler_initialize
+ * SUBSIG ID 5
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+scheduler_insert_waitable
+ * SUBSIG ID 6
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+channel_create_stream
+ * SUBSIG ID 7
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+channel_write_to_remote
+ * SUBSIG ID 8
+ +-&gt; OFFSET: ANY
+ +-&gt; SIGMOD: NONE
+ +-&gt; DECODED SUBSIGNATURE:
+buffer_from_file
+</code></pre></td></tr></table>
+</div>
+</div><p>Its looking for specific keywords like metsrv.dll and scheduler_initialize. This look like method or variable names or strings&hellip; So we can just refactor variables/methods, and change strings (most of the time, splitting them into two strings works, or you can change specific chars and then do a replace no make it right again).</p>
+<p>Tbh I&rsquo;m too lazy to be manually changing all of this, so I downloaded ProGuard which is a Java obfuscator and does basically what we need. Refactor methods, variables and can even obfuscate strings.</p>
+<p>I&rsquo;m not going into details on how to handle proguard.</p>
+<p>I just ran everything with default settings, and exported my new meterpreter payload to obfuscated.jar. Lets run a new scan:</p>
+<p><a href="images/image-21.png"><img src="images/image-21.png" alt="bypassed meterpreter on clamav"></a></p>
+<p>No findings&hellip; Great, we just bypassed AV with a real thread.</p>
+<p>But don&rsquo;t get crazy yet&hellip;</p>
+<p>Other AV&rsquo;s still catch it. Check the VirusTotal report:</p>
+<p><a href="images/image-22-1024x478.png"><img src="images/image-22-1024x478.png" alt="virus total results for obfuscated meterpreter"></a></p>
+<p>A lot of times, evading AV&rsquo;s is just about evading the AV the victim is using, don&rsquo;t need to evade all.</p>
+<p>In this case since we do not know the signatures used by the other AV&rsquo;s we would need to keep refactor code until it gets completely undetected:<br>
+Separate instructions into multiple statements, add random method calls between complex logic, obfuscate strings, change variables, method names, etc.</p>
+<p>This is it for the first article. I covered a lot of stuff already.<br>
+I&rsquo;ll be writing another post with more complex AV logic like the sandbox and some bypass techniques</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/hello-world/">&lArr; Previous Post<br><b>Hello world!</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/heap-inspection/"> Next Post &rArr;<br><b>Heap Inspection</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

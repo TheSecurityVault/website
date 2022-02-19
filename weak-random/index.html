@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Weak Random</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Weak Random" />
+<meta property="og:description"
+  content="A lot of developers don&rsquo;t know that regular Random is a weak random implementation. In fact its quite predictable. A lot of code relies on this class to generate passwords, tokens and other security related values, that in fact end up not being secure at all.
+I&rsquo;m going to focus on Java, but a lot of the concepts are the same for other languages
+How Java (weak) Random Works There are some nice articles about this on the net, the one that caught my eye when learning about this a long time ago was the one from Franklin To." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/weak-random/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/weak-random/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2019-06-17T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T11:03:59+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/weak-random/images/banner.png" /><meta name="twitter:title" content="Weak Random" />
+<meta name="twitter:description"
+  content="A lot of developers don&rsquo;t know that regular Random is a weak random implementation. In fact its quite predictable. A lot of code relies on this class to generate passwords, tokens and other security related values, that in fact end up not being secure at all.
+I&rsquo;m going to focus on Java, but a lot of the concepts are the same for other languages
+How Java (weak) Random Works There are some nice articles about this on the net, the one that caught my eye when learning about this a long time ago was the one from Franklin To." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/weak-random/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Weak Random</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jun 17, 2019</li>
+              <li class="text-secondary">7 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>A lot of developers don&rsquo;t know that regular Random is a weak random implementation. In fact its quite predictable. A lot of code relies on this class to generate passwords, tokens and other security related values, that in fact end up not being secure at all.</p>
+<p>I&rsquo;m going to focus on Java, but a lot of the concepts are the same for other languages</p>
+<h3 id="how-java-weak-random-works">How Java (weak) Random Works</h3>
+<p>There are some nice articles about this on the net, the one that caught my eye when learning about this a long time ago was the one from <a href="https://franklinta.com/2014/08/31/predicting-the-next-math-random-in-java/">Franklin To</a>. This is an awesome article explaining how he replicated the Random class from java. Its quite easy to understand and I recommend everybody to read it.</p>
+<p>So to explain how this works, basically java <a href="http://hg.openjdk.java.net/jdk8/jdk8/jdk/file/tip/src/share/classes/java/util/Random.java">Random class</a> uses a <a href="https://en.wikipedia.org/wiki/Linear_congruential_generator">Linear Congruential Generator</a> (LCG) which is a really nice and old algorithm that generates numbers in a way that for the human eye look like random. The formula is as simple as:</p>
+<p><code>xn = a * xn-1 + c mod m</code></p>
+<p>Where x0 needs to be defined manually since its the first value. and a,c and m are predefined constants.<br>
+In java, by default, the first x value ( x0 ) is seeded from current time in milliseconds with a small operation on top of it. But you can change the seed. Lets see an example:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.predictrandom</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Random</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">SameSeed</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        
+        <span style="color:#000">Random</span> <span style="color:#000">r1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">Random</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">1111</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        <span style="color:#000">Random</span> <span style="color:#000">r2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">Random</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">1111</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        
+        <span style="color:#204a87;font-weight:bold">for</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">0</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">10</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">++)</span>
+        <span style="color:#ce5c00;font-weight:bold">{</span>
+            <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">v2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">r2</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">nextInt</span><span style="color:#ce5c00;font-weight:bold">();</span>
+            <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">v1</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">r1</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">nextInt</span><span style="color:#ce5c00;font-weight:bold">();</span>
+            
+            <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">out</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">println</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">format</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;Same value: %b r2 value: %d | r2 value: %d&#34;</span><span style="color:#ce5c00;font-weight:bold">,</span> 
+                    <span style="color:#000">v1</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#000">v2</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">v1</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">v2</span><span style="color:#ce5c00;font-weight:bold">));</span>
+        <span style="color:#ce5c00;font-weight:bold">}</span>   
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-3.png"><img src="images/image-3.png" alt="weak random with replicated with same seed"></a></p>
+<p>If you run this peace of code you will see that both weak random instances will always return the same values because they have the same seed.</p>
+<p>If you look at the LCG algorithm that is understandable. The x0 which is our seed is the same in both instances. a,c and m are static and hardcoded so we have exactly the same formula for both instances.</p>
+<p>If you change the seed from one of the instances, or if you remove them results will be different.</p>
+<h3 id="replicating-java-random">Replicating Java Random</h3>
+<p>So we now have a fair understanding how this works, but you are probably thinking that you still need to guess the exact time the weak Random instance was created to get the seed, or guess the seed of an application so that you could replicate the random.</p>
+<p>In fact its quite easy to guess the seed having the right amount of samples (when using Random.nextDouble in java, you just need one sample, and Random.nextInt you need just two).<br>
+I will not get into details since this is not my expertise, but you can refer to the first link I used, or the ones in the references.</p>
+<p>To demonstrate this, I will use the <a href="https://github.com/fta2012/ReplicatedRandom">code</a> provided by <a href="https://franklinta.com/2014/08/31/predicting-the-next-math-random-in-java/">Franklin To</a> in his article</p>
+<p>You can just copy paste the class &ldquo;ReplicatedRandom&rdquo; from github and put it on your project, then you can use the following code:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.predictrandom</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Random</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Replicate</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        
+        <span style="color:#000">Random</span> <span style="color:#000">r</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">Random</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        <span style="color:#000">ReplicatedRandom</span> <span style="color:#000">rr</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">ReplicatedRandom</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        
+        <span style="color:#8f5902;font-style:italic">//assuming we got to know 2 sequential &#34;random&#34; values generated
+</span><span style="color:#8f5902;font-style:italic"></span>        <span style="color:#000">rr</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">replicateState</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">r</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">nextInt</span><span style="color:#ce5c00;font-weight:bold">(),</span> <span style="color:#000">r</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">nextInt</span><span style="color:#ce5c00;font-weight:bold">());</span> 
+        
+        <span style="color:#204a87;font-weight:bold">for</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">0</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">i</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#000">10</span><span style="color:#ce5c00;font-weight:bold">;</span> <span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">++)</span>
+        <span style="color:#ce5c00;font-weight:bold">{</span>
+            <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">randomValue</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">r</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">nextInt</span><span style="color:#ce5c00;font-weight:bold">();</span>
+            <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">replicatedValue</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">rr</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">nextInt</span><span style="color:#ce5c00;font-weight:bold">();</span>
+            
+            <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">out</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">println</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">format</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;Same value: %b Random: %d | ReplicatedRandom: %d&#34;</span><span style="color:#ce5c00;font-weight:bold">,</span> 
+                    <span style="color:#000">randomValue</span> <span style="color:#ce5c00;font-weight:bold">==</span> <span style="color:#000">replicatedValue</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">randomValue</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">replicatedValue</span><span style="color:#ce5c00;font-weight:bold">));</span>
+        <span style="color:#ce5c00;font-weight:bold">}</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>When you run it, you will see that it generates the same values.</p>
+<p><a href="images/image-4.png"><img src="images/image-4.png" alt="weak random seed guessed and values replicated"></a></p>
+<p>There are also other tools that help you &ldquo;guess&rdquo; the next numbers from weak Random, like <a href="https://github.com/ALSchwalm/foresight">Foresight</a> for multiple scenarios</p>
+<p>So regular Random is quite easy to predict. What are the alternatives?</p>
+<h3 id="secure-random">Secure Random</h3>
+<p>SecureRandom is your way to go.</p>
+<p>But how does then SecureRandom garantees an unpredictable random value? We need to understand how the class works first :)</p>
+<p>SecureRandom has multiple algorithms to get random bytes. Lets see them.<br>
+Run the following java code:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.predictrandom</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.security.SecureRandom</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.security.Security</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Set</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">SecureRandomAlgorithms</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        <span style="color:#204a87;font-weight:bold">final</span> <span style="color:#000">Set</span><span style="color:#ce5c00;font-weight:bold">&lt;</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#000">algorithms</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">Security</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getAlgorithms</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;SecureRandom&#34;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+
+        <span style="color:#204a87;font-weight:bold">for</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span> <span style="color:#000">algorithm</span> <span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000">algorithms</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+          <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">out</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">println</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">algorithm</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        <span style="color:#ce5c00;font-weight:bold">}</span>
+
+        <span style="color:#204a87;font-weight:bold">final</span> <span style="color:#000">String</span> <span style="color:#000">defaultAlgorithm</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">SecureRandom</span><span style="color:#ce5c00;font-weight:bold">().</span><span style="color:#c4a000">getAlgorithm</span><span style="color:#ce5c00;font-weight:bold">();</span>
+
+        <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">out</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">println</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;default: &#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">defaultAlgorithm</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This will show you the available algorithms that java has for your system as well as the default one.</p>
+<p>I&rsquo;m using a Windows machine so mine are:</p>
+<p><a href="images/image-5.png"><img src="images/image-5.png" alt="windows secure random algorithms"></a></p>
+<p>If you run on a Unix based environment you will see much more options like <a href="https://github.com/frohoff/jdk8u-jdk/blob/master/src/solaris/classes/sun/security/provider/NativePRNG.java">NATIVEPRNG</a>, NATIVEPRNGBLOCKING and NATIVEPRNGNONBLOCKING.</p>
+<p>Lets start by explaining the Unix ones.</p>
+<h4 id="nativeprngblocking">NATIVEPRNGBLOCKING</h4>
+<p>NATIVEPRNGBLOCKING makes use of /dev/random which is a file <a href="https://elixir.bootlin.com/linux/latest/source/drivers/char/random.c">fed by the OS</a> with random data from multiple souces. It collects &ldquo;noise&rdquo; from drivers, interrupts, etc.</p>
+<p>At the end you get unpredictable values. /dev/random works with what is called an entropy pool, where API&rsquo;s get the values from. When this pool runs out of data, you will have to wait until new data is generated, and since this uses hardware based events and others, this can take some time. This is why /dev/random is blocking. If no data is available you will have to wait until it has the necessary data.</p>
+<h4 id="nativeprngnonblocking">NATIVEPRNGNONBLOCKING</h4>
+<p>On the other hand, you have <a href="http://man7.org/linux/man-pages/man4/urandom.4.html">/dev/urandom</a> (used by NATIVEPRNGNONBLOCKING) which is non blocking. This means that you won&rsquo;t have to wait for new random data. It uses /dev/random to get a seed to feed a PRNG algorithm.<br>
+If it can&rsquo;t get a seed then theoretically, since this is non-blocking, it will return a <a href="https://linux.die.net/man/4/urandom">preditable value</a></p>
+<p>NATIVEPRNG is configurable through the java.security file and usually uses /dev/random.<br>
+This is the default configuration, and its safe :)</p>
+<p>Lets now take a quick look at the available options for windows.</p>
+<h4 id="windows-prng">WINDOWS-PRNG</h4>
+<p>WINDOWS-PRNG uses <a href="https://docs.microsoft.com/en-us/windows/desktop/api/wincrypt/nf-wincrypt-cryptgenrandom">native crypto api</a>&rsquo;s from windows to return random data, which is also considered safe. If you send the same seed to two different instances the output will be different.</p>
+<h4 id="sha1prng">SHA1PRNG</h4>
+<p>Lets move to SHA1PRNG. This one is available on all systems since its a pure java implementation. The security of this algorithm is directly linked with the source of entropy. Two instances with the same seed generate the same value. Also a lot of experts in the field have <a href="https://android-developers.googleblog.com/2016/06/security-crypto-provider-deprecated-in.html">claimed</a> this method is not that secure.</p>
+<p>This is also the default algorithm selected for windows environments prior to Java version 9.</p>
+<p>So if you are using a windows system you should always change the default algorithm:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.predictrandom</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.security.NoSuchAlgorithmException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.security.SecureRandom</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.logging.Level</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.logging.Logger</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">SafeSecureRandomWindows</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        <span style="color:#204a87;font-weight:bold">try</span> 
+        <span style="color:#ce5c00;font-weight:bold">{</span>
+            <span style="color:#000">SecureRandom</span> <span style="color:#000">sr</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">SecureRandom</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getInstance</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;WINDOWS-PRNG&#34;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        <span style="color:#ce5c00;font-weight:bold">}</span> 
+        <span style="color:#204a87;font-weight:bold">catch</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">NoSuchAlgorithmException</span> <span style="color:#000">ex</span><span style="color:#ce5c00;font-weight:bold">)</span> 
+        <span style="color:#ce5c00;font-weight:bold">{</span>
+            <span style="color:#000">Logger</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getLogger</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">SafeSecureRandomWindows</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">class</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getName</span><span style="color:#ce5c00;font-weight:bold">()).</span><span style="color:#c4a000">log</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">Level</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">SEVERE</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">null</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">ex</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        <span style="color:#ce5c00;font-weight:bold">}</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="drbg">DRBG</h5>
+<p>From Java 9 and above you now have a new option: DRBG (from Deterministic Random Bit Generator and this is the <strong>new default for windows environments</strong>. There are some nice options you can configure from the java.security file, but the defaults are good</p>
+<h4 id="tldr"><strong>;TLDR</strong></h4>
+<ul>
+<li>Random is unfit for security related stuff, or other scenarios where you need unpredictability</li>
+<li>SecureRandom is the way to go</li>
+<li>Default SecureRandom algorithm in windows is SHA1PRNG for Java 8 and bellow</li>
+<li>SHA1PSRNG is unsafe, don&rsquo;t use it.</li>
+<li>Don&rsquo;t seed SecureRandom unless you really (really) know what you are doing</li>
+</ul>
+<p>You can find a project&rsquo;s source code with some tests <a href="https://github.com/TheSecurityVault/random">here</a></p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/xml-external-entities-xxe/">&lArr; Previous Post<br><b>XML External Entities (XXE)</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/insecure-deserialization-in-java/"> Next Post &rArr;<br><b>Insecure Deserialization in Java</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

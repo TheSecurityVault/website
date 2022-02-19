@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Secure Password Hashing</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Secure Password Hashing" />
+<meta property="og:description"
+  content="Password Hashing 101: MD5 and SHA1 which are quite common, are already considered unsafe. So if you are using them, replace them with a secure algorithm. Even for checksums should not considered secure. Check references for more info.
+Now that we put that aside lets start from the basics.
+User passwords should always be stored in a one way hash.
+This means that after hashing it the original content cannot be retrieved." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/secure-password-hashing/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/secure-password-hashing/images/banner.jpeg" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2019-10-30T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:05+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/secure-password-hashing/images/banner.jpeg" /><meta name="twitter:title" content="Secure Password Hashing" />
+<meta name="twitter:description"
+  content="Password Hashing 101: MD5 and SHA1 which are quite common, are already considered unsafe. So if you are using them, replace them with a secure algorithm. Even for checksums should not considered secure. Check references for more info.
+Now that we put that aside lets start from the basics.
+User passwords should always be stored in a one way hash.
+This means that after hashing it the original content cannot be retrieved." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/secure-password-hashing/images/banner.jpeg" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Secure Password Hashing</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Oct 30, 2019</li>
+              <li class="text-secondary">6 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p><strong>Password Hashing 101</strong>: MD5 and SHA1 which are quite common, are already considered unsafe. So if you are using them, replace them with a secure algorithm. Even for checksums should not considered secure. Check references for more info.</p>
+<p>Now that we put that aside lets start from the basics.</p>
+<p>User passwords should always be stored in a one way hash.<br>
+This means that after hashing it the original content cannot be retrieved.</p>
+<p>To attack it there are the so called brute force attacks that can try all possible combinations until it gives the same hash. This is usually avoided since it may be quite slow.<br>
+A better way to attack this is to use <a href="https://en.wikipedia.org/wiki/Rainbow_table">Rainbow Tables</a>.<br>
+A Rainbow Table is a pre-computed table that stores the hash values for a specific range and length of characters. This way instead of being hashing all possible combinations, you just need to find the already hashed value, and see the value that generated that hash. This is a lot faster and reliable, if you already have the rainbow table.</p>
+<p>And to prevent this type of attacks a salt is used.</p>
+<h2 id="salt">Salt</h2>
+<p>If you search for salt in cryptography on google you will see everywhere saying that salt adds entropy to the password/hash. But what does that mean?<br>
+It means that adding a salt (which is a set of bytes) to a password its hash will be different. If you want to use the regular pre-computed rainbow tables you won&rsquo;t be able to find the password to login on a system for two reasons:</p>
+<ul>
+<li>You &ldquo;cannot&rdquo; find a collision (a collision is when two different inputs give the same hash). If a collision is found in an hashing algorithm it gets considered unsafe. So while you use a considered safe algorithm that shouldn&rsquo;t apply</li>
+<li>Even if you eventually find a collision and set the obtained password on a website to try to login, the webserver will apply a salt to that password and the ending hash will be different.</li>
+</ul>
+<p>So you can generate a rainbow table for a specific salt and use it to break a dump of passwords. Well&hellip; Salts need be unique, in other words, you should have a different salt for each user. This would make unreliable generating RainbowTables for multiple users.<br>
+If you are generating a new salt for each user you need to save it anywhere. Usually salts are stored in plaintext in the database, thats ok.</p>
+<p>Regarding salt there are some discussions about its properties. I&rsquo;m going to write about my opinions and explain why :)</p>
+<ul>
+<li><strong>Salt needs to be unique</strong> - This is the most important. Each user password should have an uniquely generated salt for it. Using same salt for multiple users would decrease the effort to crack them.</li>
+<li><strong>Salt can be public</strong> - Yes, it doesn&rsquo;t matter if an attacker knows your salt&hellip; He can&rsquo;t do much with it. He can generate a rainbow table before he gets the hash dump. But, can only try to crack the hash if has access to the DB to get the hash, and if he gets to the DB to get the hash it also gets the salt. Its just a matter of starting a rainbow table sooner. But there is no reason for a salt to be public anyway.</li>
+<li><strong>Salt doesn&rsquo;t need to be securely generated</strong> - If you look in the web, you will see a lot of articles stating that salt needs to be securely generated. I disagree, first because of the previous point, it can be public. If you just use Random which is predictable, an attacker can guest the next salt values and if it has enough samples (which means had to see previous salts in database) it could predict the next ones. So to correctly predict them it would need to know how much times the Random method had run before. Lets assume that random is only used to generate salts, the attacker would need to know how many users where created since then (could be possible through user ID&rsquo;s) and if salt has changed (when a user changes password), to guess next salts. That&rsquo;s a lot of pre-conditions to be feasible.<br>
+If you want to use <a href="https://thesecurityvault.com/weak-random/">SecureRandom</a> there&rsquo;s no harm in doing it. If you have a system with high performance requirements, <a href="https://thesecurityvault.com/weak-random/">Random</a> is enough to have good security as well</li>
+<li><strong>Salt should be long enough</strong> - The recommended length is at least 128 bits.</li>
+<li><strong>When user changes password a new salt should also be generated.</strong></li>
+</ul>
+<h2 id="pepper">Pepper</h2>
+<p>Pepper is another layer of security and it acts quite like the salt. The difference is that it&rsquo;s the same for all users, and shouldn&rsquo;t be stored on database. Hardcoding it or putting on a config file its ok.</p>
+<p>The motivation to do so is that if an attacker gets to dump the database (with an sql injection for example) it still needs the pepper to be able to brute force the credentials.</p>
+<h2 id="hash-algorithms">Hash Algorithms</h2>
+<p>Ok, so we already understand salts, what about the right algorithm for hashing?</p>
+<p>You cannot tell the &ldquo;best&rdquo; one. There are different scenarios, ones better than others.</p>
+<p>Lets take a quick look&hellip;<br>
+I like to separate the sha* algorithms and&hellip; the others :)</p>
+<p>For some time sha256 and sha512 have been suggested instead of for example sha1 or md5. The issue with sha256 and 512 is that they are really fast to process. A <a href="https://twitter.com/TychoTithonus/status/1314424307208970240">challenge on twitter</a> showed that a 10 char sha256 hash was broken by individuals in 5 days</p>
+<p>That&rsquo;s why I usually turn to other solutions like Argon2, Bcrypt or PBKDF2</p>
+<p>These algorithms take more resources from the machine and are slower to compute. While this can be a disadvantage since it consumes more server resources, they increase significantly the password security.<br>
+IETF published in 2017 <a href="https://tools.ietf.org/html/rfc8018">RFC8018</a> where PBKDF2 it the recommended algorithm for password derivation (which can be used for password hashing). On the other hand, OWASP <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Password_Storage_Cheat_Sheet.md#leverage-an-adaptive-one-way-function">recomends</a> the usage of Argon2, Bcrypt is also a good alternative.</p>
+<p>There&rsquo;s an awesome article from 1password about how they use <a href="https://support.1password.com/pbkdf2/"><strong>PBKDF2</strong></a></p>
+<p>Actually Argon2 is growing on me and it won the <a href="https://password-hashing.net/"><strong>password hashing competition</strong></a></p>
+<p>Just out of curiosity I&rsquo;ve seen projects where HMAC was used for password hashing but I don&rsquo;t recommend it</p>
+<h2 id="iterations">Iterations</h2>
+<p>Some hash algorithms allow you the define the iterations count. This defines how many times the algorithm is going to be used. It increases the security of your application by making harder to compute the final hash.<br>
+The amount of recommended iterations can change according to each algorithm. For example, NIST recommends 10 000 iterations for <a href="https://pages.nist.gov/800-63-3/sp800-63b.html#sec5">PBKDF2</a>.<br>
+Argon2 not only uses the iterations to affect the computational cost, but you can define the memory to be used and the number of threads. So each system should define this values according to its hardware requirements, and this has impact in the final hash .</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/hardcoded-passwords/">&lArr; Previous Post<br><b>Hardcoded Passwords</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/breaking_c_sharp_securestring/"> Next Post &rArr;<br><b>Breaking C# SecureString</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

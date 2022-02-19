@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Auth Token in LocalStorage</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Auth Token in LocalStorage" />
+<meta property="og:description"
+  content="Getting right to the point: storing a token in LocalStorage is insecure.
+It&rsquo;s getting more and more common to use token based authentication, specially on Single Page Applications (SPA) that need to communicate with an API. That is a good thing, and I really like the idea of JWT tokens.
+Why localStorage is bad Well, when working with cookies, the golden rule is that when storing sensitive information like an auth token, or a session, the cookie should be marked as httpOnly." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/auth-token-in-localstorage/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/auth-token-in-localstorage/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2020-03-27T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:19+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/auth-token-in-localstorage/images/banner.png" /><meta name="twitter:title" content="Auth Token in LocalStorage" />
+<meta name="twitter:description"
+  content="Getting right to the point: storing a token in LocalStorage is insecure.
+It&rsquo;s getting more and more common to use token based authentication, specially on Single Page Applications (SPA) that need to communicate with an API. That is a good thing, and I really like the idea of JWT tokens.
+Why localStorage is bad Well, when working with cookies, the golden rule is that when storing sensitive information like an auth token, or a session, the cookie should be marked as httpOnly." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/auth-token-in-localstorage/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Auth Token in LocalStorage</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Mar 27, 2020</li>
+              <li class="text-secondary">4 minutes</li>
+              
+              <li>appsec&#34;</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Getting right to the point: storing a token in LocalStorage is insecure.<br>
+It&rsquo;s getting more and more common to use token based authentication, specially on Single Page Applications (SPA) that need to communicate with an API. That is a good thing, and I really like the idea of JWT tokens.</p>
+<h3 id="why-localstorage-is-bad">Why localStorage is bad</h3>
+<p>Well, when working with cookies, the golden rule is that when storing sensitive information like an auth token, or a session, the cookie should be marked as <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Session_Management_Cheat_Sheet.md#cookies">httpOnly</a>. This means that it cannot be accessed by javascript, preventing this way an attacker from stealing the sessions from other users if they find for example an XSS attack or if a javascript dependency included in the app gets compromised.</p>
+<p>So the same way we want cookies to be httpOnly (and nowadays also to have the Secure flag) why would we store a token in localstorage? It has an API to fully control it from javascript, so, no, localStorage is not good enough to store this sensitive data (more about it <a href="https://snyk.io/blog/is-localstorage-safe-to-use/">here</a>).</p>
+<p>SessionStorage has an identical concept, WebSQL and IndexedDB are also accessible through javascript. So where to go?</p>
+<h3 id="cookies">Cookies</h3>
+<p>Yeah, I know&hellip; You have an API and stuff and your API&rsquo;s shouldn&rsquo;t use cookies, because it&rsquo;s considered a bad practice.</p>
+<p>In fact, cookies are still the best and secure place to save the auth token for a webapp. You can mark it as httponly, which means that javascript code can&rsquo;t access it. And if you need to send it in an XHR request the bowsers also do it for you by default if in the same domain. If you are doing a request to a different domain you need to use the <code>[withCredentials](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/withCredentials)</code> options.</p>
+<p>You can also set the cookie as secure, which means that the cookie is being sent only over the HTTPS connections.</p>
+<p>But sometimes cookies are not the solution&hellip;</p>
+<h3 id="when-cookies-are-not-the-solution">When cookies are not the solution</h3>
+<p>If you have an application that doesn&rsquo;t have a backend (which is not that common) you can&rsquo;t generate cookies. In this case you have two options:</p>
+<ul>
+<li><strong>You have a Single Page Application (SPA) and you can keep the token in memory.</strong> This maybe a have some usability problems, like if the user opens a new tab of closes and reopens the page, of even if refreshes it</li>
+<li><strong>LocalStorage</strong> - This is the bad solution. Unfortunately it has a better user experience. But again an app without a backend is quite uncommon, so my recommendation would just be to create one.</li>
+</ul>
+<p>If your login system is in a different domain besides the withCredentials that you need to set in the XHR requests you also need to change the CORS rules to allow the requests from the domain of the frontend.</p>
+<h3 id="dont-forget-csrf">Don&rsquo;t forget CSRF</h3>
+<p>Not using cookies had its advantages and one of them was that you didn&rsquo;t have CSRF attack vectors (unless using BasicAuth). If you get back to cookies you may have this old attack vector back. But not always.</p>
+<p>If you have a specific set of conditions you may be safe from CSRF using cookies. Let&rsquo;s take a look at them:</p>
+<ul>
+<li><strong>Not using GET method to do state changing actions</strong> - This is the most important rule and an important best practice.</li>
+<li><strong>Have a restrictive CORS policy</strong> <strong>-</strong> Do not allow requests from URL&rsquo;s others then the one from your frontend</li>
+<li><strong>Accept only JSON and XML content</strong> - An attacker has two ways to &lsquo;trick&rsquo; a victim into doing a request. Using an html form tag, or a XHR request. The XHR request is already covered because of the CORS policy. The form tag can only send <a href="https://www.w3schools.com/tags/att_form_enctype.asp">text, url encoded or form encoded content</a>.</li>
+</ul>
+<p>But have in mind that most of frameworks accepts text/plain content type and then convert it to the expected one, so always make sure plain content type is not enabled.</p>
+<p>if you meet these 3 conditions you don&rsquo;t need to worry with CSRF again, Otherwise don&rsquo;t forget to add the the protection.</p>
+<p>To wrap up: do not store <a href="https://auth0.com/docs/tokens/guides/store-tokens">auth token in localstorage</a>.</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/security-of-the-npm-packages/">&lArr; Previous Post<br><b>Security of the NPM Packages</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/"> Next Post &rArr;<br><b>Understanding CORS and SOP bypass techniques</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

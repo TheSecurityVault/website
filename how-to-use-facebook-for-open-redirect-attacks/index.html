@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>How to use Facebook for Open Redirect attacks</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="How to use Facebook for Open Redirect attacks" />
+<meta property="og:description"
+  content="Some days ago I found an Open Redirect in Facebook website, that I promptly reported to their Bug Bounty Program. There were a lot of warnings that Open Redirect&rsquo;s are usually false positives, but this one looked legit to me.
+Facebook disregarded the report, saying that wasn&rsquo;t exploitable as there are protections in place against it.
+So this is a blog post of a &ldquo;not&rdquo; open redirect issue in Facebook." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2020-08-15T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:37+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/images/banner.png" /><meta name="twitter:title" content="How to use Facebook for Open Redirect attacks" />
+<meta name="twitter:description"
+  content="Some days ago I found an Open Redirect in Facebook website, that I promptly reported to their Bug Bounty Program. There were a lot of warnings that Open Redirect&rsquo;s are usually false positives, but this one looked legit to me.
+Facebook disregarded the report, saying that wasn&rsquo;t exploitable as there are protections in place against it.
+So this is a blog post of a &ldquo;not&rdquo; open redirect issue in Facebook." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>How to use Facebook for Open Redirect attacks</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Aug 15, 2020</li>
+              <li class="text-secondary">5 minutes</li>
+              
+              <li>pentest</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Some days ago I found an Open Redirect in Facebook website, that I promptly reported to their Bug Bounty Program. There were a lot of warnings that Open Redirect&rsquo;s are usually false positives, but this one looked legit to me.</p>
+<p>Facebook disregarded the report, saying that wasn&rsquo;t exploitable as there are protections in place against it.</p>
+<p>So this is a blog post of a &ldquo;not&rdquo; open redirect issue in Facebook.</p>
+<h3 id="the-vulnerability">The Vulnerability</h3>
+<p>Before moving forward we need to understand what Open Redirect is.</p>
+<p>Open Redirect happens when a website has a redirect page, that blindly redirects a user to a website provided. This with some social engineering can be used to trick a victim to go to a malicious website.</p>
+<p>Lets see an example:</p>
+<p>Assume example.com has an endpoint at /redirect that receives a &ldquo;url&rdquo; query parameter, that when hit, will redirect a user to the url provided:</p>
+<p><a href="https://example.com/redirect?url=malicious.com">https://example.com/redirect?url=malicious.com</a></p>
+<p>An URL opened by the user would be automatically redirect him to malicious.com.</p>
+<p>An inexperienced user looking at the URL would assume that he&rsquo;s opening example.com and click on it, but in fact its going to malicious.com</p>
+<p>This is a simple url, but you can make the url much more complex and obfuscated to that the user doesn&rsquo;t notice whats happening:</p>
+<p><a href="https://example.com?token=QSbCZSb05aCbOZo6Zxdr&amp;%75%72%6c=%6d%61%6c%69%63%69%6f%75%73%2e%63%6f%6d">https://example.com?token=QSbCZSb05aCbOZo6Zxdr&amp;%75%72%6c=%6d%61%6c%69%63%69%6f%75%73%2e%63%6f%6d</a></p>
+<p>This was done by adding a new param, which is ignored by the webpage, and <a href="https://onlineasciitools.com/url-encode-ascii">URL encoding</a> the malicious.com website.</p>
+<p>And not this becomes a more hard to understand URL, and can easily be used to trick a user.</p>
+<h3 id="protection">Protection</h3>
+<p>Easiest way to protect your website against open redirect attacks is by not automatically redirecting based on user input. In most of the times it is not needed.</p>
+<p>If you really need to do it, there are a few ways of doing this.</p>
+<p>The most common one is by showing a warning to the user before a redirect:</p>
+<p><a href="images/2020-07-28-11_54_16-Window.png"><img src="images/2020-07-28-11_54_16-Window.png" alt="Redirect warning in facebook"></a></p>
+<p>You can see this in action <a href="https://l.facebook.com/l.php?u=https://google.com">here</a></p>
+<p>(We will see bellow another and nice way to protect against open redirect)</p>
+<h3 id="open-redirect-and-facebook">Open Redirect and Facebook</h3>
+<p>Although the above message is displayed by facebook, sometimes this is not enough. In Facebook&rsquo;s case all URL&rsquo;s that you open are in fact a redirect done by  <a href="https://www.facebook.com/notes/facebook-security/link-shim-protecting-the-people-who-use-facebook-from-malicious-urls/10150492832835766#">facebook.com/l.php</a> or <a href="https://www.facebook.com/notes/facebook-security/link-shim-protecting-the-people-who-use-facebook-from-malicious-urls/10150492832835766#">facebook.com/l/</a></p>
+<p>Facebook uses this mechanism so that every time you open a new link, it goes through one of these two endpoints, so they can collect some data like the link you clicked and when. This can then be used for targeted ads for example.</p>
+<p>Now you are probably asking why you never noticed you are being redirected to these endpoints&hellip; I also had never notice either until a few days, and this was due (probably) to a mistake with the new Facebook interface.</p>
+<p>When I wrote this post facebook was in the process of migrating the website to a material like style. And in the old interface, every time you hovered a link this would be what you would get:</p>
+<p><a href="images/image-1024x152.png"><img src="images/image-1024x152.png" alt="old facebook link hover"></a></p>
+<p>If you notice in the bottom left corner the url doesn&rsquo;t point to one of facebook&rsquo;s endpoints&hellip;</p>
+<p>This is due to a feature that facebook implemented&hellip; On every link there&rsquo;s an onclick listener that will replace the current URL by one pointing to one of the facebook redirection endpoints.</p>
+<p>BUT, with the migration to the new interface I finally noticed this as it is not in the onclick event (probably a bug):</p>
+<p><a href="images/image-1.png"><img src="images/image-1.png" alt="newfacebook link hover"></a></p>
+<h4 id="link-shims">Link Shims</h4>
+<p>But if every link is a redirect, and as seen above, facebooks warns when leaving the website, how come that we don&rsquo;t see the warning everytime we leave facebook?</p>
+<p>This is due a nice feature facebook added, called Link Shims.</p>
+<p>Acording to facebook&rsquo;s <a href="https://www.facebook.com/notes/facebook-security/link-shim-protecting-the-people-who-use-facebook-from-malicious-urls/10150492832835766">documentation</a> every link when replaced in the onclick event is added a user specific token. This token makes sure that that link redirect is only to be used by the same user for whom the token was generated.</p>
+<p>This way, if an attacker copies the url with the token and sends it to another user, it will be invalid and the user will be prompt before leaving facebook. Its a really nice trick.</p>
+<p>But this is where things start to get complicated as this protection seems to not be working as expected.</p>
+<h4 id="the-issue">The issue</h4>
+<p>As I mentioned before, and as is mentioned in the facebook&rsquo;s documentation the token generated should be user specific. This is the only way the token actually protects against Open Redirects.</p>
+<p>Unfortunately this is not what is happening, and the token is not being properly validated, opening the website to the vulnerability.</p>
+<p>To take advantage of this, an attacker can get the link generated for him, alter the redirecting website and just send it to his victim as in the GIF bellow</p>
+<p><a href="images/fb_open_redirect-1024x639.gif"><img src="images/fb_open_redirect-1024x639.gif" alt="exploting open redirect in facebook"></a></p>
+<p>Take into consideration the the copy url only worked due to the change in facebook layout that exposed the redirect url. Otherwise you would need other ways to get it.</p>
+<p>I tested this in multiple ways, to make sure it was actually exploitable and these are my findings:</p>
+<ul>
+<li>The token is not being validated properly. It worked for every facebook user I sent the manipulated links, and works even when not logged into facebook</li>
+<li>There&rsquo;s a blacklist of websites that facebook blocks automatic redirects, independently of the token, like <a href="https://evilzone.org/">https://evilzone.org/</a></li>
+<li>Although the blacklist, websites with invalid certificates (expired, revoked, untrusted, etc) are not blocked (I used <a href="https://badssl.com/">https://badssl.com/</a> for the tests)</li>
+<li>Shortened URL&rsquo;s are first resolved to make sure they are not a blacklist URL</li>
+<li>If you remove the token, it will always warn you before the redirect</li>
+<li>The token is valid for about 3 hours and 15 minutes. After that facebook will also ask you if you want to be redirected. This may be bad for a phishing email campaign but still works awesome if in a chat conversation, a live event, etc.</li>
+</ul>
+<h4 id="facebooks-response">Facebook&rsquo;s Response</h4>
+<p>At the time of this writing I&rsquo;ve exchanged a few messages with facebook and they still refuse to accept the vulnerability as they are &ldquo;protected&rdquo; by the linkshims, blacklists, and time based tokens.</p>
+<p>Independently of all of those protections open redirect is still possible, maybe not for phishing emails due to the time limitations but maybe for a phishing attack on social media, chats, live streams, etc&hellip;</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/">&lArr; Previous Post<br><b>Understanding CORS and SOP bypass techniques</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/screen-caching/"> Next Post &rArr;<br><b>Screen Caching</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

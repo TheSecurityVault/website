@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Screen Caching</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Screen Caching" />
+<meta property="og:description"
+  content="Screen Caching is another of those vulnerabilities nobody is paying attention to, and this one is quite important.
+As an example, even most bank applications are usually &lsquo;vulnerable&rsquo; to this issue (most of mine are). And this is a reality even for those focusing on security, like web based only banks.
+So what is screen caching? Screen caching is a mobile vulnerability, caused due to a performance/usability feature present in mobile OS&rsquo;s." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/screen-caching/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/screen-caching/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2020-11-01T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T11:07:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/screen-caching/images/banner.png" /><meta name="twitter:title" content="Screen Caching" />
+<meta name="twitter:description"
+  content="Screen Caching is another of those vulnerabilities nobody is paying attention to, and this one is quite important.
+As an example, even most bank applications are usually &lsquo;vulnerable&rsquo; to this issue (most of mine are). And this is a reality even for those focusing on security, like web based only banks.
+So what is screen caching? Screen caching is a mobile vulnerability, caused due to a performance/usability feature present in mobile OS&rsquo;s." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/screen-caching/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Screen Caching</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Nov 1, 2020</li>
+              <li class="text-secondary">3 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Screen Caching is another of those vulnerabilities nobody is paying attention to, and this one is quite important.</p>
+<p>As an example, even most bank applications are usually &lsquo;vulnerable&rsquo; to this issue (most of mine are). And this is a reality even for those focusing on security, like web based only banks.</p>
+<h3 id="so-what-is-screen-caching">So what is screen caching?</h3>
+<p>Screen caching is a mobile vulnerability, caused due to a performance/usability feature present in mobile OS&rsquo;s.</p>
+<p>Let&rsquo;s see an example, you&rsquo;re navigating in your bank account through the mobile app, then you send the application to background and go on with your life.</p>
+<p>When you grab back your phone and eventually open the &ldquo;Recent Apps&rdquo; screen you&rsquo;ll see there the bank&rsquo;s application with the sensitive information like your bank account balance. This is specially bad if you are showing something to your friends on your phone, as they can easily see this private information.</p>
+<p><a href="images/image.png"><img src="images/image.png" alt="Screen Caching example"></a></p>
+<h3 id="how-to-fix-it">How to Fix it</h3>
+<p>This is an intended behavior from iOS as well as Android, that take a snapshot of the application right before it is backgrounded, to be shown in the App Switcher (iOS) or &ldquo;Recent App&rdquo; screen (Android).</p>
+<p>So a fix to this issue is to hide the important fields just before the app enters background.</p>
+<p>There are a few ways to do this, but these are the 2 most common:</p>
+<ul>
+<li>Just before the app enters background open a new view. This is usually done with just the app logofor that. When the app is opened again, hide the screen</li>
+<li>Hide the fields with sensitive information when the application is being backgrounded. Revert the operation when opening back.</li>
+</ul>
+<h3 id="android">Android</h3>
+<p>Android has native ways to add this protection, being the easiest one, showing a blank screen by specifying a <a href="https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html#FLAG_SECURE">secure flag</a></p>
+<p>This can be done by registering the relevant activities as secure in the onCreate method like so:</p>
+<p>getWindow().setFlags(
+WindowManager.LayoutParams.FLAG_SECURE,
+WindowManager.LayoutParams.FLAG_SECURE
+);</p>
+
+
+<a href="images/image.png">
+  <img style="width:49%" src="images/image.png" alt="no screen caching protection" />
+</a>
+
+<a href="images/image-1.png">
+  <img style="width:49%"src="images/image-1.png" alt="screen caching protection" />
+</a>
+  </p>
+
+<h3 id="ios">iOS</h3>
+<p>For iOS the easiest way to accomplish this is by using the methods &lsquo;sceneWillResignActive&rsquo; and &lsquo;sceneDidBecomeActive&rsquo; from AppDelegate/SceneDelegate.</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28"><a style="outline: none; text-decoration:none; color:inherit" href="#28">28</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29"><a style="outline: none; text-decoration:none; color:inherit" href="#29">29</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30"><a style="outline: none; text-decoration:none; color:inherit" href="#30">30</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="31"><a style="outline: none; text-decoration:none; color:inherit" href="#31">31</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="32"><a style="outline: none; text-decoration:none; color:inherit" href="#32">32</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="33"><a style="outline: none; text-decoration:none; color:inherit" href="#33">33</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="34"><a style="outline: none; text-decoration:none; color:inherit" href="#34">34</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="35"><a style="outline: none; text-decoration:none; color:inherit" href="#35">35</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="36"><a style="outline: none; text-decoration:none; color:inherit" href="#36">36</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="37"><a style="outline: none; text-decoration:none; color:inherit" href="#37">37</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">UIKit</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">SwiftUI</span>
+
+<span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">SceneDelegate</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIResponder</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">UIWindowSceneDelegate</span> <span style="color:#000;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">var</span> <span style="color:#000">window</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIWindow</span><span style="color:#000;font-weight:bold">?</span>
+    <span style="color:#204a87;font-weight:bold">var</span> <span style="color:#000">screenCachingProtection</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIView</span><span style="color:#000;font-weight:bold">!</span>
+    
+    <span style="color:#204a87;font-weight:bold">func</span> <span style="color:#000">scene</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">_</span> <span style="color:#000">scene</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIScene</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">willConnectTo</span> <span style="color:#000">session</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UISceneSession</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">options</span> <span style="color:#000">connectionOptions</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIScene</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">ConnectionOptions</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">contentView</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">ContentView</span><span style="color:#000;font-weight:bold">()</span>
+
+        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">windowScene</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">scene</span> <span style="color:#204a87;font-weight:bold">as</span><span style="color:#000;font-weight:bold">?</span> <span style="color:#000">UIWindowScene</span> <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#204a87;font-weight:bold">let</span> <span style="color:#000">window</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">UIWindow</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">windowScene</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">windowScene</span><span style="color:#000;font-weight:bold">)</span>
+            <span style="color:#000">window</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">rootViewController</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">UIHostingController</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">rootView</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">contentView</span><span style="color:#000;font-weight:bold">)</span>
+            <span style="color:#204a87;font-weight:bold">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">window</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">window</span>
+            <span style="color:#000">window</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">makeKeyAndVisible</span><span style="color:#000;font-weight:bold">()</span>
+            
+            <span style="color:#204a87;font-weight:bold">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">screenCachingProtection</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">UIView</span><span style="color:#000;font-weight:bold">.</span><span style="color:#204a87;font-weight:bold">init</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">frame</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">window</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">frame</span> <span style="color:#000;font-weight:bold">)</span>
+            <span style="color:#204a87;font-weight:bold">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">screenCachingProtection</span><span style="color:#000;font-weight:bold">?.</span><span style="color:#000">backgroundColor</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">UIColor</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">white</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#204a87;font-weight:bold">func</span> <span style="color:#000">sceneDidDisconnect</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">_</span> <span style="color:#000">scene</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIScene</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{}</span>
+
+    <span style="color:#204a87;font-weight:bold">func</span> <span style="color:#000">sceneDidBecomeActive</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">_</span> <span style="color:#000">scene</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIScene</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#204a87;font-weight:bold">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">screenCachingProtection</span><span style="color:#000;font-weight:bold">?.</span><span style="color:#000">removeFromSuperview</span><span style="color:#000;font-weight:bold">()</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#204a87;font-weight:bold">func</span> <span style="color:#000">sceneWillResignActive</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">_</span> <span style="color:#000">scene</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIScene</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#204a87;font-weight:bold">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">window</span><span style="color:#000;font-weight:bold">?.</span><span style="color:#000">addSubview</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">self</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">screenCachingProtection</span><span style="color:#000;font-weight:bold">!)</span>
+    <span style="color:#000;font-weight:bold">}</span>
+
+    <span style="color:#204a87;font-weight:bold">func</span> <span style="color:#000">sceneWillEnterForeground</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">_</span> <span style="color:#000">scene</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIScene</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{}</span>
+
+    <span style="color:#204a87;font-weight:bold">func</span> <span style="color:#000">sceneDidEnterBackground</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">_</span> <span style="color:#000">scene</span><span style="color:#000;font-weight:bold">:</span> <span style="color:#000">UIScene</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#000;font-weight:bold">{}</span>
+
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+
+<a href="images/simulator_screenshot_2F890BB3-2362-4CAA-BDA8-BDC8DF7CB1D3-577x1024.png">
+  <img style="width:49%" src="images/simulator_screenshot_2F890BB3-2362-4CAA-BDA8-BDC8DF7CB1D3-577x1024.png" alt="no screen caching protection" />
+</a>
+
+<a href="images/simulator_screenshot_99C2BF54-5484-4249-B58A-48F49809503F-577x1024.png">
+  <img style="width:49%"src="images/simulator_screenshot_99C2BF54-5484-4249-B58A-48F49809503F-577x1024.png" alt="screen caching protection" />
+</a>
+  </p>
+
+<p>You can use this as well to show a splash screen or something similar.</p>
+<p>This code only works for UIKit App Delegate&rsquo;s App lifecycle. If you chose to manage the app lifecycle with SwiftUI I&rsquo;ll update this post with the code for that in the future</p>
+<p>Another nice trick for iOS is to blur the background. There&rsquo;s a nice comment on <a href="https://stackoverflow.com/a/53503787">StackOverflow</a> for that.</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/">&lArr; Previous Post<br><b>How to use Facebook for Open Redirect attacks</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/the-log-forging-vulnerability-and-how-to-fix-it/"> Next Post &rArr;<br><b>The Log Forging Vulnerability And How To Fix It</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

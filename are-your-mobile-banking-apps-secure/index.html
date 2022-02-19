@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Are your mobile banking apps secure?</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Are your mobile banking apps secure?" />
+<meta property="og:description"
+  content="These past few days I&rsquo;ve been doing some security checks in my mobile banking apps as I basically never did it since opening the accounts a lot of years ago. I was quite surprised with the difference of security among my bank applications, and it even motivated me to close one of the accounts.
+In this article I&rsquo;m going to compare some of the security features between two of my banks&#39; mobile applications, from the user perspective, without going into the underlying details of the coding implementation." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2021-03-06T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:55+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/images/banner.png" /><meta name="twitter:title" content="Are your mobile banking apps secure?" />
+<meta name="twitter:description"
+  content="These past few days I&rsquo;ve been doing some security checks in my mobile banking apps as I basically never did it since opening the accounts a lot of years ago. I was quite surprised with the difference of security among my bank applications, and it even motivated me to close one of the accounts.
+In this article I&rsquo;m going to compare some of the security features between two of my banks&#39; mobile applications, from the user perspective, without going into the underlying details of the coding implementation." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Are your mobile banking apps secure?</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Mar 6, 2021</li>
+              <li class="text-secondary">8 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>These past few days I&rsquo;ve been doing some security checks in my mobile banking apps as I basically never did it since opening the accounts a lot of years ago. I was quite surprised with the difference of security among my bank applications, and it even motivated me to close one of the accounts.</p>
+<p>In this article I&rsquo;m going to compare some of the security features between two of my banks' mobile applications, from the user perspective, without going into the underlying details of the coding implementation.</p>
+<p>I hope to share some light about things you should have (or not), security wise, with your banking apps</p>
+<p>To differentiate between between the two apps, I&rsquo;ll refer to them as the &ldquo;Safer App&rdquo; and the &ldquo;Not so Secure App&rdquo;. I will not mention the bank names.</p>
+<h2 id="initial-login">Initial Login</h2>
+<p>The Safer App require you to go to an ATM requesting a new login. This option generate a username automatically and require you to define a 7 digit code. The username can only be used to register one device and the 7 digit code is bound to that user only. After that you need to request new login to register other devices. When logging in in the app you need to introduce the generated username and 3 of the 7 digits code. A particularly interesting feature is that all operations that ask you for 3 digits will always ask for the 3 same digits, until you correctly provide them. So if you cancel the operation and try again, will ask the same 3 digits. This is good, in case an attacker finds 3 of those digits and tries to get the app to request those specific 3.</p>
+<p>The Not so Secure app after enabling mobile app access with the bank asks you 3 digits from 1 of the two: SSN or personal id number. This is public information so not a good start. In the same way the app requires you 3 digits from a 7 digit defined code. And oposite to the Safer app, if you cancel the operation and open again it will ask you for a new code.</p>
+<p>Both apps support to use FaceID with my iPhone although personally I don&rsquo;t recommend enabling this feature, as you can sometimes allow other people to unlock the phone.</p>
+<h2 id="application-access">Application Access</h2>
+<p>Both applications require you to set a 4 digit pin to access the app. The option to go with a 4 digit here is nice because if forces the user to create a different code then the 7 digit code. Unfortunately 4 digit pins are used for a lot of different things, so users will probably reuse them. A better approach would be to force a password, or create a code with different size and check that it doesn&rsquo;t contain a sequence from the 7 digit code.</p>
+<p>Obviously for an attacker to use the app still needs access to the phone&hellip; And a 4 digit it&rsquo;s better than nothing, but if the attacker knows the person&hellip; it can easily enter the bank app. Also 4 digit codes tend to be important years (like birth) or special dates (month/day, day/month). Also none of the applications forced the user to have a passcode to lock the cellphone.</p>
+<p>It should be a best practice for apps that deal with sensitive data, to force or at least advise the users to create a lock passcode for their phones in case somebody steals it.</p>
+<p>Also, the Safer app, every time its backgrounded requires the 4 digit code to login again. The same doesn&rsquo;t happen with the not so secure app, which I believe that needs to be in background for more than X seconds/minutes before requesting the code again. So if I give my phone to somebody after opening the banking app, that person can easily access my banking app without any verification.</p>
+<h2 id="operations-authorization">Operations' Authorization</h2>
+<p>This is probably the most important part&hellip; What do you need to do an operation in the application?</p>
+<h3 id="the-matrix-card">The Matrix Card</h3>
+<p>A few years ago there was a common practice of creating a matrix card, which consisted on a big table with tons of codes. Then an app would ask you for a code at for example C5 and the user would use this coordinates to get a code in the matrix card to insert in the app.</p>
+<p>Although this seems a good and secure idea, the fact is that the security of your operations are as secure as the card, and this card in most cases was on users' wallets. If that wallet gets stollen an attacker could ask your bank through telephone to do a transfer for example. Also the codes in the matrix card couldn&rsquo;t be changed, so do you trust in everybody involved in the process of sending it to you?</p>
+<p>Although this practice is still used, its not that common anymore.</p>
+<h3 id="7-digits-pin-code">7 digits pin code</h3>
+<p>Banking apps started to use for example a 7 digit code, where it asks 3 digits from it. Obviously guessing 3 digits isn&rsquo;t hard as you only have 1000 possible combinations. So is it worth it?</p>
+<p>Well yes, if you have a small number of attemps. Like 3 consecutive failures the app blocks.</p>
+<p>This is what happens with the Safer App. And I&rsquo;ve been there&hellip; By mistake I got my app blocked. And the reaction from the bank was awesome. I got an SMS and email right after it, and a guy from the bank called me in less than 5 minutes notifying me of a possible security breach in my account and that my account&rsquo;s online operations were temporarily locked until verification. I had to confirm it was me, so he could unlock the account. but I still had to go to an ATM and request a new access. Awesome.</p>
+<p>Also, if you are doing large transfers or other actions considered high risk (not sure what constitutes that) an SMS with a code is also sent to the phone to confirm and an email notification is sent after the operation. Although an SMS can work nice in the web app when you&rsquo;re at the computer, confirming an action done on the telephone with an SMS to that phone its not that good, but&hellip;</p>
+<p>The not so secure app, asks for confirmation for every operation but the confirmation is just an SMS. And I don&rsquo;t want to get into the details of SMS security, but if you have a mobile app, and you ask for confirmation only with an SMS, what good is that for if you are going to receive the SMS on the same device?</p>
+<p>This SMS verifications can help if an attacker is trying to remotely hack you account, but it doesn&rsquo;t help at all for &ldquo;local&rdquo; security.</p>
+<p>I never tried to fail this confirmation to see what happens, but I&rsquo;m somehow convinced that nothing would happen. (Added to my todo list)</p>
+<h2 id="notifications">Notifications</h2>
+<p>Let&rsquo;s start by the not so secure app this time. Because of the issues with the SMS validation described above I tried to enable notifications for basically all operations that were done with the account, so that at least I could track if something bad happened.</p>
+<p>No notifications were available at the app (only for bank news)&hellip; So, not happy with that I called the bank support and asked if I could get notified of any operation that happens in my account. Thats definitely a question they don&rsquo;t get a lot, I was on hold for an answer for almost 10 minutes. At the end and after saying that it wasn&rsquo;t possible the call finished with something like: &ldquo;Its definitely a good idea and we will take this into consideration for improving our security&rdquo;.</p>
+<p>On the bright side the safer app has notifications for all operations, and you can enable push notifications or receive emails for transfers sent/received, direct debits, logins, etc. Now, every time I use apple pay on my phone I get instantly a notification from my bank&rsquo;s app that a payment was done. Awesome again.</p>
+<h2 id="privacy">Privacy</h2>
+<p>I have to say that this wasn&rsquo;t something I dug to much but there are two things that I want to mention.</p>
+<p>First is <a href="https://thesecurityvault.com/screen-caching/">screen caching</a>, that I already covered <a href="https://thesecurityvault.com/screen-caching/">here</a>.</p>
+<p>Every time I send the Safer app to the background, all data is hidden by the bank&rsquo;s logo, so it can&rsquo;t be seen in the app switcher. On the other hand, the not so secure app does nothing, so somebody using my phone could see my banking balance without having access to the app.</p>
+<p>The second thing regarding privacy I have to admit that I never saw this in any other of my apps (but seems to be common), and although I never had a real case to use it, I love it. This is a feature present in the safer app and its called &ldquo;Privacy Mode&rdquo;.</p>
+<p>Basically at login, I can enable the privacy mode, that will just hide my balance and any transaction value so that it is &ldquo;safe&rdquo; to open the app with people around. This is awesome to protect me shoulder surfing.</p>
+<h2 id="card-security">Card Security</h2>
+<p>The safer app allows me to configure if I want my card to be able to be used in online payments, outside my country, to disable contactless or temporarily disable the card. It is still missing a nice feature of disabling ATM withdraws.</p>
+<p>On the other side, the not so secure app doesn&rsquo;t offer any of these features.</p>
+<h2 id="custom-keyboards">Custom Keyboards</h2>
+<p>For this section I have to admit that I didn&rsquo;t test it in my apps&hellip;</p>
+<p>But its a good practice for applications that deal with sensitive information to disallow the use of custom keyboards on sensitive fields as they can collect typed data and send it to a server. This happens a lot, specially with keyboards that adapt/learn to know what you are going to type next to give you suggestions.</p>
+<p>It is also common to see a custom keyboard, implemented by the app, for the initial 4 digit pin for the same reason, although other inputs are usually forgotten.</p>
+<p>So how are you mobile banking apps security? Are they careful with the details? Or is it time to switch banks?</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/the-log-forging-vulnerability-and-how-to-fix-it/">&lArr; Previous Post<br><b>The Log Forging Vulnerability And How To Fix It</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/"> Next Post &rArr;<br><b>Attacks with Zip Files and Mitigations</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

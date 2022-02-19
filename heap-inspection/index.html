@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Heap Inspection</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Heap Inspection" />
+<meta property="og:description"
+  content="Heap Inspection is a vulnerability that most of the times developers don&rsquo;t care about, since it is not easy to mitigate, and most of libraries/frameworks are not prepared to handle it.
+So what is Heap Inspection? Basically it&rsquo;s just when you get access to a machine and get access to process memory data. Then you can search for passwords or other sensitive information.
+The prevention for this is to have sensitive information in memory as less time as possible, and even encrypted if needed." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/heap-inspection/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/heap-inspection/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2019-06-16T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:42:22+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/heap-inspection/images/banner.png" /><meta name="twitter:title" content="Heap Inspection" />
+<meta name="twitter:description"
+  content="Heap Inspection is a vulnerability that most of the times developers don&rsquo;t care about, since it is not easy to mitigate, and most of libraries/frameworks are not prepared to handle it.
+So what is Heap Inspection? Basically it&rsquo;s just when you get access to a machine and get access to process memory data. Then you can search for passwords or other sensitive information.
+The prevention for this is to have sensitive information in memory as less time as possible, and even encrypted if needed." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/heap-inspection/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Heap Inspection</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jun 16, 2019</li>
+              <li class="text-secondary">10 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Heap Inspection is a vulnerability that most of the times developers don&rsquo;t care about, since it is not easy to mitigate, and most of libraries/frameworks are not prepared to handle it.</p>
+<h3 id="so-what-is-heap-inspection">So what is Heap Inspection?</h3>
+<p>Basically it&rsquo;s just when you get access to a machine and get access to process memory data. Then you can search for passwords or other sensitive information.</p>
+<p>The prevention for this is to have sensitive information in memory as less time as possible, and even encrypted if needed. When you don&rsquo;t need the information, discard it.</p>
+<p>Why is this underrated?</p>
+<p>First, you need to have access to the machine. If you have a website, the attacker needs to gain access to the server that hosts it (most of the times).</p>
+<p>Ok, so let&rsquo;s see a really exploitation of this vulnerability, that has a high impact on the target system.</p>
+<p>A few years ago, when an attacker gained access to a Windows machine, one common task to do was to extract the users' hash password from the SAM file. Then they needed to bruteforce the hash, to retrieve the real password. This brute force could take from hours to days or years.</p>
+<p>Nowadays attackers have a much easier way to retrieve user passwords, since windows needs them to be in memory.<br>
+So Mimikatz was created. This tool is known for extracting users' passwords from memory in plaintext.</p>
+<p><a href="images/image-23.png"><img src="images/image-23.png" alt="mimikatz"></a></p>
+<p>This is one of the most extreme exploitations of this vulnerability.</p>
+<h3 id="how-to-dump-process-memory">How to dump process memory</h3>
+<p>Lets start by seeing how you can dump the heap of a process.<br>
+The easiest way is by using the task manager:</p>
+<p><a href="images/image.png"><img src="images/image.png" alt="process dump with process explorer"></a></p>
+<p>Then you can use hex editors like HxD (in windows) to open and search the file.</p>
+<h3 id="java-example">Java Example</h3>
+<p>Lets take a look at a small java application to understand how does Heap Inspection happen, and how to prevent it.</p>
+<p>First you need to know that a String in java is usually immutable.<br>
+What this means is that, if you have String a = &ldquo;hello&rdquo;; and you change a to a = &ldquo;hello world&rdquo; you will end up with two strings in memory. &ldquo;hello&rdquo; and &ldquo;hello world&rdquo;, since the string cannot be changed.</p>
+<p>Every time you &lsquo;change&rsquo; a string, a new instance is being created in memory and assigned to that variable. (we are going to see bellow the exceptions)<br>
+The problem is that the old strings are not cleaned up.</p>
+<p>Take a look at the next example</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">heapinspection</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Scanner</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">OverrideString</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        <span style="color:#000">String</span> <span style="color:#000">s</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;Im a string&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span>
+        <span style="color:#000">s</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;Im a new string&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span>
+        
+        <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">Scanner</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">in</span><span style="color:#ce5c00;font-weight:bold">).</span><span style="color:#c4a000">next</span><span style="color:#ce5c00;font-weight:bold">();</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>In the example above I created the string s and then overwrite its value. The scanner is just to prevent the code from closing too soon.</p>
+<p>Now we need something to dump the heap. I&rsquo;m not going to use task manager, first because only works on windows, second because we have better ways to do this in java.</p>
+<p>I&rsquo;m going to use a tool called <a href="https://visualvm.github.io/download.html"><strong>VisualVM</strong></a>. You can dump the heap by code and import to VisualVM or just dump it in VisualVM which is the approach i&rsquo;m going to.<br>
+I have an example on how to do dump through source in the source code at the end of the post.</p>
+<p>You can also use jhat for example, which is a tool that comes with java installation that can be used to navigate the dumps</p>
+<p>Run the app, and while opened, go to VisualVM</p>
+<p>On the left side identify the process of your application, right click it and hit &ldquo;Heap Dump&rdquo;</p>
+<p><a href="images/image-11-1.png"><img src="images/image-11-1.png" alt="dump java process in visualvm"></a></p>
+<p>This will generate a dump bellow the process.<br>
+To see the objects of your app follow the next image:</p>
+<p><a href="images/image-3-1-1024x485.png"><img src="images/image-3-1-1024x485.png" alt="see dumped objects in visual vm"></a></p>
+<p>As you can see there are a lot of objects here.</p>
+<p>For this scenarios I usually switch to the &ldquo;OQL Console&rdquo; to use a really unknown and undocumented query language: OQL.</p>
+<p>Unfortunately I&rsquo;m not an expert on it so i can&rsquo;t go into much details about it either.</p>
+<p>Switch to the console and lets search in the dump for our strings:</p>
+<p><a href="images/image-10-1-1024x383.png"><img src="images/image-10-1-1024x383.png" alt="open oql console in visualvm"></a></p>
+<p>And in the console and the bottom paste this:</p>
+<p>select s from java.lang.String s where s.toString().contains(&ldquo;Im a&rdquo;)</p>
+<p>This is a query to find strings that contain the text &ldquo;Im a&rdquo;</p>
+<p>And as you can see we found two:</p>
+<p><a href="images/image-5-1.png"><img src="images/image-5-1.png" alt="strings found in dump"></a></p>
+<p>We now know for sure that when &lsquo;changing&rsquo; a string what happens down the hood is that a new instance is created.</p>
+<h3 id="what-about-garbage-collector"><strong>What about Garbage Collector?</strong></h3>
+<p>Take a look at this example:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28"><a style="outline: none; text-decoration:none; color:inherit" href="#28">28</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29"><a style="outline: none; text-decoration:none; color:inherit" href="#29">29</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="30"><a style="outline: none; text-decoration:none; color:inherit" href="#30">30</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="31"><a style="outline: none; text-decoration:none; color:inherit" href="#31">31</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="32"><a style="outline: none; text-decoration:none; color:inherit" href="#32">32</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">heapinspection</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Arrays</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Scanner</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">StringLiteralNewStringAndGC</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        <span style="color:#000">doIt</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        
+        <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">gc</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        
+        <span style="color:#000">String</span> <span style="color:#000">s4</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;string4&#34;</span><span style="color:#ce5c00;font-weight:bold">);</span> 
+        <span style="color:#000">String</span> <span style="color:#000">s5</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;string5&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span> 
+        
+        <span style="color:#204a87;font-weight:bold">char</span> <span style="color:#000">c2</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">{</span><span style="color:#4e9a06">&#39;s&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;t&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;r&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;i&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;n&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;g&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;6&#39;</span><span style="color:#ce5c00;font-weight:bold">};</span>
+        <span style="color:#000">String</span> <span style="color:#000">s6</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">c2</span><span style="color:#ce5c00;font-weight:bold">);</span> 
+        <span style="color:#000">Arrays</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">fill</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">c2</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;0&#39;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        
+        <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">Scanner</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">in</span><span style="color:#ce5c00;font-weight:bold">).</span><span style="color:#c4a000">next</span><span style="color:#ce5c00;font-weight:bold">();</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+    
+    <span style="color:#204a87;font-weight:bold">private</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">doIt</span><span style="color:#ce5c00;font-weight:bold">(){</span>
+        <span style="color:#204a87;font-weight:bold">char</span> <span style="color:#000">c</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">]</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">{</span><span style="color:#4e9a06">&#39;s&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;t&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;r&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;i&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;n&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;g&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span><span style="color:#4e9a06">&#39;1&#39;</span><span style="color:#ce5c00;font-weight:bold">};</span>
+        <span style="color:#000">String</span> <span style="color:#000">s</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">c</span><span style="color:#ce5c00;font-weight:bold">);</span> 
+        <span style="color:#000">Arrays</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">fill</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">c</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;0&#39;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        
+        <span style="color:#000">String</span> <span style="color:#000">s2</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;string2&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span> 
+        
+        <span style="color:#000">String</span> <span style="color:#000">s3</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;string3&#34;</span><span style="color:#ce5c00;font-weight:bold">);</span> 
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>First of all I need to explain the different ways that strings are being created in this sample to understand how affects heap inspection.</p>
+<p>Lets start by s2 (in doIt) method. This is a String Literal. String literals are not garbage collected and are immutable.</p>
+<p><strong>String s</strong> is being created with an instantiation with a char array as a parameter. This is not a string literal, can be garbage collected and its muttable.</p>
+<p>String s3 has a string literal and is creating a new instance of a string. So in this scenario we have 2 strings. A literal and one which is not literal. Garbage collector only removes one of the two &ldquo;string3&rdquo; in memory.</p>
+<p>Also note that on strings s and s6 if you assign a new string the old value will be overwritten since they are muttable.</p>
+<p>Close the other example, run this one, dump it on VisualVM and search for the strings:</p>
+<p>select s from java.lang.String s where s.toString().startsWith(&ldquo;string&rdquo;)</p>
+<p><a href="images/image-6-2.png"><img src="images/image-6-2.png" alt="strings containing &lsquo;string&rsquo; in visualvm"></a></p>
+<p>Notice that string1 is not showing up. It was garbage collected, great!</p>
+<p>String2 still there. Again, string literals are not garbage collected.</p>
+<p>String3 still there as well, but since we created two strings, one of them was garbage collected. We can be sure if we look for string4 which is the same scenario but not affected by GC, and it has 2 instances.</p>
+<p>Also, garbage collector only worked because s,s2 and s3 were on a different method. If they were on the same GC would leave them alone.</p>
+<p>Now for the most important part, and this is where a lot of people get it wrong. <strong>Garbage collector does not clean memory</strong>, it <strong>only releases objects</strong>.</p>
+<p>In other terms, it says that specific addresses in memory can be rewritten, that the content there is not important anymore, but the content stays in memory until it gets overwritten.</p>
+<p>Lets make sure of it. Go ahead and dump the process from the sample above through process manager.<br>
+In Linux I believe you can use programs like gcore (i&rsquo;m sorry but I didn&rsquo;t test it ).</p>
+<p>Now lets open the dump in an hex editor. I like to use HxD</p>
+<p>If you do a find for the content String1 you will find it there:</p>
+<p><a href="images/image-7-2.png"><img src="images/image-7-2.png" alt="string1 in process manager dump"></a></p>
+<p>So to prevent strings from staying in memory we can create a string with the new keyword with a char array as a parameter (that you need to clear), and when you don&rsquo;t need it set it to null (or run GC).<br>
+An easier way is to just use the char array and clear it afterwards.</p>
+<p>This is a reason when using crypto related methods, keys are sent as byte[] or char[] and not as a String.</p>
+<h3 id="preventing-heap-inspection">Preventing Heap Inspection</h3>
+<p>Lets then see (again) how to prevent this with a char array:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">heapinspection</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Arrays</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.Scanner</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">ClearArray</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        
+        <span style="color:#204a87;font-weight:bold">char</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#a40000">\</span><span style="color:#ce5c00;font-weight:bold">]</span> <span style="color:#000">t2</span> <span style="color:#ce5c00;font-weight:bold">=</span>
+        <span style="color:#ce5c00;font-weight:bold">{</span>
+            <span style="color:#4e9a06">&#39;c&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;h&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;a&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;r&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;a&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;r&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;r&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;a&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;y&#39;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;2&#39;</span>
+        <span style="color:#ce5c00;font-weight:bold">};</span>
+
+        <span style="color:#8f5902;font-style:italic">//this will be cleared
+</span><span style="color:#8f5902;font-style:italic"></span>        <span style="color:#000">Arrays</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">fill</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">t2</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#4e9a06">&#39;0&#39;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+     
+        <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">Scanner</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">in</span><span style="color:#ce5c00;font-weight:bold">).</span><span style="color:#c4a000">next</span><span style="color:#ce5c00;font-weight:bold">();</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>In this example we are creating an array and replacing all positions with a zeros</p>
+<p>Let&rsquo;s run it and check again the dump</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#204a87;font-weight:bold">select</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">from</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#a40000">\</span><span style="color:#000;font-weight:bold">[</span><span style="color:#204a87;font-weight:bold">C</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">where</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">toString</span><span style="color:#000;font-weight:bold">().</span><span style="color:#204a87;font-weight:bold">contains</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;chararray2&#34;</span><span style="color:#000;font-weight:bold">)</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>Nothing found&hellip; But now if you look for the zeros:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#204a87;font-weight:bold">select</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">from</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#a40000">\</span><span style="color:#000;font-weight:bold">[</span><span style="color:#204a87;font-weight:bold">C</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">where</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">toString</span><span style="color:#000;font-weight:bold">().</span><span style="color:#204a87;font-weight:bold">contains</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;000000000&#34;</span><span style="color:#000;font-weight:bold">)</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>Here it is :D</p>
+<p>If you need to add extra security on top of that you can use GuardedString, or SealedObject which basically keep data encrypted in memory, but GuardedString keeps the key in memory and SealedObject puts cipher management on your side, so at the end it&rsquo;s not much, but it&rsquo;s something. It adds a security layer and may get unnoticed.</p>
+<h3 id="and-what-about-webapps"><strong>And what about WebApps?</strong></h3>
+<p>So this is probably the part that you are really interested&hellip;</p>
+<p>Lets take a look at the following snippet of a Spring MVC controller:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28"><a style="outline: none; text-decoration:none; color:inherit" href="#28">28</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.heapinspection.controller</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">com.securitywhitepapers.heapinspection.model.User</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">com.sun.management.HotSpotDiagnosticMXBean</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.io.IOException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.lang.management.ManagementFactory</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.logging.Level</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.util.logging.Logger</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">javax.management.MBeanServer</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.springframework.http.MediaType</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.springframework.stereotype.Controller</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.springframework.web.bind.annotation.RequestBody</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.springframework.web.bind.annotation.RequestMapping</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.springframework.web.bind.annotation.RequestMethod</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.springframework.web.bind.annotation.ResponseBody</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#5c35cc;font-weight:bold">@Controller</span>
+<span style="color:#5c35cc;font-weight:bold">@RequestMapping</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">value</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;index&#34;</span><span style="color:#ce5c00;font-weight:bold">)</span>
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">IndexController</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#5c35cc;font-weight:bold">@RequestMapping</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">method</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">RequestMethod</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">POST</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">consumes</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">MediaType</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">APPLICATION</span><span style="color:#a40000">\</span><span style="color:#000">_JSON</span><span style="color:#a40000">\</span><span style="color:#000">_VALUE</span><span style="color:#ce5c00;font-weight:bold">)</span>
+    <span style="color:#5c35cc;font-weight:bold">@ResponseBody</span>
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#000">String</span> <span style="color:#000">parsedBody</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#5c35cc;font-weight:bold">@RequestBody</span> <span style="color:#000">User</span> <span style="color:#000">user</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        <span style="color:#000">user</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">cleanPassword</span><span style="color:#ce5c00;font-weight:bold">();</span>
+      
+        <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#4e9a06">&#34;&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This is quite simple: An endpoint that receives an object of type User, that only has a password as a char array. cleanPassword method sets all char array positions as 0</p>
+<p>Should get things done right? Let&rsquo;s check it.</p>
+<p>You can test a request with curl:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -X POST -H <span style="color:#4e9a06">&#34;Content-Type: application/json&#34;</span> --data <span style="color:#4e9a06">&#39;{&#34;password&#34;: &#34;therealdeal123&#34;}&#39;</span> http://localhost:8080/SpringMVC/index
+</code></pre></td></tr></table>
+</div>
+</div><p>Open the dump in VisualVM and search for the array:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#204a87;font-weight:bold">select</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">from</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#a40000">\</span><span style="color:#000;font-weight:bold">[</span><span style="color:#204a87;font-weight:bold">C</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">where</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">toString</span><span style="color:#000;font-weight:bold">().</span><span style="color:#204a87;font-weight:bold">contains</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;therealdeal123&#34;</span><span style="color:#000;font-weight:bold">)</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>And the output:</p>
+<p><a href="images/spring_parsed_body_clean_vulnerable.png"><img src="images/spring_parsed_body_clean_vulnerable.png" alt="strings found from a web app in visualvm"></a></p>
+<p>As you can see there&rsquo;s still heap inspection&hellip; Maybe I didn&rsquo;t clean it right?</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sql" data-lang="sql"><span style="color:#204a87;font-weight:bold">select</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">from</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#a40000">\</span><span style="color:#000;font-weight:bold">[</span><span style="color:#204a87;font-weight:bold">C</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#204a87;font-weight:bold">where</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">s</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">toString</span><span style="color:#000;font-weight:bold">()</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#ce5c00;font-weight:bold">==</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;00000000000000&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-8-2.png"><img src="images/image-8-2.png" alt="string not cleared in visualvm"></a></p>
+<p>Looks like I did&hellip;<br>
+So how can we clean that extra string? As far as I know, you can&rsquo;t &hellip;</p>
+<p>Really? All of this to tell that we can&rsquo;t?</p>
+<p>Yes :)</p>
+<p>You need to wait until these internal variables get overwritten in memory.</p>
+<p>Is this only happening because of Spring?</p>
+<p>No. This also happens with normal servlets for example. If you have a parameter in the request you are already done, because parameters are always strings. You can open a reader for the body, parse the body with an array buffer, do what you need to do, close the reader and clean the buffer. You solved the problem from your side, you still have other variables from the GlassfishServer or from the Servlets.</p>
+<p>Have in mind that even if you could just clean all the variables, if an attacker does a dump of the process in the exact moment you receive a password into a char array it will be able anyway to see it. So at the end, the best approach is to have passwords in clear text in memory as less time as possible since there is no way to completely solve this problem.</p>
+<h3 id="long-story-short">Long story short</h3>
+<p>Heap inspection is really difficult to prevent, and most of times is impossible.</p>
+<p>You can reduce the risk of exposure, by keeping sensitive data in memory as less time as possible and make sure you clear the content, by using char arrays instead of strings and clear them after usage.</p>
+<p>If dealing with passwords, you can receive them already hashed from client side, and <a href="https://thesecurityvault.com/appsec/secure-password-hashing/">hash</a> them again before going to the database.</p>
+<p>Keep sensitive information encrypted in memory, as an extra layer of security.</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/how-antivirus-works-and-bypass-techniques-part-1/">&lArr; Previous Post<br><b>How Antivirus works and bypass techniques - part 1</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/xml-external-entities-xxe/"> Next Post &rArr;<br><b>XML External Entities (XXE)</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

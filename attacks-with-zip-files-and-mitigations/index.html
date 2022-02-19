@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Attacks with Zip Files and Mitigations</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Attacks with Zip Files and Mitigations" />
+<meta property="og:description"
+  content="Once again, I bring a topic that I don&rsquo;t see getting enough attention , and a lot of times this ends up being a big security issue in the targeted systems&hellip; Attacks with zip files, two different and interesting attacks.
+ZipSlip Zip Slip is a vulnerability discovered by Snyk and its a really simple concept. It allows to do some kind of path traversal when unzipping files. This happens because the zip specification allows to create file names like:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2021-03-12T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T11:09:10+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/images/banner.png" /><meta name="twitter:title" content="Attacks with Zip Files and Mitigations" />
+<meta name="twitter:description"
+  content="Once again, I bring a topic that I don&rsquo;t see getting enough attention , and a lot of times this ends up being a big security issue in the targeted systems&hellip; Attacks with zip files, two different and interesting attacks.
+ZipSlip Zip Slip is a vulnerability discovered by Snyk and its a really simple concept. It allows to do some kind of path traversal when unzipping files. This happens because the zip specification allows to create file names like:" />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Attacks with Zip Files and Mitigations</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Mar 12, 2021</li>
+              <li class="text-secondary">6 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Once again, I bring a topic that I don&rsquo;t see getting enough attention , and a lot of times this ends up being a big security issue in the targeted systems&hellip; Attacks with zip files, two different and interesting attacks.</p>
+<h2 id="zipslip">ZipSlip</h2>
+<p>Zip Slip is a vulnerability discovered by <a href="https://snyk.io/research/zip-slip-vulnerability">Snyk</a> and its a really simple concept. It allows to do some kind of <a href="https://owasp.org/www-community/attacks/Path_Traversal">path traversal</a> when unzipping files. This happens because the zip specification allows to create file names like:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">../../../../../../../../my_file
+</code></pre></td></tr></table>
+</div>
+</div><p>When extracting files, the file name is usually used (commonly with a prefixed path) in a file write method, to give the name to the extracted file&hellip; But since the path name contains all those &lsquo;../&rsquo; you are in fact setting the file path somewhere else.</p>
+<h3 id="creating-the-malicious-zip-files">Creating the malicious Zip Files</h3>
+<p>As far as I know, you can&rsquo;t use regular zipping utilities to create the malicious zip files as none support it. But you can do a bit of code, and easily achieve the final result.</p>
+<p>The following code is a simple java function that zips a file called zip_me.txt and stores it in the zip as &ldquo;../malicious_entry.txt&rdquo;</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">zip</span><span style="color:#ce5c00;font-weight:bold">()</span> <span style="color:#204a87;font-weight:bold">throws</span> <span style="color:#000">FileNotFoundException</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">IOException</span><span style="color:#ce5c00;font-weight:bold">{</span>
+    <span style="color:#000">String</span> <span style="color:#000">sourceFile</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;test/archive/zip_me.txt&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span>
+    <span style="color:#000">FileOutputStream</span> <span style="color:#000">fos</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">FileOutputStream</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">fileZip</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#000">ZipOutputStream</span> <span style="color:#000">zipOut</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">ZipOutputStream</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">fos</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#000">File</span> <span style="color:#000">fileToZip</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">File</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">sourceFile</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#000">FileInputStream</span> <span style="color:#000">fis</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">FileInputStream</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">fileToZip</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#000">ZipEntry</span> <span style="color:#000">zipEntry</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">ZipEntry</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;../malicious_entry.txt&#34;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    
+    <span style="color:#000">zipOut</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">putNextEntry</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">zipEntry</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#204a87;font-weight:bold">byte</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">bytes</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#204a87;font-weight:bold">byte</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#000">1024</span><span style="color:#ce5c00;font-weight:bold">];</span>
+    <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">length</span><span style="color:#ce5c00;font-weight:bold">;</span>
+    <span style="color:#204a87;font-weight:bold">while</span><span style="color:#ce5c00;font-weight:bold">((</span><span style="color:#000">length</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">fis</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">read</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">bytes</span><span style="color:#ce5c00;font-weight:bold">))</span> <span style="color:#ce5c00;font-weight:bold">&gt;=</span> <span style="color:#000">0</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+      <span style="color:#000">zipOut</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">write</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">bytes</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">0</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">length</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+    <span style="color:#000">zipOut</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">close</span><span style="color:#ce5c00;font-weight:bold">();</span>
+    <span style="color:#000">fis</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">close</span><span style="color:#ce5c00;font-weight:bold">();</span>
+    <span style="color:#000">fos</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">close</span><span style="color:#ce5c00;font-weight:bold">();</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="impact">Impact</h3>
+<p>Now that we understand how these attacks with zip files work whats the impact that this can have? Well, basically the same as <a href="https://owasp.org/www-community/attacks/Path_Traversal">path traversal</a>&hellip; You can for example write a file in the application root folder that can give you a remove shell to the server. So this can be high severity.</p>
+<h3 id="prevention">Prevention</h3>
+<p>Note that not all libraries/tools will be affected by this attack, for example <a href="https://apps.apple.com/us/app/the-unarchiver/id425424353?mt=12">The Unarchiver</a> ignores the file, default <a href="https://github.com/rubyzip/rubyzip">ruby zip library</a> ignores the file path with a warning like: &ldquo;WARNING: skipped &ldquo;../&rdquo; path component(s) in ../malicious_entry.txt&rdquo;</p>
+<p>So the question is: &ldquo;Shouldn&rsquo;t all libraries prevent this attack?&rdquo;. And the answer is no. As said above, the zip specification allows these filenames, so a library at a low level should also allow. Now, if you are using a high level library to help you zip/unzip files that library needs to prevent this.</p>
+<p><a href="https://snyk.io/">Snyk</a> also keeps a list of libraries which are affected or not by ZipSlip <a href="https://github.com/snyk/zip-slip-vulnerability">here</a> but I would say that its better to test it as for example, if a library doesn&rsquo;t provide a high level API its not the library responsibility to &ldquo;prevent&rdquo; the attack but some do, like the ruby&rsquo;s <a href="https://github.com/rubyzip/rubyzip">rubyzip</a></p>
+<p>From the code side, the safest way is to resolve the canonical path of each file before writing it and make sure it is inside the directory you intended it to be:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5">5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6">6</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#000">String</span> <span style="color:#000">canonicalDestinationDirPath</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">destinationDir</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getCanonicalPath</span><span style="color:#ce5c00;font-weight:bold">();</span>
+<span style="color:#000">File</span> <span style="color:#000">destinationfile</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">File</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">destinationDir</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">e</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getName</span><span style="color:#ce5c00;font-weight:bold">());</span>
+<span style="color:#000">String</span> <span style="color:#000">canonicalDestinationFile</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">destinationfile</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getCanonicalPath</span><span style="color:#ce5c00;font-weight:bold">();</span>
+<span style="color:#204a87;font-weight:bold">if</span> <span style="color:#ce5c00;font-weight:bold">(!</span><span style="color:#000">canonicalDestinationFile</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">startsWith</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">canonicalDestinationDirPath</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">File</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">separator</span><span style="color:#ce5c00;font-weight:bold">))</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+  <span style="color:#204a87;font-weight:bold">throw</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">ArchiverException</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;Entry is outside of the target dir: &#34;</span> <span style="color:#ce5c00;font-weight:bold">+</span> <span style="color:#000">e</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getName</span><span style="color:#ce5c00;font-weight:bold">());</span>
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="zip-bomb">Zip Bomb</h2>
+<p>Some other interesting attacks with zip files are zip bombs.</p>
+<p>A zip bomb is a zip file that after uncompressed increases significantly its size, this is due to the way zip compression works, by keeping track of repeating patterns, and replacing it by a smaller representation. So what appears to be a small zip file can end up being a huge file.</p>
+<h3 id="bomb-impact">Bomb Impact</h3>
+<p>A zip bomb can be used for example to DoS a system. Imagine that an application does heavy operations in a zip file, lets say it extracts all files and searches for specific strings in it. The file ZIP was limited to 50MB so that it doesn&rsquo;t take to much system resources. The unzipped file can be 5GB, and searching for a string in a 5GB file is significantly slower, and do not forget of the fact that you will probably unzip and store the unzipped file in disk, which also takes some time.</p>
+<h3 id="creating-a-zip-bomb">Creating a zip bomb</h3>
+<p>Ok, so how to create a zip bomb?</p>
+<p>We just need to create a huge file with a repeating pattern:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5">5</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ruby" data-lang="ruby"><span style="color:#000">File</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">open</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;test.txt&#34;</span><span style="color:#000;font-weight:bold">,</span><span style="color:#4e9a06">&#34;w&#34;</span><span style="color:#000;font-weight:bold">)</span> <span style="color:#204a87;font-weight:bold">do</span> <span style="color:#ce5c00;font-weight:bold">|</span><span style="color:#000">line</span><span style="color:#ce5c00;font-weight:bold">|</span>
+  <span style="color:#000;font-weight:bold">(</span><span style="color:#0000cf;font-weight:bold">1</span><span style="color:#ce5c00;font-weight:bold">...</span><span style="color:#0000cf;font-weight:bold">99999999</span><span style="color:#000;font-weight:bold">)</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">each</span> <span style="color:#204a87;font-weight:bold">do</span> <span style="color:#ce5c00;font-weight:bold">|</span><span style="color:#000">i</span><span style="color:#ce5c00;font-weight:bold">|</span>
+    <span style="color:#000">line</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#000">print</span> <span style="color:#4e9a06">&#34;000000000000000000000000000000000000000000000000000000000000&#34;</span>
+  <span style="color:#204a87;font-weight:bold">end</span>
+<span style="color:#204a87;font-weight:bold">end</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The code above generates a text file with zeros, that has about <strong>6GB</strong>.</p>
+<p>After compressing that generated file you end up with an archived file with around <strong>6MB</strong>. Huge difference right?</p>
+<p>This is awesome to bypass upload size limits for example.</p>
+<h3 id="bomb-prevention">Bomb Prevention</h3>
+<p>Its quite easy to prevent a zip bomb from exploding&hellip; All you need to do is check the file&rsquo;s original size before writing it to disk. Set a limit to the uncompressed file sizes, or a deviation between the compressed and uncompressed sizes.</p>
+<p>In the following java example its assumed that the zip file contains source code files, so a validation exists that no file can be bigger then 10MB. <strong>Depending on your requirements this might not be the best solution</strong>.</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1"> 1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2"> 2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3"> 3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4"> 4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5"> 5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6"> 6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7"> 7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8"> 8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9"> 9</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="10"><a style="outline: none; text-decoration:none; color:inherit" href="#10">10</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="11"><a style="outline: none; text-decoration:none; color:inherit" href="#11">11</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="12"><a style="outline: none; text-decoration:none; color:inherit" href="#12">12</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="13"><a style="outline: none; text-decoration:none; color:inherit" href="#13">13</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="14"><a style="outline: none; text-decoration:none; color:inherit" href="#14">14</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="15"><a style="outline: none; text-decoration:none; color:inherit" href="#15">15</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="16"><a style="outline: none; text-decoration:none; color:inherit" href="#16">16</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="17"><a style="outline: none; text-decoration:none; color:inherit" href="#17">17</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="18"><a style="outline: none; text-decoration:none; color:inherit" href="#18">18</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="19"><a style="outline: none; text-decoration:none; color:inherit" href="#19">19</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="20"><a style="outline: none; text-decoration:none; color:inherit" href="#20">20</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="21"><a style="outline: none; text-decoration:none; color:inherit" href="#21">21</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="22"><a style="outline: none; text-decoration:none; color:inherit" href="#22">22</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="23"><a style="outline: none; text-decoration:none; color:inherit" href="#23">23</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="24"><a style="outline: none; text-decoration:none; color:inherit" href="#24">24</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="25"><a style="outline: none; text-decoration:none; color:inherit" href="#25">25</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="26"><a style="outline: none; text-decoration:none; color:inherit" href="#26">26</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="27"><a style="outline: none; text-decoration:none; color:inherit" href="#27">27</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">unzip</span><span style="color:#ce5c00;font-weight:bold">()</span> <span style="color:#204a87;font-weight:bold">throws</span> <span style="color:#000">FileNotFoundException</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">IOException</span><span style="color:#ce5c00;font-weight:bold">{</span>
+    <span style="color:#204a87;font-weight:bold">byte</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">buffer</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#204a87;font-weight:bold">byte</span><span style="color:#ce5c00;font-weight:bold">[</span><span style="color:#000">1024</span><span style="color:#ce5c00;font-weight:bold">];</span>
+    <span style="color:#000">ZipFile</span> <span style="color:#000">zipfile</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">ZipFile</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;zipbomb.zip&#34;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#000">Enumeration</span> <span style="color:#000">zipEnum</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">zipfile</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">entries</span><span style="color:#ce5c00;font-weight:bold">();</span>
+    
+    <span style="color:#204a87;font-weight:bold">while</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">zipEnum</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">hasMoreElements</span> <span style="color:#ce5c00;font-weight:bold">())</span> 
+    <span style="color:#ce5c00;font-weight:bold">{</span> 
+        <span style="color:#000">ZipEntry</span> <span style="color:#000">zipEntry</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">ZipEntry</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#000">zipEnum</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">nextElement</span><span style="color:#ce5c00;font-weight:bold">();</span> 
+    
+        <span style="color:#000">File</span> <span style="color:#000">newFile</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">File</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">zipEntry</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getName</span><span style="color:#ce5c00;font-weight:bold">());</span>
+        <span style="color:#204a87;font-weight:bold">if</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">zipEntry</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">isDirectory</span><span style="color:#ce5c00;font-weight:bold">())</span> <span style="color:#000">newFile</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">mkdirs</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        <span style="color:#204a87;font-weight:bold">else</span> <span style="color:#204a87;font-weight:bold">if</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">zipEntry</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getSize</span><span style="color:#ce5c00;font-weight:bold">()</span> <span style="color:#ce5c00;font-weight:bold">&lt;</span> <span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">10</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">1024</span> <span style="color:#ce5c00;font-weight:bold">*</span> <span style="color:#000">1024</span><span style="color:#ce5c00;font-weight:bold">))</span> <span style="color:#ce5c00;font-weight:bold">{</span> <span style="color:#8f5902;font-style:italic">//&lt;10MB
+</span><span style="color:#8f5902;font-style:italic"></span>            
+            <span style="color:#000">FileOutputStream</span> <span style="color:#000">fos</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#204a87;font-weight:bold">new</span> <span style="color:#000">FileOutputStream</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">newFile</span><span style="color:#ce5c00;font-weight:bold">);</span>
+            <span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">len</span><span style="color:#ce5c00;font-weight:bold">;</span>
+            <span style="color:#000">InputStream</span> <span style="color:#000">is</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">zipfile</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">getInputStream</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">zipEntry</span><span style="color:#ce5c00;font-weight:bold">);</span>
+            <span style="color:#204a87;font-weight:bold">while</span> <span style="color:#ce5c00;font-weight:bold">((</span><span style="color:#000">len</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#000">is</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">read</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">buffer</span><span style="color:#ce5c00;font-weight:bold">))</span> <span style="color:#ce5c00;font-weight:bold">&gt;</span> <span style="color:#000">0</span><span style="color:#ce5c00;font-weight:bold">)</span>
+                <span style="color:#000">fos</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">write</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">buffer</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">0</span><span style="color:#ce5c00;font-weight:bold">,</span> <span style="color:#000">len</span><span style="color:#ce5c00;font-weight:bold">);</span>
+            
+            <span style="color:#000">fos</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">close</span><span style="color:#ce5c00;font-weight:bold">();</span>
+        <span style="color:#ce5c00;font-weight:bold">}</span>
+        <span style="color:#204a87;font-weight:bold">else</span>
+            <span style="color:#000">System</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">out</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">println</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#4e9a06">&#34;File to big to extract&#34;</span><span style="color:#ce5c00;font-weight:bold">);</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+    <span style="color:#000">zipfile</span><span style="color:#ce5c00;font-weight:bold">.</span><span style="color:#c4a000">close</span><span style="color:#ce5c00;font-weight:bold">();</span>
+    
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="new-zip-bomb-attack">New Zip Bomb attack</h3>
+<p>The method described above is quite old, and even if 5MB going to 5GB seems quite interesting in 2019 a <a href="https://www.bamsoftware.com/talks/woot19-zipbomb/">much better technique</a> was found. In the link you can find the presentation about the finding, where its described in detail this new attack.</p>
+<p>I will not get into the technical details, but you can use the <a href="https://www.bamsoftware.com/hacks/zipbomb/#source">tool provided by the researcher</a> to generate a much more &ldquo;productive&rdquo; zip file, where a 40kb zipped file can be uncompressed into more then 5GB.</p>
+<p>I tested this with a few different tools/libraries and they seem to be patched against it. <a href="https://apps.apple.com/us/app/the-unarchiver/id425424353?mt=12">The Unarchiver</a> isn&rsquo;t vulnerable to this attack either. But again, nothing better then testing it in your environment.</p>
+<h2 id="not-only-for-zip-extensions">Not only for Zip Extensions</h2>
+<p>These attacks can also be exploited in other file types like .apk, docx, .jar as they are in fact a zipped directory. So be careful with any zip based extension and always make sure the code you&rsquo;re using isn&rsquo;t vulnerable</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/">&lArr; Previous Post<br><b>Are your mobile banking apps secure?</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/what-is-and-how-to-prevent-mass-assignment-vulnerabilities/"> Next Post &rArr;<br><b>What is and how to prevent Mass Assignment...</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

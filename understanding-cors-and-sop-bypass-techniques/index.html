@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Understanding CORS and SOP bypass techniques</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Understanding CORS and SOP bypass techniques" />
+<meta property="og:description"
+  content="CORS which stands for Cross-Origin Resource Sharing is a system designed to help &lsquo;bypass&rsquo; some of the restrictions introduced by Same Origin Policy (SOP prevents javascript code from interacting with resources from other origins).
+Basically CORS lets us define a set of &lsquo;rules&rsquo; to specify which resources can access responses from our server. By default no rule is defined, so SOP will only allow interactions form the same domain.
+It is worth notice that SOP/CORS is applied basically for browser&rsquo;s javascript." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2020-07-23T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:31+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/images/banner.png" /><meta name="twitter:title" content="Understanding CORS and SOP bypass techniques" />
+<meta name="twitter:description"
+  content="CORS which stands for Cross-Origin Resource Sharing is a system designed to help &lsquo;bypass&rsquo; some of the restrictions introduced by Same Origin Policy (SOP prevents javascript code from interacting with resources from other origins).
+Basically CORS lets us define a set of &lsquo;rules&rsquo; to specify which resources can access responses from our server. By default no rule is defined, so SOP will only allow interactions form the same domain.
+It is worth notice that SOP/CORS is applied basically for browser&rsquo;s javascript." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Understanding CORS and SOP bypass techniques</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jul 23, 2020</li>
+              <li class="text-secondary">6 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p><strong>CORS</strong> which stands for Cross-Origin Resource Sharing is a system designed to help &lsquo;bypass&rsquo; some of the restrictions introduced by <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">Same Origin Policy</a> (SOP prevents javascript code from interacting with resources from other origins).</p>
+<p>Basically CORS lets us define a set of &lsquo;rules&rsquo; to specify which resources can access responses from our server. By default no rule is defined, so SOP will only allow interactions form the same domain.</p>
+<p>It is worth notice that SOP/CORS is applied basically for browser&rsquo;s javascript. This means that if you write an application in Java, or even Node, it shouldn&rsquo;t affect you in any way.</p>
+<h2 id="whats-the-point-of-sop-and-cors">What&rsquo;s the point of SOP and CORS?</h2>
+<p>SOP is a huge security mechanism that controls how a resource (like a webpage or scripts) interact with other resources. SOP prevents code from an iframe (loaded with some website&rsquo;s code) from accessing your webpage data, for example. It&rsquo;s an isolation mechanism.</p>
+<p>CORS on the other hand was introduced to help bypassing this restrictions, as sometimes you may want these resources to comunicate between them.</p>
+<h2 id="cors-response-headers">CORS Response Headers</h2>
+<p>As CORS works through some HTTP headers it&rsquo;s important to understand which the most common headers used. Lets take a look at some:</p>
+<h3 id="access-control-allow-origin">Access-Control-Allow-Origin</h3>
+<p>This is the most important header as it specifies which origins can access the server resources:</p>
+<p>Access-Control-Allow-Origin: <a href="https://thesecurityvault.com">https://thesecurityvault.com</a></p>
+<p>If a server sends the header above, it will instruct the browser that it accepts Cross Origin requests from <a href="https://thesecurityvault.com">https://thesecurityvault.com</a></p>
+<p>A wild card can be set, although not recommended</p>
+<h3 id="access-control-allow-methods">Access-Control-Allow-Methods</h3>
+<p>Like the header above, this one instructs which method can be invoked</p>
+<p>Access-Control-Allow-Methods: POST, GET, OPTIONS</p>
+<p>In this case we are allowing other webpages to do POST, GET and OPTION requests to our server</p>
+<h3 id="access-control-allow-headers">Access-Control-Allow-Headers</h3>
+<p>Specifies which headers can be sent.</p>
+<p>Access-Control-Request-Headers: X-Some-Header</p>
+<h2 id="cors-preflight-request">CORS Preflight request</h2>
+<p>The preflight request is a request automatically sent by the browser to check if the server knows about CORS and if it allows the request.</p>
+<p>This is where things start to get tricky, because not all requests trigger a preflight request.</p>
+<p>To not trigger a preflight request this is what&rsquo;s needed:</p>
+<ul>
+<li><strong>Method:</strong> The HTTP method needs to be a GET, POST or HEAD</li>
+<li><strong>Headers:</strong> Besides the default headers automatically injected, only <a href="https://fetch.spec.whatwg.org/#cors-safelisted-request-header">CORS safe headers</a> can be set.</li>
+<li><strong>Content Type:</strong> Needs to be &lsquo;application/x-www-form-urlencoded&rsquo;, &lsquo;text/plain&rsquo; or &lsquo;multipart/form-data&rsquo;.</li>
+<li><strong>ReadableStram:</strong> Do not open a ReadableStram in the request</li>
+<li><strong>No Listeners on</strong> <strong>XMLHttpRequestUpload</strong></li>
+</ul>
+<p>Mozilla has an awesome <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Simple_requests">documentation</a> about this as well.</p>
+<h3 id="examples">Examples</h3>
+<p>Lets see some examples&hellip; I like to use <a href="https://webhook.site/">https://webhook.site</a> to test requests. It&rsquo;s really nice and powerful.</p>
+<p>Lets start by something that we know will trigger a preflight request:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#000">fetch</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">method</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;PATCH&#39;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">headers</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#4e9a06">&#39;content-type&#39;</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;text/plain&#39;</span><span style="color:#000;font-weight:bold">},</span> <span style="color:#000">body</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;thesecurityvault&#39;</span><span style="color:#000;font-weight:bold">}).</span><span style="color:#000">then</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">r</span> <span style="color:#ce5c00;font-weight:bold">=&gt;</span> <span style="color:#000">console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">log</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">r</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">body</span><span style="color:#000;font-weight:bold">)).</span><span style="color:#204a87;font-weight:bold">catch</span><span style="color:#000;font-weight:bold">(()</span> <span style="color:#ce5c00;font-weight:bold">=&gt;</span> <span style="color:#000">console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">log</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;failed&#34;</span><span style="color:#000;font-weight:bold">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-6.png"><img src="images/image-6.png" alt="fetch method triggering a preflight request and being blocked"></a></p>
+<p>We have an error in the browser, but lets see in webhook:</p>
+<p><a href="images/image-7-1024x465.png"><img src="images/image-7-1024x465.png" alt="webhook - fetch method triggering a preflight request and being blocked"></a></p>
+<p>We have an OPTIONS request, but no patch&hellip; so the method was blocked by CORS&hellip;</p>
+<p>Now lets try with a request that will not trigger a preflight request:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#000">fetch</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">method</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;GET&#39;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">headers</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#4e9a06">&#39;content-type&#39;</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;text/plain&#39;</span><span style="color:#000;font-weight:bold">}}).</span><span style="color:#000">then</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">r</span> <span style="color:#ce5c00;font-weight:bold">=&gt;</span> <span style="color:#000">console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">log</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;done&#34;</span><span style="color:#000;font-weight:bold">)).</span><span style="color:#204a87;font-weight:bold">catch</span><span style="color:#000;font-weight:bold">(()</span> <span style="color:#ce5c00;font-weight:bold">=&gt;</span> <span style="color:#000">console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">log</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;failed&#34;</span><span style="color:#000;font-weight:bold">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image.png"><img src="images/image.png" alt="request blocked, but succeded, without preflight"></a></p>
+<p>As you can see, we had a CORS error, as the page at &lsquo;<a href="https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87'">https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87'</a> is not allowing CORS requests.</p>
+<p>But lets see what heppens, at the webhook side:</p>
+<p><a href="images/image-1-1024x423.png"><img src="images/image-1-1024x423.png" alt="Webhook - request blocked, but succeded, without preflight"></a></p>
+<p>As you can see webhook successfully received a GET request. No preflight, which according to the rules above makes sense. We sent an allowed method, an allowed content type, no extra headers&hellip;</p>
+<p>Now if we try for example to set a POST with a body like:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#000">fetch</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87&#34;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#000">method</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;POST&#39;</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#000">headers</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#000;font-weight:bold">{</span><span style="color:#4e9a06">&#39;content-type&#39;</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;text/plain&#39;</span><span style="color:#000;font-weight:bold">},</span> <span style="color:#000">body</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;thesecurityvault&#39;</span><span style="color:#000;font-weight:bold">}).</span><span style="color:#000">then</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">r</span> <span style="color:#ce5c00;font-weight:bold">=&gt;</span> <span style="color:#000">console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">log</span><span style="color:#000;font-weight:bold">(</span><span style="color:#000">r</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">body</span><span style="color:#000;font-weight:bold">)).</span><span style="color:#204a87;font-weight:bold">catch</span><span style="color:#000;font-weight:bold">(()</span> <span style="color:#ce5c00;font-weight:bold">=&gt;</span> <span style="color:#000">console</span><span style="color:#000;font-weight:bold">.</span><span style="color:#000">log</span><span style="color:#000;font-weight:bold">(</span><span style="color:#4e9a06">&#34;failed&#34;</span><span style="color:#000;font-weight:bold">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="images/image-2.png"><img src="images/image-2.png" alt="POST request blocked, but succeded, without preflight"></a></p>
+<p><a href="images/image-3-1024x468.png"><img src="images/image-3-1024x468.png" alt="Webhook - POST request blocked, but succeded, without preflight"></a></p>
+<p>We still have the error in the browser, but the request keeps being made.</p>
+<p>So what happens when no preflight is made is that the browser will only know how to comply with CORS policy when receives a response with the relevant headers, so the request is made anyway, but if a CORS policy is set it will only block the response&hellip;</p>
+<p>SOP really helps out preventing some attacking techniques, like CSRF, but with the right conditions, as seen above it can be bypassed.</p>
+<h2 id="htmls-form-tag">HTML&rsquo;s Form tag</h2>
+<p>The preflight rules above may seem a little bit weird&hellip; Why doesn&rsquo;t a regular post request trigger a preflight request? Looks like a poor design&hellip;</p>
+<p>In fact this has its logic underneath&hellip; and part of it is the <!-- raw HTML omitted --> tag. If you look carefully for the rules to trigger the preflight you will notice that a form tag will never trigger a preflight, and it shouldn&rsquo;t, otherwise it would just brake a lot of websites.</p>
+<p>So this may by a good attack vector for what we&rsquo;ve seen above. Older websites are still heavily depending on forms, so most of those requests are being sent with &lsquo;application/x-www-form-urlencoded&rsquo; which we already know that can be bypassed with fetch, or even with other form tags</p>
+<h2 id="jsonp">JSONP</h2>
+<p>JSONP (Json with Padding) is an old hack to bypass Some Origin Policy, from the time when we didn&rsquo;t have CORS. It basically consists on using a script tag to get some json data, with a prefixed method (the padding), which ends up being just javascript code</p>
+<p>Basically a webpage would call a script like:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html"> <span style="color:#000;font-weight:bold">&lt;</span><span style="color:#204a87;font-weight:bold">script</span> <span style="color:#c4a000">type</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;javascript&#34;</span> <span style="color:#c4a000">src</span><span style="color:#ce5c00;font-weight:bold">=</span><span style="color:#4e9a06">&#34;https://thesecurityvault.com/somedata?callback=processData&#34;</span><span style="color:#000;font-weight:bold">&gt;&lt;/</span><span style="color:#204a87;font-weight:bold">script</span><span style="color:#000;font-weight:bold">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>and notice the callback query param, that would be used by the server, to wrap the entire response data:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#000">processData</span><span style="color:#000;font-weight:bold">({</span>
+  <span style="color:#000">username</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;Luis Fontes&#39;</span><span style="color:#000;font-weight:bold">,</span>
+  <span style="color:#000">website</span><span style="color:#ce5c00;font-weight:bold">:</span> <span style="color:#4e9a06">&#39;thesecurityvault.com&#39;</span>
+<span style="color:#000;font-weight:bold">})</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This code would be injected into the webpage, calling the processData method.</p>
+<p>This still works, but shouldn&rsquo;t be used, specially because JSONP can be a security risk, causing XSS or <a href="https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/reflected-file-download-a-new-web-attack-vector/">Reflected File Download</a></p>
+<h2 id="cors-proxy">CORS Proxy</h2>
+<p>The easiest and faster way to bypass SOP when doing requests is by using a CORS proxy. This can basically inject the headers (seen above) in the responses allowing all types of requests from all origins.</p>
+<p>There are some nice online CORS proxy tools like <a href="https://corsproxy.github.io/">https://corsproxy.github.io/</a></p>
+<p>Using this services may raise some security concerns like is the proxy sniffing the data you send/receive from it?</p>
+<p>Best approach to go with a CORS proxy would be to use an open source tool, and deploy it yourself.</p>
+<p>You can also use <a href="https://github.com/luisfontes19/SharpCorsProxy">SharpCorsProxy</a> which is an OpenSource project I did some time ago.</p>
+<h2 id="null-origin">Null Origin</h2>
+<p>Some times, developers tend to add &lsquo;null&rsquo; as an allowed origin in CORS policy. This is to help on local developments as local pages usually have &lsquo;null&rsquo; as origin. This is sometimes forgotten, and you can even see this config in production environments.</p>
+<p>Getting a null origin is fairly easy, you can get it by having a local page, or just by doing a request inside an iframe.</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/auth-token-in-localstorage/">&lArr; Previous Post<br><b>Auth Token in LocalStorage</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/"> Next Post &rArr;<br><b>How to use Facebook for Open Redirect attacks</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>

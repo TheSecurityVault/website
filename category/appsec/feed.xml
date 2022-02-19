@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>appsec on The Security Vault</title>
+    <link>https://thesecurityvault.github.io/website/category/appsec/</link>
+    <description>Recent content in appsec on The Security Vault</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright 2019-{year} The Security Vault. All rights reserved.</copyright>
+    <lastBuildDate>Thu, 11 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://thesecurityvault.github.io/website/category/appsec/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>We are making authentication systems wrong</title>
+      <link>https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/</link>
+      <pubDate>Thu, 11 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/</guid>
+      <description>For a long time I&amp;rsquo;ve been struggling with the way authentication systems work, as they don&amp;rsquo;t protect your password as they should. If you search for login best practices, like in OWASP, they&amp;rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.
+The Issue Although all of this is true and should be done, all of this has a huge fail: Users need to trust their password to the server.</description>
+    </item>
+    
+    <item>
+      <title>What is and how to prevent Mass Assignment Vulnerabilities</title>
+      <link>https://thesecurityvault.github.io/website/what-is-and-how-to-prevent-mass-assignment-vulnerabilities/</link>
+      <pubDate>Sun, 13 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/what-is-and-how-to-prevent-mass-assignment-vulnerabilities/</guid>
+      <description>First time I heard about mass assignment vulnerabilities was a long time ago, when I started learning Ruby &amp;amp; Rails. In fact I learnt a lot, security related back then, as Rails is a quite complex and secure framework, and to properly work with it you should understand the underlying mechanisms.
+At that time Rails had just introduced a security feature called &amp;ldquo;Strong Parameters&amp;rdquo; to help protect against mass assignment attacks and I was curious about what it was for so I spent some time going through the docs.</description>
+    </item>
+    
+    <item>
+      <title>Attacks with Zip Files and Mitigations</title>
+      <link>https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/</link>
+      <pubDate>Fri, 12 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/</guid>
+      <description>Once again, I bring a topic that I don&amp;rsquo;t see getting enough attention , and a lot of times this ends up being a big security issue in the targeted systems&amp;hellip; Attacks with zip files, two different and interesting attacks.
+ZipSlip Zip Slip is a vulnerability discovered by Snyk and its a really simple concept. It allows to do some kind of path traversal when unzipping files. This happens because the zip specification allows to create file names like:</description>
+    </item>
+    
+    <item>
+      <title>Are your mobile banking apps secure?</title>
+      <link>https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/</link>
+      <pubDate>Sat, 06 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/</guid>
+      <description>These past few days I&amp;rsquo;ve been doing some security checks in my mobile banking apps as I basically never did it since opening the accounts a lot of years ago. I was quite surprised with the difference of security among my bank applications, and it even motivated me to close one of the accounts.
+In this article I&amp;rsquo;m going to compare some of the security features between two of my banks&#39; mobile applications, from the user perspective, without going into the underlying details of the coding implementation.</description>
+    </item>
+    
+    <item>
+      <title>The Log Forging Vulnerability And How To Fix It</title>
+      <link>https://thesecurityvault.github.io/website/the-log-forging-vulnerability-and-how-to-fix-it/</link>
+      <pubDate>Sun, 10 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/the-log-forging-vulnerability-and-how-to-fix-it/</guid>
+      <description>The Log Forging vulnerability, also known as Log Manipulation is a really low ranked vulnerability that in a lot of cases its to farfetched to be reliably exploited, but on others can be quite easy and cause real damage.
+In this post we&amp;rsquo;ll understand what is log forging and see many different conditions that can cause the vulnerability or to increase the risk.
+What is Log Forging Log forging is a vulnerability where an attacker can manipulate the logs, by creating new entries.</description>
+    </item>
+    
+    <item>
+      <title>Screen Caching</title>
+      <link>https://thesecurityvault.github.io/website/screen-caching/</link>
+      <pubDate>Sun, 01 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/screen-caching/</guid>
+      <description>Screen Caching is another of those vulnerabilities nobody is paying attention to, and this one is quite important.
+As an example, even most bank applications are usually &amp;lsquo;vulnerable&amp;rsquo; to this issue (most of mine are). And this is a reality even for those focusing on security, like web based only banks.
+So what is screen caching? Screen caching is a mobile vulnerability, caused due to a performance/usability feature present in mobile OS&amp;rsquo;s.</description>
+    </item>
+    
+    <item>
+      <title>Understanding CORS and SOP bypass techniques</title>
+      <link>https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/</link>
+      <pubDate>Thu, 23 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/</guid>
+      <description>CORS which stands for Cross-Origin Resource Sharing is a system designed to help &amp;lsquo;bypass&amp;rsquo; some of the restrictions introduced by Same Origin Policy (SOP prevents javascript code from interacting with resources from other origins).
+Basically CORS lets us define a set of &amp;lsquo;rules&amp;rsquo; to specify which resources can access responses from our server. By default no rule is defined, so SOP will only allow interactions form the same domain.
+It is worth notice that SOP/CORS is applied basically for browser&amp;rsquo;s javascript.</description>
+    </item>
+    
+    <item>
+      <title>Auth Token in LocalStorage</title>
+      <link>https://thesecurityvault.github.io/website/auth-token-in-localstorage/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/auth-token-in-localstorage/</guid>
+      <description>Getting right to the point: storing a token in LocalStorage is insecure.
+It&amp;rsquo;s getting more and more common to use token based authentication, specially on Single Page Applications (SPA) that need to communicate with an API. That is a good thing, and I really like the idea of JWT tokens.
+Why localStorage is bad Well, when working with cookies, the golden rule is that when storing sensitive information like an auth token, or a session, the cookie should be marked as httpOnly.</description>
+    </item>
+    
+    <item>
+      <title>Security of the NPM Packages</title>
+      <link>https://thesecurityvault.github.io/website/security-of-the-npm-packages/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/security-of-the-npm-packages/</guid>
+      <description>Javascript (and typescript) is now one of the most used languages in new projects. It has an awesome performance, and Promises came to improve it even more. With it came tons of new tools and projects like Node and NPM. But not all is good, the security of the NPM packages is a worrying problem. Lets talk about it.
+NPM stands for &amp;ldquo;Node Package Manager&amp;rdquo; and its a really easy to use tool to get and install dependencies for our projects.</description>
+    </item>
+    
+    <item>
+      <title>Breaking C# SecureString</title>
+      <link>https://thesecurityvault.github.io/website/breaking_c_sharp_securestring/</link>
+      <pubDate>Sat, 18 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/breaking_c_sharp_securestring/</guid>
+      <description>As discussed previously in Heap Inspection post keeping passwords and other sensitive data in memory may be insecure as they can be inspected or dumped.
+Although it is almost impossible to completely mitigate Heap Inspection there are several techniques to reduce the time frame sensitive data keeps in memory, lowering the risk of exposure.
+Lets review some of them:
+ Don&amp;rsquo;t store sensitive data as strings, Use char arrays, and override their values when not needed anymore Keep the data as less time as possible in memory keep data encrypted if needed Use as few instances of the data as possible  But besides these tricks there are also some constraints that will prevent you from doing it right:</description>
+    </item>
+    
+    <item>
+      <title>Secure Password Hashing</title>
+      <link>https://thesecurityvault.github.io/website/secure-password-hashing/</link>
+      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/secure-password-hashing/</guid>
+      <description>Password Hashing 101: MD5 and SHA1 which are quite common, are already considered unsafe. So if you are using them, replace them with a secure algorithm. Even for checksums should not considered secure. Check references for more info.
+Now that we put that aside lets start from the basics.
+User passwords should always be stored in a one way hash.
+This means that after hashing it the original content cannot be retrieved.</description>
+    </item>
+    
+    <item>
+      <title>Hardcoded Passwords</title>
+      <link>https://thesecurityvault.github.io/website/hardcoded-passwords/</link>
+      <pubDate>Fri, 19 Jul 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/hardcoded-passwords/</guid>
+      <description>Hardcoded passwords&amp;hellip; This is a problem quite common, and most of the projects that I get my hands on have a hardcoded password somewhere.
+But, what&amp;rsquo;s the problem of having for example the password of the database in the code?
+Well, actually, a lot!
+Lets start by the most straightforward scenario. Hardcoded passwords, (and when I say passwords I mean credentials, not just passwords) get into source control. From there its impossible to remove.</description>
+    </item>
+    
+    <item>
+      <title>Reverse Tabnabbing</title>
+      <link>https://thesecurityvault.github.io/website/reverse-tabnabbing/</link>
+      <pubDate>Wed, 26 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/reverse-tabnabbing/</guid>
+      <description>Reverse Tabnabbing or also known as Unsafe Target Blank is one of the most underrated vulnerability, and this is the one I like the most. It&amp;rsquo;s really easy to find an exploitable web application and it&amp;rsquo;s also quite easy to mitigate.
+So what is Reverse Tabnabbing? When you create a link that opens in a new tab (with target=&#39;_blank&#39;) the browsers injects two variables into the destination page, window.opener and window.</description>
+    </item>
+    
+    <item>
+      <title>Insecure Deserialization in Java</title>
+      <link>https://thesecurityvault.github.io/website/insecure-deserialization-in-java/</link>
+      <pubDate>Mon, 17 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/insecure-deserialization-in-java/</guid>
+      <description>Insecure deserialization got in OWASP top 10 in 2017 as most of web applications written in Java and .net where found vulnerable and in most of the scenarios the vulnerabilities got to Remote Code Execution (RCE)
+So lets see how this vulnerability works, how to exploit it and how to prevent it.
+Deserialization in Java and the Read Object 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74  package org.</description>
+    </item>
+    
+    <item>
+      <title>Weak Random</title>
+      <link>https://thesecurityvault.github.io/website/weak-random/</link>
+      <pubDate>Mon, 17 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/weak-random/</guid>
+      <description>A lot of developers don&amp;rsquo;t know that regular Random is a weak random implementation. In fact its quite predictable. A lot of code relies on this class to generate passwords, tokens and other security related values, that in fact end up not being secure at all.
+I&amp;rsquo;m going to focus on Java, but a lot of the concepts are the same for other languages
+How Java (weak) Random Works There are some nice articles about this on the net, the one that caught my eye when learning about this a long time ago was the one from Franklin To.</description>
+    </item>
+    
+    <item>
+      <title>XML External Entities (XXE)</title>
+      <link>https://thesecurityvault.github.io/website/xml-external-entities-xxe/</link>
+      <pubDate>Mon, 17 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/xml-external-entities-xxe/</guid>
+      <description>XML and JSON are two formats ruling the web right now.
+Although JSON&amp;rsquo;s adoption is increasing significantly specially with REST, XML is still widely used.
+What most of developers don&amp;rsquo;t know is that most of the XML parsers out there by following the specification by default have major security flaws. In some cases (not that much) you can even get RCE (Remote Code Execution)
+Lets start by the basics and understand the problem.</description>
+    </item>
+    
+    <item>
+      <title>Heap Inspection</title>
+      <link>https://thesecurityvault.github.io/website/heap-inspection/</link>
+      <pubDate>Sun, 16 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.github.io/website/heap-inspection/</guid>
+      <description>Heap Inspection is a vulnerability that most of the times developers don&amp;rsquo;t care about, since it is not easy to mitigate, and most of libraries/frameworks are not prepared to handle it.
+So what is Heap Inspection? Basically it&amp;rsquo;s just when you get access to a machine and get access to process memory data. Then you can search for passwords or other sensitive information.
+The prevention for this is to have sensitive information in memory as less time as possible, and even encrypted if needed.</description>
+    </item>
+    
+  </channel>
+</rss>

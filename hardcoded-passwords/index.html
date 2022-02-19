@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Hardcoded Passwords</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="" />
+<meta name="keywords" content="">
+<meta name="author" content="Luis Fontes">
+
+
+
+<meta property="og:title" content="Hardcoded Passwords" />
+<meta property="og:description"
+  content="Hardcoded passwords&hellip; This is a problem quite common, and most of the projects that I get my hands on have a hardcoded password somewhere.
+But, what&rsquo;s the problem of having for example the password of the database in the code?
+Well, actually, a lot!
+Lets start by the most straightforward scenario. Hardcoded passwords, (and when I say passwords I mean credentials, not just passwords) get into source control. From there its impossible to remove." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/hardcoded-passwords/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/hardcoded-passwords/images/banner.jpeg" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2019-07-19T00:00:00+00:00" />
+
+<meta property="article:modified_time" content="2022-02-19T00:43:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/website/hardcoded-passwords/images/banner.jpeg" /><meta name="twitter:title" content="Hardcoded Passwords" />
+<meta name="twitter:description"
+  content="Hardcoded passwords&hellip; This is a problem quite common, and most of the projects that I get my hands on have a hardcoded password somewhere.
+But, what&rsquo;s the problem of having for example the password of the database in the code?
+Well, actually, a lot!
+Lets start by the most straightforward scenario. Hardcoded passwords, (and when I say passwords I mean credentials, not just passwords) get into source control. From there its impossible to remove." />
+
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+
+<link rel="dns-prefetch" href="//kit.fontawesome.com" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/hardcoded-passwords/images/banner.jpeg" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Hardcoded Passwords</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Jul 19, 2019</li>
+              <li class="text-secondary">6 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Hardcoded passwords&hellip; This is a problem quite common, and most of the projects that I get my hands on have a hardcoded password somewhere.</p>
+<p>But, what&rsquo;s the problem of having for example the password of the database in the code?</p>
+<p>Well, actually, a lot!</p>
+<p>Lets start by the most straightforward scenario. Hardcoded passwords, (and when I say passwords I mean credentials, not just passwords) get into source control. From there its impossible to remove. If you share source control between all the developers, if you open source the project, everybody with access to it can see those credentials, and depending on the scenarios use them to login on a service. If you are concerned with <a href="https://thesecurityvault.com/heap-inspection">Heap Inspection</a> its also bad.</p>
+<p>As you can imagine there are tons of tools to search, for example, in github to find passwords commited in the code. A simple google search can give a good list:</p>
+<ul>
+<li><a href="https://github.com/zricethezav/gitleaks">https://github.com/zricethezav/gitleaks</a></li>
+<li><a href="https://github.com/dxa4481/truffleHog">https://github.com/dxa4481/truffleHog</a></li>
+<li><a href="https://github.com/kootenpv/gittyleaks">https://github.com/kootenpv/gittyleaks</a></li>
+</ul>
+<p>And you can even use github dorks to find passwords: <a href="https://github.com/techgaun/github-dorks">github-dorks</a></p>
+<p>But you can use these techniques to help you preventing commits with passwords as well :)</p>
+<p>Honestly I never tried this tools, but don&rsquo;t need to use them to know that you will find a lot of results. I see this problem on almost all projects I review.</p>
+<p>The deployed version of the software will also have the keys hardcoded. Its not as bad if its a web application deployed on your server, for example. But if this is a desktop application the user can eventually get a hold on the password.</p>
+<p>But there are much more scenarios why you should not hardcode passwords. Let&rsquo;s assume an attacker finds path traversal in your website. With some luck it can find a file that has hardcoded credentials, and again, depending on the scenario he could even login with those credentials on the service.</p>
+<h3 id="retrieving-an-hardcoded-password-from-a-binary">Retrieving an hardcoded password from a binary</h3>
+<p>Theory aside lets see some examples on how this can be &ldquo;exploited&rdquo; and prevented.</p>
+<p>Take a look at this super complex C code that just has an hardcoded password:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5">5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6">6</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#8f5902;font-style:italic">#include</span> <span style="color:#8f5902;font-style:italic">&lt;stdio.h&gt;</span><span style="color:#8f5902;font-style:italic">
+</span><span style="color:#8f5902;font-style:italic"></span><span style="color:#204a87;font-weight:bold">int</span> <span style="color:#000">main</span><span style="color:#000;font-weight:bold">()</span>
+<span style="color:#000;font-weight:bold">{</span>
+   <span style="color:#204a87;font-weight:bold">char</span> <span style="color:#ce5c00;font-weight:bold">*</span><span style="color:#000">pwd</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;super_password_not_that_secure&#34;</span><span style="color:#000;font-weight:bold">;</span>
+   <span style="color:#204a87;font-weight:bold">return</span> <span style="color:#0000cf;font-weight:bold">0</span><span style="color:#000;font-weight:bold">;</span>
+<span style="color:#000;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Lets compile it:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">gcc password.c -o pwd_program
+</code></pre></td></tr></table>
+</div>
+</div><p>And now have a binary file, user can&rsquo;t see the password right?</p>
+<p><strong>Wrong</strong>.</p>
+<p>It&rsquo;s quite easy to retrieve for example strings from a binary. In linux you can do this with the strings command (there&rsquo;s an equivalent for windows from sysinternals:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">strings pwd_program
+</code></pre></td></tr></table>
+</div>
+</div><p>You will get a list of strings, and the password will be there.</p>
+<p>In a java .jar file it&rsquo;s even worse. Here you need to &ldquo;guess&rdquo; that a specific string is a password. Or dig much further to understand what the passwords are.</p>
+<p>In Java doing an easy reverse engineering you get almost the original source code. Variable names and all. This makes much easier to figure out where passwords are.<br>
+So I created this simple peace of code and built the jar file for it:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5">5</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="6"><a style="outline: none; text-decoration:none; color:inherit" href="#6">6</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="7"><a style="outline: none; text-decoration:none; color:inherit" href="#7">7</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="8"><a style="outline: none; text-decoration:none; color:inherit" href="#8">8</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="9"><a style="outline: none; text-decoration:none; color:inherit" href="#9">9</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#204a87;font-weight:bold">package</span> <span style="color:#000">com.securitywhitepapers.hardcodedpassword</span><span style="color:#ce5c00;font-weight:bold">;</span>
+
+<span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">class</span> <span style="color:#000">NewMain</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+
+    <span style="color:#204a87;font-weight:bold">public</span> <span style="color:#204a87;font-weight:bold">static</span> <span style="color:#204a87;font-weight:bold">void</span> <span style="color:#000">main</span><span style="color:#ce5c00;font-weight:bold">(</span><span style="color:#000">String</span><span style="color:#ce5c00;font-weight:bold">[]</span> <span style="color:#000">args</span><span style="color:#ce5c00;font-weight:bold">)</span> <span style="color:#ce5c00;font-weight:bold">{</span>
+        <span style="color:#000">String</span> <span style="color:#000">password</span> <span style="color:#ce5c00;font-weight:bold">=</span> <span style="color:#4e9a06">&#34;somehiddenpassword&#34;</span><span style="color:#ce5c00;font-weight:bold">;</span>
+    <span style="color:#ce5c00;font-weight:bold">}</span>
+
+<span style="color:#ce5c00;font-weight:bold">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now we can use a tool called <a href="https://github.com/java-decompiler/jd-gui/releases">jd-gui</a> to easly reverse engineer the .jar file. You just need to drag it over:</p>
+<p><a href="images/jdgui.png"><img src="images/jdgui.png" alt="source decompiled in jd-gui"></a></p>
+<p>And there&rsquo;s the password.</p>
+<p>So if you plan to send a binary file to an user, with an hardcoded password you are doing it wrong.</p>
+<h3 id="avoiding-hardcoded-passwords">Avoiding Hardcoded Passwords</h3>
+<p>Now that we understand this lets see how on a server side app we can store and use passwords</p>
+<h4 id="on-a-desktop-application">On a Desktop Application</h4>
+<p>If you think you need to store some password that is not from the user, you are doing something wrong&hellip; If you have for example a Facebook app and you need to have the app id, you should not hardcoded it. You have a webservice that does that part. The desktop/client-side app communicates with your service and the webservice calls facebook app.</p>
+<p>This is how you should proceed for almost scenarios.</p>
+<h4 id="on-a-backend-application">On a backend application</h4>
+<p>To manage passwords on the backend there are some different techniques you can use, some more secure then others.</p>
+<h5 id="feeding-passwords-to-the-application-through-the-command-line-args">Feeding passwords to the application through the command line args</h5>
+<p>This is nice, since the password isn&rsquo;t stored anywhere, you depend on a user to type the passwords as an argument when starting the application, this can be bad, if the server reboots by any reasons. You would need to manually start the application</p>
+<h5 id="saving-passwords-in-environment-variables">Saving passwords in environment variables</h5>
+<p>If you have a &ldquo;secured&rdquo; machine with restricted access you can just save passwords in environment variables. Although, people with access to the machine can see them. This is not that secure, but still better then hardcoded passwords.</p>
+<p>If you want to add extra security, you can save them encrypted, and use command line arguments to get the decryption key. You will still have the same problem as the solution above where you need to manually start the app.</p>
+<h5 id="saving-passwords-in-configproperties-files">Saving passwords in config/properties files</h5>
+<p>You you create a config/properties file that is not going to source control. The file needs to be stored in a secure location outside the app source code, and restricted access only to the application that needs it. But storing passwords in plain text in config files is not a perfect solution for the same reasons as storing in environment variables</p>
+<h5 id="secret-managers">Secret Managers</h5>
+<p>Secret manager tools allow you to securely save keys in encrypted files, but you may still need at least a master password, or authentication to open the keystore, so again, where do you save that password?</p>
+<p>If you use a store service like AWS secrets manager, then you don&rsquo;t need to worry with the password that encrypts all the secrets, you shift that responsibility to Amazon (in this case). This is the kind of approach I like the most, and what i&rsquo;m using in a few projects hosted on AWS.</p>
+<p>If you start combining these methods, you can also end up with a more robust solution. You can use a keystore to store the passwords needed by the application and store it on a safe place,then use a config file, or an environment variable to store the master key to the keystore. Again, its not perfect but its an extra layer of security</p>
+<p>If you don&rsquo;t mind to write a solution for a specific OS, you can integrate with native tools such as Gnome Keyring or OSX keychain. Windows only has a built in certificate manager, you can&rsquo;t store passwords.</p>
+<p>Also, don&rsquo;t forget about <a href="https://thesecurityvault.com/appsec/heap-inspection/">heap inspection</a> when dealing with passwords in memory</p>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/reverse-tabnabbing/">&lArr; Previous Post<br><b>Reverse Tabnabbing</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/secure-password-hashing/"> Next Post &rArr;<br><b>Secure Password Hashing</b></a>
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://thesecurityvault.github.io/website/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://kit.fontawesome.com/ab4860f980.js" id="Fontawesome-js"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+</script></body>
+
+</html>
