@@ -3,7 +3,10 @@ title: Hello world!
 preview: images/banner.png
 date: '2019-06-15'
 type: post
-lastmod: '2022-02-19T10:55:01.162Z'
+tags:
+  - Hello
+  - World
+lastmod: '2022-02-19T19:34:53.724Z'
 ---
 
 "What hath God wrought?"  
