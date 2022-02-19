@@ -29,20 +29,20 @@ jobs:
           /tmp/hugo
           
           # move build version to temp
-          mv -r public /tmp
+          mv public /tmp
 
           # Checkout the gh-page branch (where the prod version is)
           git fetch origin
           git checkout gh-pages
-          mv -r .git /tmp
+          mv .git /tmp
           
           # Delete all files JIC
           rm -rf .[!.] .??*
           rm -rf *
           
           # Move back the git folder and built version of the site
-          mv -r /tmp/.git .
-          mv -r /tmp/public/* .
+          mv /tmp/.git .
+          mv /tmp/public/* .
 
           # Fix feed path to be compatible with old wordpress site
           mkdir feed
