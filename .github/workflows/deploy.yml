@@ -25,20 +25,31 @@ jobs:
           echo "694bcb7242a72b355538be796681f28c5ba4d6ea10e6b86cea21238b61dacb70  /tmp/hugo" | shasum -c 
       - name: Build Website
         run: |
+          # build website with Hugp
           /tmp/hugo
-          cp -r public /tmp
+          
+          # move build version to temp
+          mv public /tmp
 
+          # Checkout the gh-page branch (where the prod version is)
           git fetch origin
           git checkout gh-pages
+          mv .git /tmp
           
-          cp -r .git /tmp
+          # Delete all files JIC
           rm -rf .[!.] .??*
-        
           rm -rf *
           
-          cp -r /tmp/.git .
-          cp -r /tmp/public/* .
-          
+          # Move back the git folder and built version of the site
+          mv /tmp/.git .
+          mv /tmp/public/* .
+
+          # Fix feed path to be compatible with old wordpress site
+          mkdir feed
+          cp feed.xml feed/index.xml
+
+          # Commit changes
           git add .
           git commit -S -m "Build Version for $GITHUB_SHA"
           git push origin gh-pages
+
