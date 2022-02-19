@@ -12,7 +12,11 @@
 <title>Breaking C# SecureString</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="" />
+<meta property="description"
+  content="As discussed previously in Heap Inspection post keeping passwords and other sensitive data in memory may be insecure as they can be inspected or dumped.
+Although it is almost impossible to completely mitigate Heap Inspection there are several techniques to reduce the time frame sensitive data keeps in memory, lowering the risk of exposure.
+Lets review some of them:
+ Don&rsquo;t store sensitive data as strings, Use char arrays, and override their values when not needed anymore Keep the data as less time as possible in memory keep data encrypted if needed Use as few instances of the data as possible  But besides these tricks there are also some constraints that will prevent you from doing it right:" />
 <meta name="keywords" content="">
 <meta name="author" content="Luis Fontes">
 
