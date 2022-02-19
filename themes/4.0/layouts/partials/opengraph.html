@@ -10,7 +10,6 @@
 <meta property="og:image" content="{{$postLink}}{{ . }}" />
 {{- else -}}
 {{- with $.Site.Params.images }}
-{{.}}
 <meta property="og:image" content="{{ $.Site.BaseURL }}{{index . 0}}" />
 {{ end -}}
 {{- end -}}
