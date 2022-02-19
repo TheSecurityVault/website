@@ -1,0 +1,66 @@
+{{ define "main" }}
+{{ $paginator := .Paginate (where ( where site.RegularPages "Type" "in" site.Params.mainSections) "Draft" false) 5 }}
+
+
+<section class="body">
+  <div class="container main">
+    <div class="row">
+      <div class="col-lg-8" style="padding:'0px'">
+        <section class="posts-container">
+
+          {{ range $paginator.Pages }}
+          {{ $author := index .Site.Data.authors (.Params.author | default "default") }}
+
+          <section class="post-preview">
+            <img class="post-image" src="{{.Permalink}}/{{.Params.preview}}" />
+            <div class="post-preview-padding">
+              <div class="row">
+                <div class="col-md-2 post-preview-author">
+                  <img class="post-preview-author-img" src="{{ .Site.BaseURL }}{{$author.avatar}}" width="70"
+                    class="rounded-circle" />
+                  <a href="">{{$author.username}}</a>
+                </div>
+                <div class="col-md-10">
+                  <div class="post-details">
+                    <ul>
+                      <li>{{.Date.Format "Jan 2, 2006"}}</li>
+                      <li class="text-secondary">{{.ReadingTime}} minutes</li>
+                    </ul>
+                  </div>
+
+                  <h3><a href="{{.Permalink}}" class="post-preview-title-link">{{.Title}} </a></h3>
+                  <div class="post-preview-excerpt">{{truncate 300 .Summary }}</div>
+
+                  <div class="post-preview-read-more"><a href="{{.Permalink}}">Continue Reading</a></div>
+                </div>
+              </div>
+            </div>
+          </section>
+          {{ end }}
+        </section>
+
+        <div class="paginator container">
+          <div class="row">
+            <div class="col-md-6 text-left">
+              {{ if $paginator.HasNext }}
+              <a href="{{$paginator.Next.URL}}">« Older Posts</a>
+              {{end}}
+            </div>
+            <div class="col-md-6 text-right">
+              {{ if $paginator.HasPrev }}
+              <a href="{{$paginator.Prev.URL}}">Newer Posts »</a>
+              {{end}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-4">
+        {{- partial "sidebar.html" . -}}
+      </div>
+    </div>
+  </div>
+</section>>
+
+{{ end }}

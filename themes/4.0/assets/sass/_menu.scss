@@ -1,0 +1,41 @@
+@import 'variables.scss';
+
+.navbar{
+  background-color: $main-color;
+  z-index: 10;
+  width: 100%;
+  padding-top:5px;
+}
+
+.menu-container{
+  background-color: $main-color;
+  padding-left:0px;
+  padding-right:0px;
+}
+
+.nav-link{ 
+  color: #c1c1c1;
+
+  &:hover {
+    color: lighten($main-color, 20%);
+  }
+
+}
+
+.navbar-toggler{
+  color: #c1c1c1;
+}
+
+
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  transition: 0.5s;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 60px;
+}

@@ -1,0 +1,44 @@
+<div class="sidebar">
+  {{ $author := index .Site.Data.authors (.Params.author | default "default") }}
+  <section class="author containers">
+    <div class="author-img-container">
+      <img alt="" src="{{ .Site.BaseURL }}{{ $author.avatar }}" class="author-img" class="photo author-img"
+        height="1000" width="1000" />
+    </div>
+    <div class="author-description">
+      <h4>{{$author.name}}</h4>
+      <p>{{$author.bio}}</p>
+    </div>
+  </section>
+
+  <section class="social side-container">
+    <h4>{{.Site.Params.social_title}}</h4>
+    <div class="social-container side-container-content" style="background-color: inherit;">
+      <div>
+        <ul id="menu-social" class="sidebar-social-menu list-inline">
+          {{ range .Site.Menus.social }}
+          <li class="nav-item">
+            {{if eq .Identifier "rss"}}
+            <a href="{{.URL}}"><i class="media-icon fas fa-{{.Identifier}}"></i></a>
+            {{else}}
+            <a href="{{.URL}}"><i class="media-icon fab fa-{{.Identifier}}"></i></a>
+            {{end}}
+          </li>
+          {{end}}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="side-container adz-container">
+    <div style="padding:40px;">
+      <h4>{{.Site.Params.ads_title}}</h4>
+    </div>
+
+    {{ range .Site.Menus.ads }}
+    <div class="ad">
+      <a href="{{.URL}}"> <img class="img-ad" style="padding:0px" src="{{.Pre}}" /></a>
+    </div>
+    {{end}}
+  </section>
+</div>

@@ -1,0 +1,26 @@
+@import 'mixins';
+
+
+$header-alt-size: 400px;
+$header-size: $header-alt-size;
+
+$light-gray: #f2f2f2;
+
+$dark-color: #1e1f21;
+
+$menu-color: $dark-color;
+
+$radius: 4px;
+
+$main-color: #000;
+$alt-color1: #0197F6;
+$alt-color2: #D7263D;
+$alt-color3: #02182B;
+$bg-color: #f5f8fd;
+$text-color: #576477;
+$link-color: $alt-color2;
+$header-color: $main-color;
+
+@include smallscreen{
+  $header-alt-size: 20px;
+}

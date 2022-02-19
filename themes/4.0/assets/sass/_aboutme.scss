@@ -1,0 +1,125 @@
+@import "variables.scss";
+
+// .features{
+//   padding: 100px;
+
+//   @include smallscreen{
+//     padding:40px;
+//   }
+
+//   padding-top:50px;
+//   padding-bottom: 140px;
+// }
+
+// .feature-img i {
+//   font-size:100px;
+// }
+
+// .feature{
+//   padding-top:50px;
+//   text-align: center;
+// }
+
+// .highlight-zone{
+//   background-color: $dark-color;
+// }
+
+// .highlight-container{
+//   padding: 100px;
+
+//   @include smallscreen{
+//     padding:20px;
+//     padding-top:40px;
+//   }  
+
+//   color: #AAA;
+// }
+
+
+
+.highlight-zone{
+  background-color: $dark-color;
+  margin-top:50px;
+  padding:100px;
+  color: #DDD;
+}
+
+.about{
+  
+  &-author{
+    margin:0px;
+    padding:0px;
+    border-radius: $radius;
+    
+    h1,h2,h3,h4,h5,h6{
+      color: #FFF;
+      margin:0px;
+    }
+
+    &-introduction{
+      margin-top:50px;
+    }
+
+    &-img{
+      height:100%;
+      width:100%;
+      object-fit: cover;
+      border-radius:0px !important;
+    }
+
+    &-content{
+      $color: #1e2022;
+      background-color:$color;
+      padding:50px;
+      color: #DDD;
+      border: 1px solid lighten($color, 10%);
+    }
+
+    &-visual{
+      padding:0px;
+    }
+  }
+}
+
+.skills{
+  margin-top:50px;
+  padding:50px;
+  &-radar{
+    &-container{
+      position:relative;
+    }
+  }
+}
+
+.progress-bar {
+  width: 100%;
+  background-color: #e0e0e0;
+  border-radius: $radius;
+  //box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
+}
+
+.progress-bar-fill {
+  display: block;
+  height: 10px;
+  background-color: $alt-color2;
+  border-radius: 3px;
+  
+  transition: width 500ms ease-in-out;
+}
+
+
+.about-projects{
+  margin-top:50px;
+  padding:50px;
+
+  .badge{
+    background-color: $alt-color2;
+    padding: 10px;
+    border-radius: 4px;
+    color: white;
+
+    &:hover{
+      background-color: darken($alt-color2, 20%);
+    }
+  }
+}

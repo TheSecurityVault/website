@@ -1,0 +1,16 @@
+@import 'variables.scss';
+
+.btn{
+  font-family: "Josefin Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  font-size: 13px !important;
+  padding: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 15px;
+  font-weight: 700;
+}
+
+.btn-outline-primary{
+  border-color: $text-color;
+}

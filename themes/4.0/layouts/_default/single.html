@@ -1,0 +1,70 @@
+{{- define "main" }}
+{{ $author := index .Site.Data.authors (.Params.author | default "default") }}
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="{{.Permalink}}{{.Params.preview}}" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>{{.Title}}</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">{{$author.username}}</a></li>
+              <li>{{.Date.Format "Jan 2, 2006"}}</li>
+              <li class="text-secondary">{{.ReadingTime}} minutes</li>
+              <!-- <li><a href="/category/{{.Params.category}}">{{.Params.category}}</a></li> -->
+              <li>{{.Params.category}}</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          {{ .Content }}
+
+          {{if .Site.Params.author_on_posts}}
+          <div class="post-about-author">
+
+            <div class="row">
+              <div class="col-md-4 text-right post-about-author-img">
+                <img src="{{ $author.avatar }}" width="100" class="rounded-circle">
+              </div>
+              <div class="col-md-8 post-about-author-bio">
+                <h4>{{$author.name}}</h4>
+                <p>{{$author.bio}}</p>
+              </div>
+            </div>
+          </div>
+          {{end}}
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        {{ if .PrevPage }}
+        <a href="{{ .PrevPage.Permalink }}">&lArr; Previous Post<br><b>{{ .PrevPage.Title | truncate 50 "..."
+            }}</b></a>
+        {{ end }}
+      </div>
+      <div class="col-md-6 next-post">
+        {{ if .NextPage }}
+        <a href="{{ .NextPage.Permalink }}"> Next Post &rArr;<br><b>{{ .NextPage.Title | truncate 50 "..." }}</b></a>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+{{- end }}

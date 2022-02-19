@@ -1,0 +1,17 @@
+
+@mixin box_shadow () {
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.2), 0 15px 12px rgba(0, 0, 0, 0.01)
+}
+
+
+@mixin smallscreen{
+  @media all and (max-width: 992px) {
+    @content;
+  }
+}
+
+@mixin notsmallscreen{
+  @media all and (min-width: 993px) {
+    @content;
+  }
+}

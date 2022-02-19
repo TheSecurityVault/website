@@ -1,0 +1,24 @@
+@import "variables";
+
+
+.comments-title{
+  margin-bottom:50px;
+  padding:0px;
+}
+
+.comment-list{
+  padding:50px;
+  padding-top:0px;
+  list-style: none;
+}
+
+.comment-container{
+  border-top: 1px solid rgba($text-color, 0.3);
+  padding-top:40px;
+  padding-bottom:40px;
+  .children{
+    padding-top: 20px;
+    border-left: 1px solid $light-gray;
+    list-style: none;
+  }
+}

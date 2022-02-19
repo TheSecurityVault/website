@@ -1,0 +1,181 @@
+@import 'variables.scss';
+
+body{
+  color: $text-color;
+  line-height: 1.5;
+  word-break: break-word;
+  background-color: $bg-color;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.2px;
+  line-height: 1.8em;
+}
+
+a{
+  word-break: break-word;
+  color: $link-color;
+  transition: 0.5s;
+
+  &:hover{
+    color: darken($link-color, 20%);
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    color: $header-color;
+    margin: 0 0 15px;
+}
+
+hr{
+  margin-top:30px;
+  margin-bottom:30px;
+}
+
+
+
+
+.white-bg{
+  box-shadow: 20px 0 50px rgba(85, 92, 121, .08);
+  background-color: #FFF;
+  border-radius:$radius;
+  
+}
+
+.avatar{
+  border-radius: 50%;
+  //padding: 4px;
+  border: 1px solid $alt-color3;
+}
+
+#banner-img{
+  display: none;
+  width:100%;
+
+  @include smallscreen{
+    margin-top: 50px;
+  }
+
+
+}
+
+
+.highlight{
+  line-height: 1.5;
+}
+
+.header{
+
+  background-image: url("../img/bg_image2.png");
+  background-size: cover;
+  top: 0px;
+  height: $header-size;
+  width: 100%;
+  margin-top:50px;
+  
+
+  @include smallscreen{
+    height:300px;
+  }
+}
+
+.header::before{
+  content: ' ';
+  width:100%;
+  height: $header-size;
+  position: absolute;
+  //background: rgb(0,0,0);
+  //background: linear-gradient(180deg, rgba(0, 0, 0, 0.58248)5%, rgba(0, 0, 0, 0.2248) 20%, rgba(255, 255, 255, 0) 30%);
+
+  @include smallscreen{
+    height:300px;
+  }
+}
+
+
+.header-alt{
+
+  background-image: url("../img/bg_image2.png");
+  background-size: cover;
+  position: absolute;
+  top: 0px;
+  height: $header-alt-size;
+  width: 100%;
+}
+
+.header-alt::before{
+  content: ' ';
+  width:100%;
+  height: $header-alt-size;
+  position: absolute;
+  //background: rgb(0,0,0);
+  //background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7175245098039216) 21%, rgba(255,255,255,0) 100%);
+}
+
+.containers{
+  background-color: #FFF;
+}
+
+.main-container{
+  @extend .containers;
+}
+
+
+.body{
+
+  margin-top:100px;
+
+  @include smallscreen{
+    margin-top:50px;
+  }
+}
+
+.padding{
+  padding:50px;
+  @include smallscreen{
+    padding:20px;
+  }
+}
+
+.left-column{
+  padding:0px;
+}
+
+
+.paginator{
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 20px;
+  padding: 0px;
+  padding-bottom:50px;
+
+  a{
+    color: #8a8a8a;
+
+    &:hover{
+      color: $text-color;
+    }
+  }
+
+}
+
+
+
+.challange1 {
+  word-break: break-word;
+  font-family: monospace;
+  font-size: 17px;
+  padding: 20px;
+  opacity: 0.15;
+  user-select: none;
+}
+
+footer{
+  padding-top:20px;
+}
+
+.img-ad{
+  width:100%;
+  padding:10px;
+  padding-top:0px;
+}
