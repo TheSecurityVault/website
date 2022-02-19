@@ -1,7 +1,7 @@
 {{- $postLink := .Page.Permalink}}
 {{- with $.Params.preview -}}
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="{{$postLink}}{{ . }}" />
+<meta name="twitter:image" content="{{ $.Site.BaseURL }}{{ . }}" />
 {{- end -}}
 <meta name="twitter:title" content="{{ .Title }}" />
 <meta name="twitter:description"
