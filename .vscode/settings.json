@@ -1,7 +1,7 @@
 {
   "[markdown]": {
     "editor.rulers": [
-      90
+      63
     ],
     "editor.fontSize": 14,
     "editor.lineHeight": 26,
