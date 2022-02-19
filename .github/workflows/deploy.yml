@@ -28,7 +28,7 @@ jobs:
           # build website with Hugp
           /tmp/hugo
           
-          /move build version to temp
+          # move build version to temp
           mv -r public /tmp
 
           # Checkout the gh-page branch (where the prod version is)
