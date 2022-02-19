@@ -47,4 +47,20 @@
     })
   }
 
+
+  // create hover link/icon for headers
+  const headers = document.querySelectorAll(".single-post-content > h2,.single-post-content > h3,.single-post-content > h4,.single-post-content > h5,.single-post-content > h6")
+  const icon = document.createElement("i")
+  icon.className = "fas fa-link"
+  icon.textContent = " "
+  icon.style.marginLeft = "5px"
+  icon.style.fontSize = "20px"
+
+  for (let i = 0; i < headers.length; i++) {
+    const h = headers[i]
+    h.insertAdjacentElement("beforeend", icon.cloneNode())
+    h.onclick = () => window.location.hash = h.id
+
+  }
+
 </script>
