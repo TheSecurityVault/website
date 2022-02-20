@@ -13,7 +13,7 @@
   content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
 
 <meta property="keywords"
-  content='{{if .Params.tags}}{{delimit .Params.tags ", "}}{{else}}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}' />
+  content='{{if .Params.keywords}}{{delimit .Params.keywords ", "}}{{else}}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}' />
 
 <meta name="author" content="{{ $.Site.Params.author }}">
 
@@ -21,8 +21,11 @@
 {{ partial "opengraph.html" . }}
 {{ partial "twitter_cards.html" . }}
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&family=Roboto:ital,wght@1,900&display=swap"
+  rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
   integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">

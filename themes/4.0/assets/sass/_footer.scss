@@ -1,5 +1,10 @@
 footer{
   background-color:#000;
+
+  @media print {
+    display:none; 
+  }
+
 }
 
 .banner-footer{

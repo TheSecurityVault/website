@@ -20,6 +20,19 @@ a{
   }
 }
 
+// this fixes the anchor scroll with the fixed navbar :D 
+h2::before,
+h3::before, 
+h4::before,
+h5::before,
+h6::before {
+  content: '';
+  display: block;
+  height:      75px;
+  margin-top: -75px;
+  visibility: hidden;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
     line-height: 1.3;
