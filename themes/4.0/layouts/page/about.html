@@ -1,0 +1,108 @@
+{{ define "main" }}
+{{ $author := index .Site.Data.authors (.Params.author | default "default") }}
+
+<div class="body">
+  <div class="container">
+    <section class=about>>
+      <div class="row about-author">
+        <div class="col-lg-8 about-author-content">
+          <h2>{{$author.name}}</h2>
+          <h6>{{$author.jobTitle}}</h6>
+
+          <div class="about-author-introduction">
+            <p>{{$author.bio}}</p>
+          </div>
+        </div>
+        <div class="col-lg-4 about-author-visual">
+          <img src="{{ $author.avatar }}" class="about-author-img" />
+        </div>
+      </div>
+    </section>
+
+    <section class="skills white-bg">
+      <div class=row>
+        <div class="col-md-6 skills-radar-container">
+          <h2>Skills</h2>
+          <canvas id="skills" class="skills-radar"></canvas>
+        </div>
+        <div class="col-md-6">
+          <h2>Dev Technologies</h2>
+
+          <div>JS/TS/Node<div class="progress-bar"><span class="progress-bar-fill" style="width: 95%;"></span></div>
+          </div>
+          <div>React<div class="progress-bar"><span class="progress-bar-fill" style="width: 93%;"></span></div>
+          </div>
+          <div>Ruby/Rails<div class="progress-bar"><span class="progress-bar-fill" style="width: 85%;"></span></div>
+          </div>
+          <div>Java<div class="progress-bar"><span class="progress-bar-fill" style="width: 70%;"></span></div>
+          </div>
+          <div>AWS<div class="progress-bar"><span class="progress-bar-fill" style="width: 60%;"></span></div>
+          </div>
+          <div>.NET<div class="progress-bar"><span class="progress-bar-fill" style="width: 50%;"></span></div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <section class="about-projects white-bg">
+      <h2>Some Open Source Contributions</h2>
+      <div>
+        <a href="https://github.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp"><span
+            class="badge">DamnVulnerableCryptoApp</span></a>
+        <a href="https://github.com/luisfontes19/xxexploiter"><span class="badge">XXExploiter</span></a>
+        <a href="https://github.com/luisfontes19/CSRFER"><span class="badge">CSRFER</span></a>
+        <a href="https://marketplace.visualstudio.com/items?itemName=luisfontes19.vscode-swissknife"><span
+            class="badge">Vscode Swissknife</span></a>
+        <a href="https://github.com/pwndoc/pwndoc"><span class="badge">PwnDoc</span></a>
+        <a href="https://github.com/OWASP/owasp-masvs/"><span class="badge">OWASP MASVS</span></a>
+        <a href="https://github.com/IvanMathy/Boop/"><span class="badge">Boop</span></a>
+        <a href="https://github.com/rsksmart/"><span class="badge">RSK/RIF</span></a>
+        <a href="https://github.com/rapid7/metasploit-framework"><span class="badge">Metasploit</span></a>
+      </div>
+    </section>
+  </div>
+
+  <div class="container-fluid highlight-zone">
+    <div class="container">
+      {{ .Content }}
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+<script>
+
+  const ctx = document.getElementById("skills");
+  const skillsChart = new Chart(ctx, {
+    type: 'radar',
+    responsive: true,
+    maintainAspectRatio: false,
+    data: {
+      labels: ['App Sec', 'Web Development', 'Mobile Development', 'Script Automation', 'AWS', 'Geekness'],
+      datasets: [{
+        data: [4, 4, 3, 4, 3.5, 5],
+        backgroundColor: 'rgba(215,38,61, 0.3)',
+        borderColor: '#D7263D'
+      }]
+    },
+    options: {
+      animation: {
+        duration: 5000
+      },
+      legend: {
+        display: false
+      },
+      scale: {
+        ticks: {
+          suggestedMin: 1,
+          suggestedMax: 5,
+          stepSize: 1
+        }
+      }
+    }
+  });
+</script>
+{{ end }}
