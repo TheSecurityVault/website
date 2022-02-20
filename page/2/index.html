@@ -15,8 +15,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta property="description"
   content="Because Security Matters - Demistifying those weird and dark security vulnerabilities nobody talks about" />
-<meta name="keywords" content="">
+
+<meta property="keywords"
+  content='Because Security Matters - Demistifying those weird and dark security vulnerabilities nobody talks about' />
+
 <meta name="author" content="Luis Fontes">
+
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "The Security Vault",
+    "url": "https:\/\/thesecurityvault.github.io\/website",
+    "description": "Because Security Matters - Demistifying those weird and dark security vulnerabilities nobody talks about",
+    "thumbnailUrl": "https:\/\/thesecurityvault.github.io\/img\/logo.png",
+    "license": ""
+}
+</script>
 
 
 
@@ -25,7 +40,6 @@
   content="Because Security Matters - Demistifying those weird and dark security vulnerabilities nobody talks about" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://thesecurityvault.github.io/website/" />
-[/banner.png]
 <meta property="og:image" content="https://thesecurityvault.github.io/website/banner.png" />
 
 <meta name="twitter:title" content="The Security Vault" />
@@ -41,7 +55,7 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
   integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.c9e4c2451b8e0940828b6d104ae77fcb54c8b13f33715ee6ed499d33f84cbbf873c70a016aefa12396619afb38f622f434b4455f7ea61b8ae5390e93560106c7.css">
 
 
 
@@ -383,6 +397,22 @@ Why …</div>
         evt.currentTarget.rel = "noopener noreferrer"
       }
     })
+  }
+
+
+  
+  const headers = document.querySelectorAll(".single-post-content > h2,.single-post-content > h3,.single-post-content > h4,.single-post-content > h5,.single-post-content > h6")
+  const icon = document.createElement("i")
+  icon.className = "fas fa-link"
+  icon.textContent = " "
+  icon.style.marginLeft = "5px"
+  icon.style.fontSize = "20px"
+
+  for (let i = 0; i < headers.length; i++) {
+    const h = headers[i]
+    h.insertAdjacentElement("beforeend", icon.cloneNode())
+    h.onclick = () => window.location.hash = h.id
+
   }
 
 </script></body>

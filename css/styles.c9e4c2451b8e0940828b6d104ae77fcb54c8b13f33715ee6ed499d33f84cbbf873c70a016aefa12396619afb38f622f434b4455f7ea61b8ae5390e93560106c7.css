@@ -41,6 +41,14 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 0 15px;
 }
 
+h1 i, h2 i, h3 i, h4 i, h5 i, h6 i {
+  visibility: hidden;
+}
+
+h1:hover i, h2:hover i, h3:hover i, h4:hover i, h5:hover i, h6:hover i {
+  visibility: visible;
+}
+
 hr {
   margin-top: 30px;
   margin-bottom: 30px;
@@ -241,6 +249,14 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.3;
   color: #000;
   margin: 0 0 15px;
+}
+
+h1 i, h2 i, h3 i, h4 i, h5 i, h6 i {
+  visibility: hidden;
+}
+
+h1:hover i, h2:hover i, h3:hover i, h4:hover i, h5:hover i, h6:hover i {
+  visibility: visible;
 }
 
 hr {
@@ -702,6 +718,14 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.3;
   color: #000;
   margin: 0 0 15px;
+}
+
+h1 i, h2 i, h3 i, h4 i, h5 i, h6 i {
+  visibility: hidden;
+}
+
+h1:hover i, h2:hover i, h3:hover i, h4:hover i, h5:hover i, h6:hover i {
+  visibility: visible;
 }
 
 hr {

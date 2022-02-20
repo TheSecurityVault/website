@@ -15,8 +15,65 @@
 <meta property="description"
   content="First time I heard about mass assignment vulnerabilities was a long time ago, when I started learning Ruby &amp; Rails. In fact I learnt a lot, security related back then, as Rails is a quite complex and secure framework, and to properly work with it you should understand the underlying mechanisms.
 At that time Rails had just introduced a security feature called &ldquo;Strong Parameters&rdquo; to help protect against mass assignment attacks and I was curious about what it was for so I spent some time going through the docs." />
-<meta name="keywords" content="">
+
+<meta property="keywords"
+  content='assignment, injection, javascript, mass, mongo, nosql, rails, spring, strong' />
+
 <meta name="author" content="Luis Fontes">
+
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "articleSection": "posts",
+    "name": "What is and how to prevent Mass Assignment Vulnerabilities",
+    "headline": "What is and how to prevent Mass Assignment Vulnerabilities",
+    "alternativeHeadline": "",
+    "description": "First time I heard about mass assignment vulnerabilities was a long time ago, when I started learning Ruby \u0026amp; Rails. In fact I learnt a lot, security related back then, as Rails is a quite complex and secure framework, and to properly work with it you should understand the underlying mechanisms.\nAt that time Rails had just introduced a security feature called \u0026ldquo;Strong Parameters\u0026rdquo; to help protect against mass assignment attacks and I was curious about what it was for so I spent some time going through the docs.",
+    "inLanguage": "en-us",
+    "isFamilyFriendly": "true",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https:\/\/thesecurityvault.github.io\/website\/what-is-and-how-to-prevent-mass-assignment-vulnerabilities\/"
+    },
+    "author" : {
+        "@type": "Person",
+        "name": "map[avatar:\/img\/luisfontes19.jpeg bio:After 5 years working with different technologies as full stack developer I changed to the AppSec world. Worked at checkmarx and huge global customers reviewing application\u0027s source code to find and help mitigate its vulnerabilities. From there changed to IOVLabs (RSK) and the crypto currency world. Nowadays I work at a Xapo, a crypto bank. jobTitle:Application Security Engineer | eMAPT | eWPTXv2 name:Luís Fontes username:luisfontes19]"
+    },
+    "creator" : {
+        "@type": "Person",
+        "name": "map[avatar:\/img\/luisfontes19.jpeg bio:After 5 years working with different technologies as full stack developer I changed to the AppSec world. Worked at checkmarx and huge global customers reviewing application\u0027s source code to find and help mitigate its vulnerabilities. From there changed to IOVLabs (RSK) and the crypto currency world. Nowadays I work at a Xapo, a crypto bank. jobTitle:Application Security Engineer | eMAPT | eWPTXv2 name:Luís Fontes username:luisfontes19]"
+    },
+    "accountablePerson" : {
+        "@type": "Person",
+        "name": "map[avatar:\/img\/luisfontes19.jpeg bio:After 5 years working with different technologies as full stack developer I changed to the AppSec world. Worked at checkmarx and huge global customers reviewing application\u0027s source code to find and help mitigate its vulnerabilities. From there changed to IOVLabs (RSK) and the crypto currency world. Nowadays I work at a Xapo, a crypto bank. jobTitle:Application Security Engineer | eMAPT | eWPTXv2 name:Luís Fontes username:luisfontes19]"
+    },
+    "copyrightHolder" : "The Security Vault",
+    "copyrightYear" : "2021",
+    "dateCreated": "2021-06-13T00:00:00.00Z",
+    "datePublished": "2021-06-13T00:00:00.00Z",
+    "dateModified": "2022-02-19T00:44:05.85Z",
+    "publisher":{
+        "@type":"Organization",
+        "name": "The Security Vault",
+        "url": "https://thesecurityvault.github.io/website",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https:\/\/thesecurityvault.github.io\/website\/img\/logo.png",
+            "width":"32",
+            "height":"32"
+        }
+    },
+    "image": "https://thesecurityvault.github.io/img/logo.png",
+    "url" : "https:\/\/thesecurityvault.github.io\/website\/what-is-and-how-to-prevent-mass-assignment-vulnerabilities\/",
+    "wordCount" : "1112",
+    "genre" : [ "assignment" , "injection" , "javascript" , "mass" , "mongo" , "nosql" , "rails" , "spring" , "strong" ],
+    "keywords" : [ "assignment" , "injection" , "javascript" , "mass" , "mongo" , "nosql" , "rails" , "spring" , "strong" ],
+}
+</script>
 
 
 
@@ -45,7 +102,7 @@ At that time Rails had just introduced a security feature called &ldquo;Strong P
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
   integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.f44e723f4eae0d9fd305bd6958b414d8a14e7f1042dc0709835577b18cde17667f88b57e27421cfa9438bb2fec6b83fd51e856bb15b0921f1bcf3547be94389c.css">
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.c9e4c2451b8e0940828b6d104ae77fcb54c8b13f33715ee6ed499d33f84cbbf873c70a016aefa12396619afb38f622f434b4455f7ea61b8ae5390e93560106c7.css">
 
 
 
@@ -385,6 +442,22 @@ Let&rsquo;s take into consideration MongoDB. MongoDB works with unstructured doc
         evt.currentTarget.rel = "noopener noreferrer"
       }
     })
+  }
+
+
+  
+  const headers = document.querySelectorAll(".single-post-content > h2,.single-post-content > h3,.single-post-content > h4,.single-post-content > h5,.single-post-content > h6")
+  const icon = document.createElement("i")
+  icon.className = "fas fa-link"
+  icon.textContent = " "
+  icon.style.marginLeft = "5px"
+  icon.style.fontSize = "20px"
+
+  for (let i = 0; i < headers.length; i++) {
+    const h = headers[i]
+    h.insertAdjacentElement("beforeend", icon.cloneNode())
+    h.onclick = () => window.location.hash = h.id
+
   }
 
 </script></body>
