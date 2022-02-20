@@ -6,4 +6,5 @@ categories:
   - "appsec"
 preview: images/banner.png
 tags: 
+type: post
 ---
