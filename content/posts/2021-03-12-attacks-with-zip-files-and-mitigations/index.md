@@ -3,7 +3,7 @@ title: Attacks with Zip Files and Mitigations
 date: '2021-03-12'
 category: appsec
 preview: images/banner.png
-tags:
+keywords:
   - bomb
   - path
   - ruby
@@ -16,7 +16,7 @@ tags:
 aliases:
   - appsec/attacks-with-zip-files-and-mitigations
 type: post
-lastmod: '2022-02-19T11:09:10.010Z'
+lastmod: '2022-02-20T13:42:27.319Z'
 ---
 
 Once again, I bring a topic that I don't see getting enough attention , and a lot of times this ends up being a big security issue in the targeted systems... Attacks with zip files, two different and interesting attacks.

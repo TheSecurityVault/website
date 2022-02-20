@@ -3,7 +3,7 @@ title: How to use Facebook for Open Redirect attacks
 date: '2020-08-15'
 category: pentest
 preview: images/banner.png
-tags:
+keywords:
   - badssl
   - bounty
   - bug
@@ -15,7 +15,7 @@ tags:
 aliases:
   - pentest/how-to-use-facebook-for-open-redirect-attacks
 type: post
-lastmod: '2022-02-19T00:43:37.765Z'
+lastmod: '2022-02-20T13:42:27.335Z'
 ---
 
 Some days ago I found an Open Redirect in Facebook website, that I promptly reported to their Bug Bounty Program. There were a lot of warnings that Open Redirect's are usually false positives, but this one looked legit to me.

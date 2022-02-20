@@ -3,7 +3,7 @@ title: What is and how to prevent Mass Assignment Vulnerabilities
 date: '2021-06-13'
 category: appsec
 preview: images/banner.jpeg
-tags:
+keywords:
   - assignment
   - injection
   - javascript
@@ -17,7 +17,7 @@ aliases:
   - appsec/what-is-and-how-to prevent-mass-assignment
   - asd
 type: post
-lastmod: '2022-02-19T00:44:05.853Z'
+lastmod: '2022-02-20T13:42:27.322Z'
 ---
 
 First time I heard about mass assignment vulnerabilities was a long time ago, when I started learning Ruby & Rails. In fact I learnt a lot, security related back then, as Rails is a quite complex and secure framework, and to properly work with it you should understand the underlying mechanisms.

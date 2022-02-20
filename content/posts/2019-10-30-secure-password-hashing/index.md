@@ -3,7 +3,7 @@ title: Secure Password Hashing
 date: '2019-10-30'
 category: appsec
 preview: images/banner.jpeg
-tags:
+keywords:
   - argon2
   - hash
   - hashing
@@ -20,7 +20,7 @@ tags:
 aliases:
   - appsec/secure-password-hashing
 type: post
-lastmod: '2022-02-19T00:43:05.490Z'
+lastmod: '2022-02-20T13:42:27.329Z'
 ---
 
 **Password Hashing 101**: MD5 and SHA1 which are quite common, are already considered unsafe. So if you are using them, replace them with a secure algorithm. Even for checksums should not considered secure. Check references for more info.

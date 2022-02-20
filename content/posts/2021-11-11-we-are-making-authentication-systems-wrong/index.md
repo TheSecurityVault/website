@@ -3,7 +3,7 @@ title: We are making authentication systems wrong
 date: '2021-11-11'
 category: appsec
 preview: images/banner.jpeg
-tags:
+keywords:
   - 2fa
   - df
   - diffie
@@ -26,7 +26,7 @@ tags:
 aliases:
   - appsec/we-are-making-authentication-systems-wrong
 type: post
-lastmod: '2022-02-19T11:09:42.176Z'
+lastmod: '2022-02-20T13:42:27.330Z'
 ---
 
 For a long time I've been struggling with the way authentication systems work, as they don't protect your password as they should. If you search for login best practices, like in [OWASP](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html), they'll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.

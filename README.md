@@ -1,5 +1,5 @@
 ---
-lastmod: '2022-02-19T23:40:49.701Z'
+lastmod: '2022-02-20T00:51:37.554Z'
 ---
 # The security Vault website
 
@@ -8,3 +8,6 @@ lastmod: '2022-02-19T23:40:49.701Z'
 * hugo
 * exiftool
 * vscode
+* markdownlint
+
+There's a pre commit hook that runs exiftool to clean images, and markdownlint to auto fix markdown issues

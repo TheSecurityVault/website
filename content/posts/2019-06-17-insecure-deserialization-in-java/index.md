@@ -3,23 +3,23 @@ title: Insecure Deserialization in Java
 date: '2019-06-17'
 category: appsec
 preview: images/banner.jpeg
-tags:
-    - apache
-    - code
-    - commons
-    - data
-    - deserialization
-    - execution
-    - insecure
-    - objectinputstram
-    - rce
-    - serializable
-    - serialization
-    - unsafe
+keywords:
+  - apache
+  - code
+  - commons
+  - data
+  - deserialization
+  - execution
+  - insecure
+  - objectinputstram
+  - rce
+  - serializable
+  - serialization
+  - unsafe
 aliases:
-    - appsec/insecure-deserialization-in-java-2
+  - appsec/insecure-deserialization-in-java-2
 type: post
-lastmod: '2022-02-19T00:42:33.178Z'
+lastmod: '2022-02-20T13:42:27.339Z'
 ---
 
 Insecure deserialization got in [OWASP top 10](https://www.owasp.org/index.php/Top_10-2017_A8-Insecure_Deserialization) in 2017 as most of web applications written in Java and .net where found vulnerable and in most of the scenarios the vulnerabilities got to Remote Code Execution (RCE)

@@ -3,7 +3,7 @@ title: 'Breaking C# SecureString'
 date: '2020-01-18'
 category: appsec
 preview: /../images/banner.jpeg
-tags:
+keywords:
   - api
   - break
   - c-sharp
@@ -28,7 +28,7 @@ aliases:
   - appsec/not-that-securestring-in-csharp
   - appsec/not-that-securestring-in-csharp/
 type: post
-lastmod: '2022-02-19T00:43:11.618Z'
+lastmod: '2022-02-20T13:42:27.323Z'
 ---
 
 As discussed previously in [Heap Inspection post](https://thesecurityvault.com/heap-inspection/) keeping passwords and other sensitive data in memory may be insecure as they can be inspected or dumped.

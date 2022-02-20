@@ -3,7 +3,7 @@ title: How Antivirus works and bypass techniques - part 1
 date: '2019-06-16'
 category: pentest
 preview: images/banner.jpeg
-tags:
+keywords:
   - anti
   - antivirus
   - av
@@ -19,7 +19,7 @@ tags:
 aliases:
   - pentest/how-antivirus-works-and-bypass-techniques-part-1
 type: post
-lastmod: '2022-02-19T11:03:02.017Z'
+lastmod: '2022-02-20T13:42:27.331Z'
 ---
 
 This time i'm not going to talk about a specific vulnerability. Instead I'm going to show how attackers disguise malware in order to bypass antivirus.

@@ -3,7 +3,7 @@ title: Screen Caching
 date: '2020-11-01'
 category: appsec
 preview: images/banner.png
-tags:
+keywords:
   - android
   - caching
   - fix
@@ -15,7 +15,7 @@ aliases:
   - appsec/screen-caching
   - appsec/screen-caching-2
 type: post
-lastmod: '2022-02-19T11:07:00.654Z'
+lastmod: '2022-02-20T13:42:27.324Z'
 ---
 
 Screen Caching is another of those vulnerabilities nobody is paying attention to, and this one is quite important.

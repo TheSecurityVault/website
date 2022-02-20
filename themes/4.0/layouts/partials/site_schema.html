@@ -59,8 +59,8 @@
     "image": {{ if .Params.images }}[{{ range $i, $e := .Params.images }}{{ if $i }}, {{ end }}{{ $e | absURL }}{{ end }}]{{ else}}{{.Site.Params.logo | absURL }}{{ end }},
     "url" : "{{ .Permalink }}",
     "wordCount" : "{{ .WordCount }}",
-    "genre" : [ {{ range $index, $tag := .Params.tags }}{{ if $index }}, {{ end }}"{{ $tag }}" {{ end }}],
-    "keywords" : [ {{ range $index, $tag := .Params.tags }}{{ if $index }}, {{ end }}"{{ $tag }}" {{ end }}],
+    "genre" : [ {{ range $index, $tag := .Params.keywords }}{{ if $index }}, {{ end }}"{{ $tag }}" {{ end }}],
+    "keywords" : [ {{ range $index, $tag := .Params.keywords }}{{ if $index }}, {{ end }}"{{ $tag }}" {{ end }}],
 }
 </script>
 {{ end }}

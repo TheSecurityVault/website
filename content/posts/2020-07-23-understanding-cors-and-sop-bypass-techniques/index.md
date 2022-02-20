@@ -3,7 +3,7 @@ title: Understanding CORS and SOP bypass techniques
 date: '2020-07-23'
 category: appsec
 preview: images/banner.png
-tags:
+keywords:
   - access
   - allow
   - control
@@ -20,7 +20,7 @@ tags:
 aliases:
   - appsec/understanding-cors-and-sop-bypass-techniques
 type: post
-lastmod: '2022-02-19T19:25:46.440Z'
+lastmod: '2022-02-20T13:42:27.336Z'
 ---
 
 **CORS** which stands for Cross-Origin Resource Sharing is a system designed to help 'bypass' some of the restrictions introduced by [Same Origin Policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy) (SOP prevents javascript code from interacting with resources from other origins).

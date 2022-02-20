@@ -3,18 +3,18 @@ title: Weak Random
 date: '2019-06-17'
 category: appsec
 preview: images/banner.png
-tags:
-    - dev-random
-    - dev-urandom
-    - drbg
-    - prng
-    - secure
-    - sha1prng
-    - windows-prng
+keywords:
+  - dev-random
+  - dev-urandom
+  - drbg
+  - prng
+  - secure
+  - sha1prng
+  - windows-prng
 aliases:
-    - appsec/weak-random-2
+  - appsec/weak-random-2
 type: post
-lastmod: '2022-02-19T11:03:59.194Z'
+lastmod: '2022-02-20T13:42:27.321Z'
 ---
 
 A lot of developers don't know that regular Random is a weak random implementation. In fact its quite predictable. A lot of code relies on this class to generate passwords, tokens and other security related values, that in fact end up not being secure at all.

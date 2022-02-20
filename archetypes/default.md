@@ -5,6 +5,6 @@ draft: true
 categories: 
   - "appsec"
 preview: images/banner.png
-tags: 
+keywords: 
 type: post
 ---

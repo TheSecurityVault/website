@@ -3,7 +3,7 @@ title: Are your mobile banking apps secure?
 date: '2021-03-06'
 category: appsec
 preview: images/banner.png
-tags:
+keywords:
   - mobile
   - bank
   - banking
@@ -11,7 +11,7 @@ tags:
 aliases:
   - appsec/are-your-mobile-banking-apps-secure
 type: post
-lastmod: '2022-02-19T00:43:55.019Z'
+lastmod: '2022-02-20T13:42:27.328Z'
 ---
 
 These past few days I've been doing some security checks in my mobile banking apps as I basically never did it since opening the accounts a lot of years ago. I was quite surprised with the difference of security among my bank applications, and it even motivated me to close one of the accounts.

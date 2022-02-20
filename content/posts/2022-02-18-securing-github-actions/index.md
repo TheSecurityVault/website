@@ -3,7 +3,7 @@ title: Securing Github Actions
 date: '2022-02-19T00:15:40.578Z'
 category: appsec
 preview: images/banner.png
-tags:
+keywords:
   - actions
   - github
   - hardening
@@ -13,7 +13,7 @@ tags:
 aliases:
   - appsec/securing-github-actions
 draft: false
-lastmod: '2022-02-20T13:33:12.484Z'
+lastmod: '2022-02-20T13:42:27.317Z'
 type: post
 ---
 
@@ -50,13 +50,14 @@ Let's see some of the possible security issues with Github Actions
 7. [Billing Issues](#billing)
 8. [Do you need an Action for that?](#do-you-need-an-action-for-that)
 9. [Required status checks to pass](#required-status-checks-to-pass)
+
 ### Workflow Manipulation
 
 There are multiple ways developers can change a workflow. For example, in an organization users can edit the actions of any repo they have write access to.
 
 The scary thing about it is that if you add/change a workflow in your branch and the right conditions are met for the action to be [triggered](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows) it will trigger the changed workflow from your branch and not the one on the default branch or de previous one before your commits.
 
-On public repositories that's also tricky. 
+On public repositories that's also tricky.
 
 If a developer does a fork of your project the workflows running on his fork won't use any of your secrets, and they can even fail until the developer configures the secrets in his fork.
 
@@ -179,23 +180,23 @@ Check the storage and minutes for each plan [here](https://docs.github.com/en/bi
 
 As said before Github Actions are trending right now, which makes people overusing them. Having that in mind the first thing you should do before creating an action/workflow is to ask: "Do I really need that in Github Actions?"
 
-Sometimes the best solution is not using an Action, like when deploying a product on a cloud service (like AWS), since you need to store credentials on Github, which as seen before can be an issue. 
+Sometimes the best solution is not using an Action, like when deploying a product on a cloud service (like AWS), since you need to store credentials on Github, which as seen before can be an issue.
 
 Also, if you are storing AWS credentials for you production systems you are adding another point of failure in your chain. You are trusting github with access to your systems, which you should not do. For something like that a webhook is preferred, security wise.
 
-Lets see another example. 
+Lets see another example.
 
-[TheSecurityVault.com](https://TheSecurityVault.com) website was just migrated from a [Wordpress](https://wordpress.com/) platform to a static generated website with [Hugo](https://gohugo.io/). 
+[TheSecurityVault.com](https://TheSecurityVault.com) website was just migrated from a [Wordpress](https://wordpress.com/) platform to a static generated website with [Hugo](https://gohugo.io/).
 
-The website code is hosted in github, and there's a workflow that does the build and deployment. 
+The website code is hosted in github, and there's a workflow that does the build and deployment.
 
 But one important thing was to have a flow that removes [Exif](https://en.wikipedia.org/wiki/Exif) metadata from the images on the website. A first plan can be to use for example [exiftool](https://www.exiftool.org/) on a github workflow. But if you think carefully about it, if thats done on a workflow in means that the information has already been commited to git...
 
 Instead I created a [pre-commit hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) that removes that metadata before even commiting to Git
 
-Another example is markdown linting. Since the website is now written basically in markdown its important to keep it organize. I use markdownlint to do that. 
+Another example is markdown linting. Since the website is now written basically in markdown its important to keep it organize. I use markdownlint to do that.
 
-I could have an action that runs markdownlint and fails if there are issues, which would force me to do an extra commit and push, or fix it on the fly, which would require an extra commit. 
+I could have an action that runs markdownlint and fails if there are issues, which would force me to do an extra commit and push, or fix it on the fly, which would require an extra commit.
 
 A better approach is again to use a pre-commit hook that runs markdownlint (and fixes the issues). Still there's an action on github that just checks markdownlint as a fallback, just to make sure. But relying just on the action may not be best approach.
 
@@ -205,7 +206,7 @@ Branch protections have an option to require status checks to pass before mergin
 
 ![Require status checks before merging](images/require_status_checks.jpg)
 
-Repository/Organization admins may rely on this feature to try to add some security, trying to force workflows to succeed on some checks, before merging. But this gives a false sense of security. As we saw before in [Workflow Manipulation](#workflow-manipulation) a developer can change the workflow to always pass, bypassing then this configuration. 
+Repository/Organization admins may rely on this feature to try to add some security, trying to force workflows to succeed on some checks, before merging. But this gives a false sense of security. As we saw before in [Workflow Manipulation](#workflow-manipulation) a developer can change the workflow to always pass, bypassing then this configuration.
 
 A workaround for this is to force multiple approvals (I recommend 2 if github actions [cannot approve PR's](#pull-request-review-bypass)). This way, although the user changes the workflow to pass the checks, the reviewers of the pull request will see the change in the workflow and can reject the PR.
 

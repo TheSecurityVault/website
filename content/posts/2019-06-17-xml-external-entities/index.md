@@ -3,7 +3,7 @@ title: XML External Entities (XXE)
 date: '2019-06-17'
 category: appsec
 preview: images/banner.png
-tags:
+keywords:
   - builder
   - disclousure
   - entities
@@ -22,7 +22,7 @@ tags:
 aliases:
   - appsec/xml-external-entities
 type: post
-lastmod: '2022-02-19T11:15:35.555Z'
+lastmod: '2022-02-20T13:42:27.337Z'
 ---
 
 XML and JSON are two formats ruling the web right now.  

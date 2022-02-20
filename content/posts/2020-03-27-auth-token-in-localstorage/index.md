@@ -3,7 +3,7 @@ title: Auth Token in LocalStorage
 date: '2020-03-27'
 category: appsec"
 preview: images/banner.png
-tags:
+keywords:
   - api
   - auth
   - authentication
@@ -21,7 +21,7 @@ tags:
 aliases:
   - appsec/auth-token-in-localstorage
 type: post
-lastmod: '2022-02-19T00:43:19.656Z'
+lastmod: '2022-02-20T13:42:27.320Z'
 ---
 
 Getting right to the point: storing a token in LocalStorage is insecure.  

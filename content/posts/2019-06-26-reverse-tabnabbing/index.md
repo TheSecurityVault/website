@@ -3,7 +3,7 @@ title: Reverse Tabnabbing
 date: '2019-06-26'
 category: appsec
 preview: images/banner.jpeg
-tags:
+keywords:
   - blank
   - noopener
   - noreferrer
@@ -18,7 +18,7 @@ tags:
 aliases:
   - appsec/reverse-tabnabbing
 type: post
-lastmod: '2022-02-19T11:06:28.738Z'
+lastmod: '2022-02-20T13:42:27.338Z'
 ---
 
 Reverse Tabnabbing or also known as Unsafe Target Blank is one of the most underrated vulnerability, and this is the one I like the most. It's really easy to find an exploitable web application and it's also quite easy to mitigate.

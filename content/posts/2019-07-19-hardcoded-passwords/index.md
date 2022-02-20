@@ -3,7 +3,7 @@ title: Hardcoded Passwords
 date: '2019-07-19'
 category: appsec
 preview: images/banner.jpeg
-tags:
+keywords:
   - dorks
   - gitleaks
   - gittyleaks
@@ -20,7 +20,7 @@ tags:
 alias:
   - appsec/hardcoded-passwords
 type: post
-lastmod: '2022-02-19T00:43:00.101Z'
+lastmod: '2022-02-20T13:42:27.332Z'
 ---
 
 Hardcoded passwords... This is a problem quite common, and most of the projects that I get my hands on have a hardcoded password somewhere.

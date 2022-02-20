@@ -3,18 +3,18 @@ title: Heap Inspection
 date: '2019-06-16'
 category: appsec
 preview: images/banner.png
-tags:
-    - array
-    - char
-    - dump
-    - heap
-    - inspection
-    - memory
-    - password
+keywords:
+  - array
+  - char
+  - dump
+  - heap
+  - inspection
+  - memory
+  - password
 alias:
-    - appsec/heap-inspection
+  - appsec/heap-inspection
 type: post
-lastmod: '2022-02-19T00:42:22.765Z'
+lastmod: '2022-02-20T13:42:27.326Z'
 ---
 
 Heap Inspection is a vulnerability that most of the times developers don't care about, since it is not easy to mitigate, and most of libraries/frameworks are not prepared to handle it.

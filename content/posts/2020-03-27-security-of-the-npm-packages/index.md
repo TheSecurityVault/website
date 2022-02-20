@@ -3,7 +3,7 @@ title: Security of the NPM Packages
 date: '2020-03-27'
 category: appsec
 preview: images/banner.png
-tags:
+keywords:
   - chain
   - dependencies
   - dependency
@@ -17,7 +17,7 @@ tags:
 aliases:
   - appsec/security-of-the-npm-packages
 type: post
-lastmod: '2022-02-19T00:43:25.747Z'
+lastmod: '2022-02-20T13:42:27.333Z'
 ---
 
 Javascript (and typescript) is now one of the most used languages in new projects. It has an awesome performance, and Promises came to improve it even more. With it came tons of new tools and projects like Node and NPM. But not all is good, the security of the NPM packages is a worrying problem. Lets talk about it.
