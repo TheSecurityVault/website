@@ -1,4 +1,4 @@
-baseURL = 'https://thesecurityvault.github.io/website'
+baseURL = 'https://thesecurityvault.com'
 languageCode = 'en-us'
 title = 'The Security Vault'
 theme = '4.0'
@@ -101,7 +101,7 @@ baseName = "feed"
   [[menu.ads]]
     identifier = '3-CSRFER'
     url = 'https://github.com/luisfontes19/CSRFER'
-    pre = 'https://thesecurityvault.com/wp-content/uploads/2020/11/csrfer.png'
+    pre = '/img/csrfer'
   [[menu.ads]]
     identifier = '4-SharpCorsProxy'
     url = 'https://github.com/luisfontes19/SharpCorsProxy'
