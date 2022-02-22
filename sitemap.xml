@@ -2,86 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://thesecurityvault.github.io/website/category/appsec/</loc>
+    <loc>https://thesecurityvault.com/category/appsec/</loc>
     <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/category/</loc>
+    <loc>https://thesecurityvault.com/category/</loc>
     <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/posts/</loc>
+    <loc>https://thesecurityvault.com/posts/</loc>
     <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/securing-github-actions/</loc>
+    <loc>https://thesecurityvault.com/securing-github-actions/</loc>
     <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/</loc>
+    <loc>https://thesecurityvault.com/</loc>
     <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/</loc>
+    <loc>https://thesecurityvault.com/we-are-making-authentication-systems-wrong/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/what-is-and-how-to-prevent-mass-assignment-vulnerabilities/</loc>
+    <loc>https://thesecurityvault.com/what-is-and-how-to-prevent-mass-assignment-vulnerabilities/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/</loc>
+    <loc>https://thesecurityvault.com/attacks-with-zip-files-and-mitigations/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/</loc>
+    <loc>https://thesecurityvault.com/are-your-mobile-banking-apps-secure/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/the-log-forging-vulnerability-and-how-to-fix-it/</loc>
+    <loc>https://thesecurityvault.com/the-log-forging-vulnerability-and-how-to-fix-it/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/screen-caching/</loc>
+    <loc>https://thesecurityvault.com/screen-caching/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/</loc>
+    <loc>https://thesecurityvault.com/how-to-use-facebook-for-open-redirect-attacks/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/category/pentest/</loc>
+    <loc>https://thesecurityvault.com/category/pentest/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/</loc>
+    <loc>https://thesecurityvault.com/understanding-cors-and-sop-bypass-techniques/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/auth-token-in-localstorage/</loc>
+    <loc>https://thesecurityvault.com/auth-token-in-localstorage/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/security-of-the-npm-packages/</loc>
+    <loc>https://thesecurityvault.com/security-of-the-npm-packages/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/breaking_c_sharp_securestring/</loc>
+    <loc>https://thesecurityvault.com/breaking_c_sharp_securestring/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/secure-password-hashing/</loc>
+    <loc>https://thesecurityvault.com/secure-password-hashing/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/hardcoded-passwords/</loc>
+    <loc>https://thesecurityvault.com/hardcoded-passwords/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/reverse-tabnabbing/</loc>
+    <loc>https://thesecurityvault.com/reverse-tabnabbing/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/insecure-deserialization-in-java/</loc>
+    <loc>https://thesecurityvault.com/insecure-deserialization-in-java/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/weak-random/</loc>
+    <loc>https://thesecurityvault.com/weak-random/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/xml-external-entities-xxe/</loc>
+    <loc>https://thesecurityvault.com/xml-external-entities-xxe/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/heap-inspection/</loc>
+    <loc>https://thesecurityvault.com/heap-inspection/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/how-antivirus-works-and-bypass-techniques-part-1/</loc>
+    <loc>https://thesecurityvault.com/how-antivirus-works-and-bypass-techniques-part-1/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/hello-world/</loc>
+    <loc>https://thesecurityvault.com/hello-world/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/about/</loc>
+    <loc>https://thesecurityvault.com/about/</loc>
   </url><url>
-    <loc>https://thesecurityvault.github.io/website/tag/</loc>
+    <loc>https://thesecurityvault.com/tag/</loc>
   </url>
 </urlset>
