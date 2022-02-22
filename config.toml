@@ -88,7 +88,7 @@ baseName = "feed"
   [[menu.social]]
     identifier = 'rss'
     name = 'Rss'
-    url = 'https://thesecurityvault.com/?feed=rss2'
+    url = 'https://thesecurityvault.com/feed'
   
   [[menu.ads]]
     identifier = '1-XXExploiter'
