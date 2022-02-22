@@ -49,8 +49,7 @@ Let's see some of the possible security issues with Github Actions
 5. [Pull Request Review Bypass](#pull-request-review-bypass)
 6. [Custom Runners](#custom-runners)
 7. [Billing Issues](#billing)
-8. [Do you need an Action for that?](#do-you-need-an-action-for-that)
-9. [Required status checks to pass](#required-status-checks-to-pass)
+8. [Required status checks to pass](#required-status-checks-to-pass)
 
 ### Secrets Leak
 
@@ -177,30 +176,6 @@ On a private repo, as a rule of thumb do not use custom runners with more access
 Github actions are not free. For each different plan, github offers an amount of minutes and space for workflows. When that time or space comes to an end new costs are billed. This can be exploited to make workflows run for big amounts of time and a lot of times and eventually to increase the billing.
 
 Check the storage and minutes for each plan [here](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions)
-
-### Do you need an Action for that?
-
-As said before Github Actions are trending right now, which makes people overusing them. Having that in mind the first thing you should do before creating an action/workflow is to ask: "Do I really need that in Github Actions?"
-
-Sometimes the best solution is not using an Action, like when deploying a product on a cloud service (like AWS), since you need to store credentials on Github, which as seen before can be an issue.
-
-Also, if you are storing AWS credentials for you production systems you are adding another point of failure in your chain. You are trusting github with access to your systems, which you should not do. For something like that a webhook is preferred, security wise.
-
-Lets see another example.
-
-[TheSecurityVault.com](https://TheSecurityVault.com) website was just migrated from a [Wordpress](https://wordpress.com/) platform to a static generated website with [Hugo](https://gohugo.io/).
-
-The website code is hosted in github, and there's a workflow that does the build and deployment.
-
-But one important thing was to have a flow that removes [Exif](https://en.wikipedia.org/wiki/Exif) metadata from the images on the website. A first plan can be to use for example [exiftool](https://www.exiftool.org/) on a github workflow. But if you think carefully about it, if thats done on a workflow in means that the information has already been commited to git...
-
-Instead I created a [pre-commit hook](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) that removes that metadata before even commiting to Git
-
-Another example is markdown linting. Since the website is now written basically in markdown its important to keep it organize. I use markdownlint to do that.
-
-I could have an action that runs markdownlint and fails if there are issues, which would force me to do an extra commit and push, or fix it on the fly, which would require an extra commit.
-
-A better approach is again to use a pre-commit hook that runs markdownlint (and fixes the issues). Still there's an action on github that just checks markdownlint as a fallback, just to make sure. But relying just on the action may not be best approach.
 
 ### Required status checks to pass
 
