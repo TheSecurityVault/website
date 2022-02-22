@@ -101,7 +101,7 @@ baseName = "feed"
   [[menu.ads]]
     identifier = '3-CSRFER'
     url = 'https://github.com/luisfontes19/CSRFER'
-    pre = '/img/csrfer'
+    pre = '/img/csrfer.png'
   [[menu.ads]]
     identifier = '4-SharpCorsProxy'
     url = 'https://github.com/luisfontes19/SharpCorsProxy'
