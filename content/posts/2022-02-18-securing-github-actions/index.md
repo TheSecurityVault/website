@@ -1,5 +1,6 @@
 ---
 title: Securing Github Actions
+description: Github actions are being used to build and deploy solutions, with privileged accesses, but its security is being ignored. Lets change that
 date: '2022-02-19T00:15:40.578Z'
 category: appsec
 preview: images/banner.png
@@ -13,7 +14,7 @@ keywords:
 aliases:
   - appsec/securing-github-actions
 draft: false
-lastmod: '2022-02-20T13:42:27.317Z'
+lastmod: '2022-02-20T15:37:27.214Z'
 type: post
 ---
 
@@ -41,15 +42,25 @@ Let's see some of the possible security issues with Github Actions
 
 ## Possible issues
 
-1. [Workflow manipulation](#workflow-manipulation)
-2. [Workflow with write permissions](#workflow-with-write-permissions)
-3. [Secrets Leak](#secrets-leak)
+1. [Secrets Leak](#secrets-leak)
+2. [Workflow manipulation](#workflow-manipulation)
+3. [Workflow with write permissions](#workflow-with-write-permissions)
 4. [Third-Party Actions abuse](#third-party-action-abuse)
 5. [Pull Request Review Bypass](#pull-request-review-bypass)
 6. [Custom Runners](#custom-runners)
 7. [Billing Issues](#billing)
 8. [Do you need an Action for that?](#do-you-need-an-action-for-that)
 9. [Required status checks to pass](#required-status-checks-to-pass)
+
+### Secrets Leak
+
+Using the secrets feature may give you a false sense of security.
+
+Although github does some filtering on the workflow output to prevent secrets from being leaked, this routine is basically a simple search and replace. Secrets can still be printed to the workflow log if you base64 encode it for example, or if you reverse the string, or if you print one char at a time (and many other ways).
+
+Having this chained with [Workflow Manipulation](#workflow-manipulation) and you get a serious thing.
+
+This does not impact only public repos, but also private organizational repositories with global secrets configured.
 
 ### Workflow Manipulation
 
@@ -75,48 +86,39 @@ There are malicious users that do simple PR's to fix typos or formatting issues 
 
 To secure yourself from this, consider one of the options:
 
-1. If you want workflows to run on all PR's like for linting/scanning do not use any kind of secrets in the repository. Instead you can have a webhook to an external service that uses the secrets. This way an attacker has low control on that. It can only trigger the process.
-2. Configure workflows to need manually approval for all runs ([docs](https://docs.github.com/en/actions/managing-workflow-runs/approving-workflow-runs-from-public-forks))
-3. Allow any user to run any action but the ones that need sensitive fields make them manually triggered, passing the sensitive information as param inputs.
+1. Configure workflows to need manually approval for all runs ([docs](https://docs.github.com/en/actions/managing-workflow-runs/approving-workflow-runs-from-public-forks))
+2. Allow any user to run any action but the ones that need sensitive fields make them manually triggered, passing the sensitive information as param inputs.
+3. [Configure environments](#environments)
 
-If you're running workflows under an organization you have an org wide setting to disable workflows to run from pull requests from fork repos. This helps preventing repo specific secrets to get leaked to other organization members that do not have write permissions to the repository.
+If you're running workflows under an organization you have an org wide setting to disable workflows to run from pull requests from forked repos. This helps preventing repo specific secrets from getting leaked tby other organization members that do not have write permissions to the repository.
 
 ![Fork pull request workflows in private repositories](images/fork_workflow_pull_request.jpg)
 
-You can also disable forks from organization's repositories.
+Tip: You can also disable forks from organization's repositories.
 
 ### Workflow with write permissions
 
 When running a workflow, github generates a temporary token (GITHUB_TOKEN) that lives only for the time of the running of the workflow. This token has by default read and write permissions to the repository and can be accessed by any action/step.
 
-So, if you use *random* actions from the [Github Marketplace](https://github.com/marketplace?type=actions) they have access to this token as well, be careful.
-
-This in public repos can have a bigger impact.
+So, if you use *random* actions from the [Github Marketplace](https://github.com/marketplace?type=actions) the actions also have access to this token so be careful.
 
 You should restrict the permissions of the GITHUB_TOKEN, in case you don't need writing permissions. ([docs](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token))
 
-### Secrets Leak
+#### Environments
 
-Using the secrets feature may give you a false sense of security.
+Github environments can also contain secrets, and jobs that use environments need first to pass all protections to run. This means that environment secrets are only exposed after passing these protections.
 
-Although github does some filtering on the workflow output to prevent secrets from being leaked, this routine is basically a simple search and replace. Secrets can still be printed to the workflow log if you base64 encode it for example, or if you reverse the string, or if you print one char at a time (and many other ways).
+![Github environments](images/environments.jpg)
 
-Having this chained with [Workflow Manipulation](#workflow-manipulation) and you get a serious thing.
+You can require people to approve a workflow to run, and only make it run after X hours, which can add some time for relevant people see if something is wrong.
 
-This does not impact only public repos, but also private organizational repositories with global secrets configured.
-
-**Key takeaways for this section:**
-
-* Secrets can be obtained by anybody with write access to the repository
-* Avoid using secrets in actions in shared or public repositories
-* Instead use webhooks to trigger flows outside of github, where you can securely store the secrets
-* Only use organizational secrets if you are comfortable that anybody with access to the github org has access to the secret
+Also, you can restrict which branches can trigger the environment, so if you have a strict master branch protection, where it can only be merged by pull request (no direct pushes), and x reviewers, you can restrict an environment to run on master for example, which adds a good extra security. 
 
 ### Third-Party Action abuse
 
-Here's a good news. 3rd party actions cannot access your secrets variables... But they can access the GITHUB_TOKEN.
+Good news. 3rd party actions cannot access your secrets variable... But they can access the GITHUB_TOKEN.
 
-Good safety preventions for this are to set the GITHUB_TOKEN has as [ready only](#workflow-with-write-permissions) and to [specify which specific permissions](https://github.blog/changelog/2021-04-20-github-actions-control-permissions-for-github_token/) the workflow will have when running
+Good safety preventions for this are to set the GITHUB_TOKEN has as [ready only](#workflow-with-write-permissions) and to [specify which specific permissions](https://github.blog/changelog/2021-04-20-github-actions-control-permissions-for-github_token/) the workflow will have when running.
 
 Remember that when you use 3rd party actions on most of the cases they will have access to you code as you probably did a checkout before, and even if you didn't the action can do it with the GITHUB_TOKEN. If you have a private repo a malicious extension can easily exfiltrate your code.
 
@@ -138,7 +140,7 @@ steps:
 
 Also, github provides a configuration to specify which kind of actions can be run in an org/repo.
 
-You can choose to disable Github Actions, to allow any action to run, local actions only (from the same org or the same repo) or even go into more detail and specify action name or even commit hash
+You can choose to disable Github Actions, to allow any action to run, local actions only (from the same org or the same repo) or even go into more detail and specify action names or even commit hashes
 
 ### Pull Request Review Bypass
 
@@ -216,16 +218,16 @@ A workaround for this is to force multiple approvals (I recommend 2 if github ac
 * Secrets can be accessed by anybody with write access to a repo
 * Secrets can be accessed by external repo users
   * By default, developers can run actions at will after first contribution, change the setting to always need manual approval (if you have secrets or privileged flows)
-  * Are you doing a deployment? Use a webhook instead to trigger a flow in a more restricted environment
+  * Are you doing a deployment? Use a webhook instead to trigger a flow in a more restricted environment, or configure restricted github environments
 * Avoid organization's wide secrets, anybody with permissions to create/write to a repo can extract them
 * Avoid 3rd party action. You can enable options to only allow github's, verified  or internal actions to run.
 * When using external actions review the source code first, and pin them to a specific commit hash to make sure there were no changes.
 * Limit the workflow permissions
 * Remove default GITHUB_TOKEN write permissions if not needed
 * Block actions from approving pull requests on older repos
-* Do not make available custom runners that have access to more things that the developers that can control the workflow with the action
-* Change "Fork pull request workflows from outside collaborators" to "Require approval for all outside collaborators" for public or sensitive repos
-* Do not rely on "Require status checks to pass before merging" if developers can change the action
+* Do not make available custom runners that have access to more things then the developers
+* Change "Fork pull request workflows from outside collaborators" to "Require approval for all outside collaborators" for public or sensitive repos if you have configured secrets 
+* Do not rely on "Require status checks to pass before merging" if developers can change the actions
 * Disable the permission for github actions to approve PR's
 * Use at least 2 reviewers for PR's and block push to master
 
