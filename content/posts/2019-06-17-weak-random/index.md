@@ -1,5 +1,6 @@
 ---
 title: Weak Random
+description: Weak Random classes can lead to predictable passwords and keyphrases which could make your application logic or users authentication insecure
 date: '2019-06-17'
 category: appsec
 preview: images/banner.png

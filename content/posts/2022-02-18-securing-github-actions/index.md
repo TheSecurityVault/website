@@ -112,7 +112,7 @@ Github environments can also contain secrets, and jobs that use environments nee
 
 You can require people to approve a workflow to run, and only make it run after X hours, which can add some time for relevant people see if something is wrong.
 
-Also, you can restrict which branches can trigger the environment, so if you have a strict master branch protection, where it can only be merged by pull request (no direct pushes), and x reviewers, you can restrict an environment to run on master for example, which adds a good extra security. 
+Also, you can restrict which branches can trigger the environment, so if you have a strict master branch protection, where it can only be merged by pull request (no direct pushes), and x reviewers, you can restrict an environment to run on master for example, which adds a good extra security.
 
 ### Third-Party Action abuse
 
@@ -226,7 +226,7 @@ A workaround for this is to force multiple approvals (I recommend 2 if github ac
 * Remove default GITHUB_TOKEN write permissions if not needed
 * Block actions from approving pull requests on older repos
 * Do not make available custom runners that have access to more things then the developers
-* Change "Fork pull request workflows from outside collaborators" to "Require approval for all outside collaborators" for public or sensitive repos if you have configured secrets 
+* Change "Fork pull request workflows from outside collaborators" to "Require approval for all outside collaborators" for public or sensitive repos if you have configured secrets
 * Do not rely on "Require status checks to pass before merging" if developers can change the actions
 * Disable the permission for github actions to approve PR's
 * Use at least 2 reviewers for PR's and block push to master

@@ -1,5 +1,6 @@
 ---
 title: What is and how to prevent Mass Assignment Vulnerabilities
+description: With mass assignment vulnerabilities an attacker can manipulate data he doesn't have access to, sometimes to bypass permissions/validations
 date: '2021-06-13'
 category: appsec
 preview: images/banner.jpeg

@@ -1,5 +1,6 @@
 ---
 title: Auth Token in LocalStorage
+description: Storing an authentication token in localStorage is insecure. LocalStorage is accessible through Javascript and easly accessed by an attacker.
 date: '2020-03-27'
 category: appsec"
 preview: images/banner.png

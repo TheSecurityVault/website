@@ -1,5 +1,6 @@
 ---
 title: Attacks with Zip Files and Mitigations
+description: There are a few known attacks to zip files. In this post I cover two os the most commons attacks (zipslip and zip bomb) how to exploit and fix them
 date: '2021-03-12'
 category: appsec
 preview: images/banner.png

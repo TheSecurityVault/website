@@ -1,5 +1,6 @@
 ---
 title: Security of the NPM Packages
+description: Security of the NPM Packages is a growing concert. There are too many attack vectors when using unknown packages from public repositories
 date: '2020-03-27'
 category: appsec
 preview: images/banner.png

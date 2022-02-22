@@ -1,5 +1,6 @@
 ---
 title: 'Breaking C# SecureString'
+description: SecureString stores data in memory encrypted. But it can be easly reverted by an attacker to get it's original plaintext content.
 date: '2020-01-18'
 category: appsec
 preview: /../images/banner.jpeg

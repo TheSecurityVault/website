@@ -1,5 +1,6 @@
 ---
 title: Are your mobile banking apps secure?
+description: We trust that our mobile banking apps are secure and that properly protect our money... But are they really secure or built with security in mind?
 date: '2021-03-06'
 category: appsec
 preview: images/banner.png

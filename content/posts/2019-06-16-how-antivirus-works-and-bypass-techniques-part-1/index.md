@@ -1,5 +1,6 @@
 ---
 title: How Antivirus works and bypass techniques - part 1
+description: How antivirus work and some basic bypass techniques. Pratical examples with clamAV, from detection to bypass in a few tweaks
 date: '2019-06-16'
 category: pentest
 preview: images/banner.jpeg

@@ -1,5 +1,6 @@
 ---
 title: We are making authentication systems wrong
+description: Authentication systems are designed in a trust model where we need to trust and send our password to the server, but this is wrong.
 date: '2021-11-11'
 category: appsec
 preview: images/banner.jpeg

@@ -1,5 +1,6 @@
 ---
 title: Hardcoded Passwords
+description: Hardcoded passwords, get into source control, if you share source control between all the developers, if you open source the project, everybody with access to it can see those credentials.
 date: '2019-07-19'
 category: appsec
 preview: images/banner.jpeg

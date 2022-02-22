@@ -1,5 +1,6 @@
 ---
 title: Reverse Tabnabbing
+description: Reverse Tabnabbing refers to when you have a link with an unsafe target blank, meaning that the target page can manipulate properties from the current page
 date: '2019-06-26'
 category: appsec
 preview: images/banner.jpeg

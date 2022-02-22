@@ -1,5 +1,6 @@
 ---
 title: Understanding CORS and SOP bypass techniques
+description: How SOP works and secures a website and how can CORS help us creating more dynamic applications, by bypassing some SOP restrictions
 date: '2020-07-23'
 category: appsec
 preview: images/banner.png

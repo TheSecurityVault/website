@@ -1,5 +1,6 @@
 ---
 title: Heap Inspection
+description: By default java strings are immutable. Heap inspection takes advantage of this to dump strings that were disposed by stayed in memory
 date: '2019-06-16'
 category: appsec
 preview: images/banner.png

@@ -1,5 +1,6 @@
 ---
 title: How to use Facebook for Open Redirect attacks
+description: Understanding Open Redirect and analyzing an Open Redirect found in facebook, that can be used in social engineering attacks
 date: '2020-08-15'
 category: pentest
 preview: images/banner.png

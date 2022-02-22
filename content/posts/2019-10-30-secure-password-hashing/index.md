@@ -1,5 +1,6 @@
 ---
 title: Secure Password Hashing
+description: Avoid weak password hashing algorithms like md5 and sha1. Instead chose better solutions like bcrypt, PBKDF2, Argon2 and others
 date: '2019-10-30'
 category: appsec
 preview: images/banner.jpeg

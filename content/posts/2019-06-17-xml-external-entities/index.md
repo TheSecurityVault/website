@@ -1,5 +1,6 @@
 ---
 title: XML External Entities (XXE)
+description: External entities can be exploited to make a webserver do requests for you, disclose files or even get remote code execution
 date: '2019-06-17'
 category: appsec
 preview: images/banner.png

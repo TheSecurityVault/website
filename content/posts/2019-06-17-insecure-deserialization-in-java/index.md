@@ -1,5 +1,6 @@
 ---
 title: Insecure Deserialization in Java
+description: Insecure deserialization got in OWASP top 10 in 2017 as most of web applications written in Java and .net used vulnerable components.
 date: '2019-06-17'
 category: appsec
 preview: images/banner.jpeg

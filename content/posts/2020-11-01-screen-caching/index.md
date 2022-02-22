@@ -1,5 +1,6 @@
 ---
 title: Screen Caching
+description: Screen caching is a mobile vulnerability, caused due to a performance/usability feature present in mobile OS's. Learn hot to fix it
 date: '2020-11-01'
 category: appsec
 preview: images/banner.png
