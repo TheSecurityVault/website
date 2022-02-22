@@ -68,7 +68,7 @@
     },
     "image": "https://thesecurityvault.com/img/logo.png",
     "url" : "https:\/\/thesecurityvault.com\/securing-github-actions\/",
-    "wordCount" : "2370",
+    "wordCount" : "2019",
     "genre" : [ "actions" , "github" , "hardening" , "securing" , "workflows" , "security" ],
     "keywords" : [ "actions" , "github" , "hardening" , "securing" , "workflows" , "security" ],
 }
@@ -167,7 +167,7 @@
             <ul>
               <li><a href="">luisfontes19</a></li>
               <li>Feb 19, 2022</li>
-              <li class="text-secondary">12 minutes</li>
+              <li class="text-secondary">10 minutes</li>
               
               <li>appsec</li>
             </ul>
@@ -199,7 +199,6 @@
 <li><a href="#pull-request-review-bypass">Pull Request Review Bypass</a></li>
 <li><a href="#custom-runners">Custom Runners</a></li>
 <li><a href="#billing">Billing Issues</a></li>
-<li><a href="#do-you-need-an-action-for-that">Do you need an Action for that?</a></li>
 <li><a href="#required-status-checks-to-pass">Required status checks to pass</a></li>
 </ol>
 <h3 id="secrets-leak">Secrets Leak</h3>
@@ -280,18 +279,6 @@
 <h3 id="billing">Billing</h3>
 <p>Github actions are not free. For each different plan, github offers an amount of minutes and space for workflows. When that time or space comes to an end new costs are billed. This can be exploited to make workflows run for big amounts of time and a lot of times and eventually to increase the billing.</p>
 <p>Check the storage and minutes for each plan <a href="https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions">here</a></p>
-<h3 id="do-you-need-an-action-for-that">Do you need an Action for that?</h3>
-<p>As said before Github Actions are trending right now, which makes people overusing them. Having that in mind the first thing you should do before creating an action/workflow is to ask: &ldquo;Do I really need that in Github Actions?&rdquo;</p>
-<p>Sometimes the best solution is not using an Action, like when deploying a product on a cloud service (like AWS), since you need to store credentials on Github, which as seen before can be an issue.</p>
-<p>Also, if you are storing AWS credentials for you production systems you are adding another point of failure in your chain. You are trusting github with access to your systems, which you should not do. For something like that a webhook is preferred, security wise.</p>
-<p>Lets see another example.</p>
-<p><a href="https://TheSecurityVault.com">TheSecurityVault.com</a> website was just migrated from a <a href="https://wordpress.com/">Wordpress</a> platform to a static generated website with <a href="https://gohugo.io/">Hugo</a>.</p>
-<p>The website code is hosted in github, and there&rsquo;s a workflow that does the build and deployment.</p>
-<p>But one important thing was to have a flow that removes <a href="https://en.wikipedia.org/wiki/Exif">Exif</a> metadata from the images on the website. A first plan can be to use for example <a href="https://www.exiftool.org/">exiftool</a> on a github workflow. But if you think carefully about it, if thats done on a workflow in means that the information has already been commited to git&hellip;</p>
-<p>Instead I created a <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">pre-commit hook</a> that removes that metadata before even commiting to Git</p>
-<p>Another example is markdown linting. Since the website is now written basically in markdown its important to keep it organize. I use markdownlint to do that.</p>
-<p>I could have an action that runs markdownlint and fails if there are issues, which would force me to do an extra commit and push, or fix it on the fly, which would require an extra commit.</p>
-<p>A better approach is again to use a pre-commit hook that runs markdownlint (and fixes the issues). Still there&rsquo;s an action on github that just checks markdownlint as a fallback, just to make sure. But relying just on the action may not be best approach.</p>
 <h3 id="required-status-checks-to-pass">Required status checks to pass</h3>
 <p>Branch protections have an option to require status checks to pass before merging PR&rsquo;s. This means that the workflows need to successfully pass first.</p>
 <p><img src="images/require_status_checks.jpg" alt="Require status checks before merging"></p>
