@@ -129,7 +129,7 @@ I believe I made my point, moving on. Lets install express which is the "standar
 npm install --save express@4.16.2
 ```
 
-[installing express](images/image-5.png)](images/image-5.png)
+![installing express](images/image-5.png)](images/image-5.png)
 
 As you can see from NPM's output, it installed 51 packages. And from my stats I god around 22 000 lines of code. Have in mind that this is not a problem just for NPM, it is for all package manager all across (specially) the open source community.
 
