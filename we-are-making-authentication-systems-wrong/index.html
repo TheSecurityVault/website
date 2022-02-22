@@ -13,8 +13,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta property="description"
-  content="For a long time I&rsquo;ve been struggling with the way authentication systems work, as they don&rsquo;t protect your password as they should. If you search for login best practices, like in OWASP, they&rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.
-The Issue Although all of this is true and should be done, all of this has a huge fail: Users need to trust their password to the server." />
+  content="Authentication systems are designed in a trust model where we need to trust and send our password to the server, but this is wrong." />
 
 <meta property="keywords"
   content='2fa, df, diffie, ecc, eliptic, encryption, helmen, link, login, magic, password, pbkdf2, plaitext, reuse, sign, single, srp, sso, system' />
@@ -32,7 +31,7 @@ The Issue Although all of this is true and should be done, all of this has a hug
     "name": "We are making authentication systems wrong",
     "headline": "We are making authentication systems wrong",
     "alternativeHeadline": "",
-    "description": "For a long time I\u0026rsquo;ve been struggling with the way authentication systems work, as they don\u0026rsquo;t protect your password as they should. If you search for login best practices, like in OWASP, they\u0026rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.\nThe Issue Although all of this is true and should be done, all of this has a huge fail: Users need to trust their password to the server.",
+    "description": "Authentication systems are designed in a trust model where we need to trust and send our password to the server, but this is wrong.",
     "inLanguage": "en-us",
     "isFamilyFriendly": "true",
     "mainEntityOfPage": {
@@ -55,7 +54,7 @@ The Issue Although all of this is true and should be done, all of this has a hug
     "copyrightYear" : "2021",
     "dateCreated": "2021-11-11T00:00:00.00Z",
     "datePublished": "2021-11-11T00:00:00.00Z",
-    "dateModified": "2022-02-19T11:09:42.17Z",
+    "dateModified": "2022-02-20T13:42:27.33Z",
     "publisher":{
         "@type":"Organization",
         "name": "The Security Vault",
@@ -79,30 +78,31 @@ The Issue Although all of this is true and should be done, all of this has a hug
 
 <meta property="og:title" content="We are making authentication systems wrong" />
 <meta property="og:description"
-  content="For a long time I&rsquo;ve been struggling with the way authentication systems work, as they don&rsquo;t protect your password as they should. If you search for login best practices, like in OWASP, they&rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.
-The Issue Although all of this is true and should be done, all of this has a huge fail: Users need to trust their password to the server." />
+  content="Authentication systems are designed in a trust model where we need to trust and send our password to the server, but this is wrong." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/images/banner.jpeg" /><meta property="article:section" content="posts" />
 
 <meta property="article:published_time" content="2021-11-11T00:00:00+00:00" />
 
-<meta property="article:modified_time" content="2022-02-19T11:09:42+00:00" />
+<meta property="article:modified_time" content="2022-02-20T13:42:27+00:00" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://thesecurityvault.github.io/websiteimages/banner.jpeg" /><meta name="twitter:title" content="We are making authentication systems wrong" />
 <meta name="twitter:description"
-  content="For a long time I&rsquo;ve been struggling with the way authentication systems work, as they don&rsquo;t protect your password as they should. If you search for login best practices, like in OWASP, they&rsquo;ll tell you things like hashing the password with a strong algorithm, use salt and pepper, limit attempts, and the most important, use https.
-The Issue Although all of this is true and should be done, all of this has a huge fail: Users need to trust their password to the server." />
+  content="Authentication systems are designed in a trust model where we need to trust and send our password to the server, but this is wrong." />
 
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&family=Roboto:ital,wght@1,900&display=swap"
+  rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
   integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
   integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.c9e4c2451b8e0940828b6d104ae77fcb54c8b13f33715ee6ed499d33f84cbbf873c70a016aefa12396619afb38f622f434b4455f7ea61b8ae5390e93560106c7.css">
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.ee9e2ce8a02b41443541de90c22fcdd19ee882b9c1f66a530f6f4c5a9cb4ec197d5201fc03be68d0b6175646ab63c9ae99c47a42181b7368145b69c9f2ba75a7.css">
 
 
 
@@ -225,6 +225,8 @@ The Issue Although all of this is true and should be done, all of this has a hug
         
       </div>
       <div class="col-md-6 next-post">
+        
+        <a href="https://thesecurityvault.github.io/website/securing-github-actions/"> Next Post &rArr;<br><b>Securing Github Actions</b></a>
         
       </div>
     </div>

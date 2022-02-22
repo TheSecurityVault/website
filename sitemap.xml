@@ -3,79 +3,82 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://thesecurityvault.github.io/website/category/appsec/</loc>
-    <lastmod>2022-02-19T19:25:46+00:00</lastmod>
+    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/category/</loc>
-    <lastmod>2022-02-19T19:25:46+00:00</lastmod>
+    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/posts/</loc>
-    <lastmod>2022-02-19T19:34:53+00:00</lastmod>
+    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.github.io/website/securing-github-actions/</loc>
+    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/</loc>
-    <lastmod>2022-02-19T19:34:53+00:00</lastmod>
+    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/</loc>
-    <lastmod>2022-02-19T11:09:42+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/what-is-and-how-to-prevent-mass-assignment-vulnerabilities/</loc>
-    <lastmod>2022-02-19T00:44:05+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/attacks-with-zip-files-and-mitigations/</loc>
-    <lastmod>2022-02-19T11:09:10+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/are-your-mobile-banking-apps-secure/</loc>
-    <lastmod>2022-02-19T00:43:55+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/the-log-forging-vulnerability-and-how-to-fix-it/</loc>
-    <lastmod>2022-02-19T11:07:52+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/screen-caching/</loc>
-    <lastmod>2022-02-19T11:07:00+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/how-to-use-facebook-for-open-redirect-attacks/</loc>
-    <lastmod>2022-02-19T00:43:37+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/category/pentest/</loc>
-    <lastmod>2022-02-19T11:03:02+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/understanding-cors-and-sop-bypass-techniques/</loc>
-    <lastmod>2022-02-19T19:25:46+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/auth-token-in-localstorage/</loc>
-    <lastmod>2022-02-19T00:43:19+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/security-of-the-npm-packages/</loc>
-    <lastmod>2022-02-19T00:43:25+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/breaking_c_sharp_securestring/</loc>
-    <lastmod>2022-02-19T00:43:11+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/secure-password-hashing/</loc>
-    <lastmod>2022-02-19T00:43:05+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/hardcoded-passwords/</loc>
-    <lastmod>2022-02-19T00:43:00+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/reverse-tabnabbing/</loc>
-    <lastmod>2022-02-19T11:06:28+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/insecure-deserialization-in-java/</loc>
-    <lastmod>2022-02-19T00:42:33+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/weak-random/</loc>
-    <lastmod>2022-02-19T11:03:59+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/xml-external-entities-xxe/</loc>
-    <lastmod>2022-02-19T11:15:35+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/heap-inspection/</loc>
-    <lastmod>2022-02-19T00:42:22+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/how-antivirus-works-and-bypass-techniques-part-1/</loc>
-    <lastmod>2022-02-19T11:03:02+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/hello-world/</loc>
-    <lastmod>2022-02-19T19:34:53+00:00</lastmod>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.github.io/website/about/</loc>
   </url><url>

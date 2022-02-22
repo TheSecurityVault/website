@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+
+<head><meta charset="UTF-8">
+<meta http-equiv="Cache-control" content="public">
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.github.io/website/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.github.io/website/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.github.io/website/favicon/favicon-16x16.png">
+<link rel="manifest" href="https://thesecurityvault.github.io/website/site.webmanifest">
+
+<title>Securing Github Actions</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta property="description"
+  content="Github actions are being used to build and deploy solutions, with privileged accesses, but its security is being ignored. Lets change that" />
+
+<meta property="keywords"
+  content='actions, github, hardening, securing, workflows, security' />
+
+<meta name="author" content="Luis Fontes">
+
+
+
+
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "BlogPosting",
+    "articleSection": "posts",
+    "name": "Securing Github Actions",
+    "headline": "Securing Github Actions",
+    "alternativeHeadline": "",
+    "description": "Github actions are being used to build and deploy solutions, with privileged accesses, but its security is being ignored. Lets change that",
+    "inLanguage": "en-us",
+    "isFamilyFriendly": "true",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https:\/\/thesecurityvault.github.io\/website\/securing-github-actions\/"
+    },
+    "author" : {
+        "@type": "Person",
+        "name": "map[avatar:\/img\/luisfontes19.jpeg bio:After 5 years working with different technologies as full stack developer I changed to the AppSec world. Worked at checkmarx and huge global customers reviewing application\u0027s source code to find and help mitigate its vulnerabilities. From there changed to IOVLabs (RSK) and the crypto currency world. Nowadays I work at a Xapo, a crypto bank. jobTitle:Application Security Engineer | eMAPT | eWPTXv2 name:Luís Fontes username:luisfontes19]"
+    },
+    "creator" : {
+        "@type": "Person",
+        "name": "map[avatar:\/img\/luisfontes19.jpeg bio:After 5 years working with different technologies as full stack developer I changed to the AppSec world. Worked at checkmarx and huge global customers reviewing application\u0027s source code to find and help mitigate its vulnerabilities. From there changed to IOVLabs (RSK) and the crypto currency world. Nowadays I work at a Xapo, a crypto bank. jobTitle:Application Security Engineer | eMAPT | eWPTXv2 name:Luís Fontes username:luisfontes19]"
+    },
+    "accountablePerson" : {
+        "@type": "Person",
+        "name": "map[avatar:\/img\/luisfontes19.jpeg bio:After 5 years working with different technologies as full stack developer I changed to the AppSec world. Worked at checkmarx and huge global customers reviewing application\u0027s source code to find and help mitigate its vulnerabilities. From there changed to IOVLabs (RSK) and the crypto currency world. Nowadays I work at a Xapo, a crypto bank. jobTitle:Application Security Engineer | eMAPT | eWPTXv2 name:Luís Fontes username:luisfontes19]"
+    },
+    "copyrightHolder" : "The Security Vault",
+    "copyrightYear" : "2022",
+    "dateCreated": "2022-02-19T00:15:40.57Z",
+    "datePublished": "2022-02-19T00:15:40.57Z",
+    "dateModified": "2022-02-20T15:37:27.21Z",
+    "publisher":{
+        "@type":"Organization",
+        "name": "The Security Vault",
+        "url": "https://thesecurityvault.github.io/website",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https:\/\/thesecurityvault.github.io\/website\/img\/logo.png",
+            "width":"32",
+            "height":"32"
+        }
+    },
+    "image": "https://thesecurityvault.github.io/img/logo.png",
+    "url" : "https:\/\/thesecurityvault.github.io\/website\/securing-github-actions\/",
+    "wordCount" : "2370",
+    "genre" : [ "actions" , "github" , "hardening" , "securing" , "workflows" , "security" ],
+    "keywords" : [ "actions" , "github" , "hardening" , "securing" , "workflows" , "security" ],
+}
+</script>
+
+
+
+<meta property="og:title" content="Securing Github Actions" />
+<meta property="og:description"
+  content="Github actions are being used to build and deploy solutions, with privileged accesses, but its security is being ignored. Lets change that" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://thesecurityvault.github.io/website/securing-github-actions/" /><meta property="og:image" content="https://thesecurityvault.github.io/website/securing-github-actions/images/banner.png" /><meta property="article:section" content="posts" />
+
+<meta property="article:published_time" content="2022-02-19T00:15:40+00:00" />
+
+<meta property="article:modified_time" content="2022-02-20T15:37:27+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://thesecurityvault.github.io/websiteimages/banner.png" /><meta name="twitter:title" content="Securing Github Actions" />
+<meta name="twitter:description"
+  content="Github actions are being used to build and deploy solutions, with privileged accesses, but its security is being ignored. Lets change that" />
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&family=Roboto:ital,wght@1,900&display=swap"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
+  integrity="sha384-jLKHWM3JRmfMU0A5x5AkjWkw/EYfGUAGagvnfryNV3F9VqM98XiIH7VBGVoxVSc7" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+  integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<link rel="stylesheet" href="https://thesecurityvault.github.io/website/css/styles.ee9e2ce8a02b41443541de90c22fcdd19ee882b9c1f66a530f6f4c5a9cb4ec197d5201fc03be68d0b6175646ab63c9ae99c47a42181b7368145b69c9f2ba75a7.css">
+
+
+
+<script>
+  console.log("Hmm wait, what?!")
+  console.log("77 90 26 59 64 81 81 84 12 89 12 82 80 43 83");
+  console.log("14 6  8  10 1  3  12 2  4  11 9  2  7  5  13");
+  console.log("Should add 20")
+</script></head>
+
+<body><section id="header" class="header-alt"></section>
+<section class="container-fluid menu-container">
+  <div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
+      <a class="navbarbar-brand" href="/">
+        <img src="https://thesecurityvault.github.io/website/img/logo.png">
+      </a>
+      <div style="height:50px;"></div>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menubar" aria-controls="menubar"
+        aria-expanded="false" aria-label="">
+        <span class="navbar-toggler-icon">
+          <i class="fa fa-bars"></i>
+        </span>
+      </button>
+
+
+      <div class="collapse navbar-collapse" id="menubar">
+        <div class="navbar-nav mr-auto"></div>
+
+        <ul class="navbar-nav">
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/">
+              Home
+            </a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link" href="/website/about/">
+              About me
+            </a>
+          </li>
+          
+        </ul>
+
+      </div>
+
+    </nav>
+  </div>
+</section>
+
+
+<div class="container">
+  <div class="page">
+    <section class="single-post">
+
+      <img class="single-post-image" src="https://thesecurityvault.github.io/website/securing-github-actions/images/banner.png" />
+      <div class="">
+        <div class="single-post-header text-center">
+          <h1>Securing Github Actions</h1>
+          <div class="single-post-details text-secondary">
+            <ul>
+              <li><a href="">luisfontes19</a></li>
+              <li>Feb 19, 2022</li>
+              <li class="text-secondary">12 minutes</li>
+              
+              <li>appsec</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="single-post-content">
+          <p>Github actions are a thing more and more common nowadays, and I have to admit, I love them. But the security of Github Actions are usually ignored. In this post I&rsquo;ll go through some of common flows and issues, and see some preventions</p>
+<h2 id="terminology">Terminology</h2>
+<p>First its important to understand the terminologies used as the naming convention chosen by github may be misleading.</p>
+<ul>
+<li><strong>Github Actions</strong> is the name for the feature</li>
+<li>A <strong>Step</strong> is a small set of operations in a job. A step can be for example calling an action, or running bash code.</li>
+<li>An <strong>Action</strong> is a set of steps combined to do an operation. An action is the smallest reusable block, that can be exported and invoked from other jobs.</li>
+<li>A <strong>Job</strong> is a set of steps and actions, that you can define to run on a specific environment</li>
+<li>Finally, a <strong>workflow</strong> is a set of jobs, represented in a yml file that trigger on a specified event.</li>
+</ul>
+<h2 id="github-actions-overview">Github Actions overview</h2>
+<p>Github Actions are an awesome way of creating CI/CD pipelines on github. Developers can easily create .yml files to configure workflows and perform common tasks like running tests or create builds.</p>
+<p>You can use also use javascript (and other languages) to create a more complex Action.</p>
+<p>Github Actions are used to deploy code, run tests, run SAST scans, run linters, create final product builds, block the pipelines for approvals, and basically anything that you can remember.</p>
+<p>Let&rsquo;s see some of the possible security issues with Github Actions</p>
+<h2 id="possible-issues">Possible issues</h2>
+<ol>
+<li><a href="#secrets-leak">Secrets Leak</a></li>
+<li><a href="#workflow-manipulation">Workflow manipulation</a></li>
+<li><a href="#workflow-with-write-permissions">Workflow with write permissions</a></li>
+<li><a href="#third-party-action-abuse">Third-Party Actions abuse</a></li>
+<li><a href="#pull-request-review-bypass">Pull Request Review Bypass</a></li>
+<li><a href="#custom-runners">Custom Runners</a></li>
+<li><a href="#billing">Billing Issues</a></li>
+<li><a href="#do-you-need-an-action-for-that">Do you need an Action for that?</a></li>
+<li><a href="#required-status-checks-to-pass">Required status checks to pass</a></li>
+</ol>
+<h3 id="secrets-leak">Secrets Leak</h3>
+<p>Using the secrets feature may give you a false sense of security.</p>
+<p>Although github does some filtering on the workflow output to prevent secrets from being leaked, this routine is basically a simple search and replace. Secrets can still be printed to the workflow log if you base64 encode it for example, or if you reverse the string, or if you print one char at a time (and many other ways).</p>
+<p>Having this chained with <a href="#workflow-manipulation">Workflow Manipulation</a> and you get a serious thing.</p>
+<p>This does not impact only public repos, but also private organizational repositories with global secrets configured.</p>
+<h3 id="workflow-manipulation">Workflow Manipulation</h3>
+<p>There are multiple ways developers can change a workflow. For example, in an organization users can edit the actions of any repo they have write access to.</p>
+<p>The scary thing about it is that if you add/change a workflow in your branch and the right conditions are met for the action to be <a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows">triggered</a> it will trigger the changed workflow from your branch and not the one on the default branch or de previous one before your commits.</p>
+<p>On public repositories that&rsquo;s also tricky.</p>
+<p>If a developer does a fork of your project the workflows running on his fork won&rsquo;t use any of your secrets, and they can even fail until the developer configures the secrets in his fork.</p>
+<p>But if he does a Pull Request things change a bit.</p>
+<p>By default, github only requires an approval for first time contributors to the repo. This means that a workflow run needs to be manually approved for new contributors.</p>
+<p><img src="images/first_time_contributor.jpg" alt="First time contributors need approval to run workflow"></p>
+<p>But after the first contribution (a PR to be merged) the developer can run the workflows automatically, which means he can change the code to dump secrets for example, do the PR and it will run.</p>
+<p>If you have linters or sast tools that you want to run before merging PR&rsquo;s this can be problematic.</p>
+<p>There are malicious users that do simple PR&rsquo;s to fix typos or formatting issues on open source repos so that the owners of the repo approve them to run the workflow. After that he is free to run the workflows as he wants to.</p>
+<p>To secure yourself from this, consider one of the options:</p>
+<ol>
+<li>Configure workflows to need manually approval for all runs (<a href="https://docs.github.com/en/actions/managing-workflow-runs/approving-workflow-runs-from-public-forks">docs</a>)</li>
+<li>Allow any user to run any action but the ones that need sensitive fields make them manually triggered, passing the sensitive information as param inputs.</li>
+<li><a href="#environments">Configure environments</a></li>
+</ol>
+<p>If you&rsquo;re running workflows under an organization you have an org wide setting to disable workflows to run from pull requests from forked repos. This helps preventing repo specific secrets from getting leaked tby other organization members that do not have write permissions to the repository.</p>
+<p><img src="images/fork_workflow_pull_request.jpg" alt="Fork pull request workflows in private repositories"></p>
+<p>Tip: You can also disable forks from organization&rsquo;s repositories.</p>
+<h3 id="workflow-with-write-permissions">Workflow with write permissions</h3>
+<p>When running a workflow, github generates a temporary token (GITHUB_TOKEN) that lives only for the time of the running of the workflow. This token has by default read and write permissions to the repository and can be accessed by any action/step.</p>
+<p>So, if you use <em>random</em> actions from the <a href="https://github.com/marketplace?type=actions">Github Marketplace</a> the actions also have access to this token so be careful.</p>
+<p>You should restrict the permissions of the GITHUB_TOKEN, in case you don&rsquo;t need writing permissions. (<a href="https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token">docs</a>)</p>
+<h4 id="environments">Environments</h4>
+<p>Github environments can also contain secrets, and jobs that use environments need first to pass all protections to run. This means that environment secrets are only exposed after passing these protections.</p>
+<p><img src="images/environments.jpg" alt="Github environments"></p>
+<p>You can require people to approve a workflow to run, and only make it run after X hours, which can add some time for relevant people see if something is wrong.</p>
+<p>Also, you can restrict which branches can trigger the environment, so if you have a strict master branch protection, where it can only be merged by pull request (no direct pushes), and x reviewers, you can restrict an environment to run on master for example, which adds a good extra security.</p>
+<h3 id="third-party-action-abuse">Third-Party Action abuse</h3>
+<p>Good news. 3rd party actions cannot access your secrets variable&hellip; But they can access the GITHUB_TOKEN.</p>
+<p>Good safety preventions for this are to set the GITHUB_TOKEN has as <a href="#workflow-with-write-permissions">ready only</a> and to <a href="https://github.blog/changelog/2021-04-20-github-actions-control-permissions-for-github_token/">specify which specific permissions</a> the workflow will have when running.</p>
+<p>Remember that when you use 3rd party actions on most of the cases they will have access to you code as you probably did a checkout before, and even if you didn&rsquo;t the action can do it with the GITHUB_TOKEN. If you have a private repo a malicious extension can easily exfiltrate your code.</p>
+<p>Nowadays there&rsquo;s a trendy term for this: <strong>Supply Chain Attack</strong></p>
+<p>To prevent malicious abuse of the 3rd party actions review the code of the action in the marketplace, and hardcode the hash of the commit reviewed, when using the action on your workflow.</p>
+<p>Otherwise an action author can release a new malicious update or delete a specific version and push the same version tag with different code. Using commit hashes prevents possible issues on your side.</p>
+<p>Ex:</p>
+<div class="highlight"><div style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="1"><a style="outline: none; text-decoration:none; color:inherit" href="#1">1</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="2"><a style="outline: none; text-decoration:none; color:inherit" href="#2">2</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="3"><a style="outline: none; text-decoration:none; color:inherit" href="#3">3</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="4"><a style="outline: none; text-decoration:none; color:inherit" href="#4">4</a>
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f" id="5"><a style="outline: none; text-decoration:none; color:inherit" href="#5">5</a>
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#f8f8f8;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#000">...</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#204a87;font-weight:bold">steps</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">  </span>- <span style="color:#204a87;font-weight:bold">name</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#4e9a06">&#34;Checkout code&#34;</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline">    </span><span style="color:#204a87;font-weight:bold">uses</span><span style="color:#000;font-weight:bold">:</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#000">actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579</span><span style="color:#f8f8f8;text-decoration:underline"> </span><span style="color:#8f5902;font-style:italic"># v2.4.0</span><span style="color:#f8f8f8;text-decoration:underline">
+</span><span style="color:#f8f8f8;text-decoration:underline"></span><span style="color:#000">...</span><span style="color:#f8f8f8;text-decoration:underline">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>Also, github provides a configuration to specify which kind of actions can be run in an org/repo.</p>
+<p>You can choose to disable Github Actions, to allow any action to run, local actions only (from the same org or the same repo) or even go into more detail and specify action names or even commit hashes</p>
+<h3 id="pull-request-review-bypass">Pull Request Review Bypass</h3>
+<p>Another interesting attack vector is by using the GITHUB_TOKEN to approve a PR. Since this token does not represent the user that trigger the event, using the token to approve a PR will just work.</p>
+<p>If you only need 1 (more) approval to merge a PR, then you can easily do it with this flow. You can read more about this vulnerability in the eyes of the researchers who found it, <a href="https://medium.com/cider-sec/bypassing-required-reviews-using-github-actions-6e1b29135cc7">here</a></p>
+<p>Meanwhile github added a new setting to help preventing this issue for organizations:</p>
+<p><img src="images/allow_action_approve_pr.jpg" alt="Allow GitHub Actions to approve pull requests"></p>
+<p>This setting is enabled by default in new repos, but repos created before the feature was introduced have it disabled.</p>
+<p>Some other recommendations online for this issue, is to increase the number of reviewers, but depending on your settings this may not be enough. For example if you don&rsquo;t need a new approval after a code change, when you get number_of_required_approvals - 1 you can change the pull request and the action to approve it.</p>
+<p>So for that recommendation to work, you need to enable the option &ldquo;Dismiss stale pull request approvals when new commits are pushed&rdquo; on the branch protection rules:</p>
+<p><img src="images/dismiss_stale_pr.jpg" alt="Dismiss stale pull request approvals when new commits are pushed"></p>
+<p>And as a precaution add at least 3 reviewers instead of 2. So that you have at least two real reviewers.</p>
+<h3 id="custom-runners">Custom Runners</h3>
+<p>Workflows run in Runners. A runner is a container, and you can chose from a few different ones, being the most common ubuntu.</p>
+<p>A lot of organizations use custom runners, inside AWS for example, with privileged accesses to organization assets. This is done for example to do deployments.</p>
+<p>The issue with this is as we saw before in <a href="#workflow-manipulation">Workflow Manipulation</a> if somebody changes the action they have privilege access to everything the runner has as well.</p>
+<p>On a private repo, as a rule of thumb do not use custom runners with more access then the users on that repo</p>
+<h3 id="billing">Billing</h3>
+<p>Github actions are not free. For each different plan, github offers an amount of minutes and space for workflows. When that time or space comes to an end new costs are billed. This can be exploited to make workflows run for big amounts of time and a lot of times and eventually to increase the billing.</p>
+<p>Check the storage and minutes for each plan <a href="https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions">here</a></p>
+<h3 id="do-you-need-an-action-for-that">Do you need an Action for that?</h3>
+<p>As said before Github Actions are trending right now, which makes people overusing them. Having that in mind the first thing you should do before creating an action/workflow is to ask: &ldquo;Do I really need that in Github Actions?&rdquo;</p>
+<p>Sometimes the best solution is not using an Action, like when deploying a product on a cloud service (like AWS), since you need to store credentials on Github, which as seen before can be an issue.</p>
+<p>Also, if you are storing AWS credentials for you production systems you are adding another point of failure in your chain. You are trusting github with access to your systems, which you should not do. For something like that a webhook is preferred, security wise.</p>
+<p>Lets see another example.</p>
+<p><a href="https://TheSecurityVault.com">TheSecurityVault.com</a> website was just migrated from a <a href="https://wordpress.com/">Wordpress</a> platform to a static generated website with <a href="https://gohugo.io/">Hugo</a>.</p>
+<p>The website code is hosted in github, and there&rsquo;s a workflow that does the build and deployment.</p>
+<p>But one important thing was to have a flow that removes <a href="https://en.wikipedia.org/wiki/Exif">Exif</a> metadata from the images on the website. A first plan can be to use for example <a href="https://www.exiftool.org/">exiftool</a> on a github workflow. But if you think carefully about it, if thats done on a workflow in means that the information has already been commited to git&hellip;</p>
+<p>Instead I created a <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">pre-commit hook</a> that removes that metadata before even commiting to Git</p>
+<p>Another example is markdown linting. Since the website is now written basically in markdown its important to keep it organize. I use markdownlint to do that.</p>
+<p>I could have an action that runs markdownlint and fails if there are issues, which would force me to do an extra commit and push, or fix it on the fly, which would require an extra commit.</p>
+<p>A better approach is again to use a pre-commit hook that runs markdownlint (and fixes the issues). Still there&rsquo;s an action on github that just checks markdownlint as a fallback, just to make sure. But relying just on the action may not be best approach.</p>
+<h3 id="required-status-checks-to-pass">Required status checks to pass</h3>
+<p>Branch protections have an option to require status checks to pass before merging PR&rsquo;s. This means that the workflows need to successfully pass first.</p>
+<p><img src="images/require_status_checks.jpg" alt="Require status checks before merging"></p>
+<p>Repository/Organization admins may rely on this feature to try to add some security, trying to force workflows to succeed on some checks, before merging. But this gives a false sense of security. As we saw before in <a href="#workflow-manipulation">Workflow Manipulation</a> a developer can change the workflow to always pass, bypassing then this configuration.</p>
+<p>A workaround for this is to force multiple approvals (I recommend 2 if github actions <a href="#pull-request-review-bypass">cannot approve PR&rsquo;s</a>). This way, although the user changes the workflow to pass the checks, the reviewers of the pull request will see the change in the workflow and can reject the PR.</p>
+<h2 id="key-takeaways">Key Takeaways</h2>
+<ul>
+<li>Github actions are trending now, but do you really need a workflow? Is it the best option for you need?</li>
+<li>Secrets can be accessed by anybody with write access to a repo</li>
+<li>Secrets can be accessed by external repo users
+<ul>
+<li>By default, developers can run actions at will after first contribution, change the setting to always need manual approval (if you have secrets or privileged flows)</li>
+<li>Are you doing a deployment? Use a webhook instead to trigger a flow in a more restricted environment, or configure restricted github environments</li>
+</ul>
+</li>
+<li>Avoid organization&rsquo;s wide secrets, anybody with permissions to create/write to a repo can extract them</li>
+<li>Avoid 3rd party action. You can enable options to only allow github&rsquo;s, verified  or internal actions to run.</li>
+<li>When using external actions review the source code first, and pin them to a specific commit hash to make sure there were no changes.</li>
+<li>Limit the workflow permissions</li>
+<li>Remove default GITHUB_TOKEN write permissions if not needed</li>
+<li>Block actions from approving pull requests on older repos</li>
+<li>Do not make available custom runners that have access to more things then the developers</li>
+<li>Change &ldquo;Fork pull request workflows from outside collaborators&rdquo; to &ldquo;Require approval for all outside collaborators&rdquo; for public or sensitive repos if you have configured secrets</li>
+<li>Do not rely on &ldquo;Require status checks to pass before merging&rdquo; if developers can change the actions</li>
+<li>Disable the permission for github actions to approve PR&rsquo;s</li>
+<li>Use at least 2 reviewers for PR&rsquo;s and block push to master</li>
+</ul>
+<h2 id="other-docs">Other docs</h2>
+<p>If you are writing github actions, i&rsquo;ll leave here some documentation pages that were very helpful to me:</p>
+<ul>
+<li><a href="https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows">Workflow Triggers</a> - Events that can trigger a workflow</li>
+<li><a href="https://docs.github.com/en/actions/learn-github-actions/environment-variables">Env Variables</a> - Environment variables available when running bash</li>
+<li><a href="https://docs.github.com/en/actions/learn-github-actions/contexts">Contexts</a> - The context structure and all fields</li>
+<li><a href="https://docs.github.com/en/actions/learn-github-actions/expressions">Expressions</a> - Expressions to use in the yaml file like operators and functions</li>
+<li><a href="https://github.com/actions/github-script">Github Script</a> - Run inline javascript code in the the yaml file</li>
+<li><a href="https://github.com/actions/upload-artifact">Upload artifact</a> - Action to upload artifacts generated in the workflow</li>
+<li><a href="https://github.com/github/codeql-action">CodeQL Action</a> - CodeQL Action and Sarif uploads</li>
+</ul>
+
+
+          
+        </div>
+      </div>
+
+      <div class="challange1">
+        <div class="d-none  d-sm-none d-md-block">
+          ClZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1ZwZEhsV1lYVnNkRWhsY21WR2IzSlpiM1ZVYUdWVFkzVnlhWFI1Vm1GMWJIUklaWEpsUm05eVdXOTFWR2hsVTJWamRYSnBkSGxXWVhWc2RFaGxaVVp2Y2xsdmRWUm9aVk5qZFhKcGRIbFdZWFZzZEVobGNtVkdiM0paYjNWVWFGTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY21WdmNsbHZkVlJvWlZObFkzVnlhWFI1Vm1GMWJIUkljbVZHYjNKWmIzVlVhR1ZUWldOMWNuUjVWbUYxYkhSSVpYSmxSbTl5V1c5MVZHaGxVMlZqZFhKcGRIbFdZWFZzZEVobGNrWnZjbGx2ZFZSb1pWTmxZM1Z5YVhSNVZtRjFiSFJJWlhKbFJtOXlXWFZVYUdWVFpXTjFjbWwwZVZaaGRXeDBTR1Z5WlVaeVdXOTFhR1ZUWldOMWNtbDBlVlpoZFd4MFNHVnlaVVp2Y2xsdmRWUm9aVk5sWTNWeWFYUjVWbUYxYkhSSVpYSmxiM0paYjNWVWFHVlRaV04xY21sMGVXRjFiSFJJWlhKbFJtOXlXVzkxVkdobFUyVmpkWEpwZEhsV1lYVnNkRWhsY2tadmNsbHZkUT09
+        </div>
+      </div>
+    </section>
+
+
+
+  </div>
+
+  <div class="single-post-pagination">
+    <div class="row post-pagination">
+      <div class="col-md-6 previous-post">
+        
+        <a href="https://thesecurityvault.github.io/website/we-are-making-authentication-systems-wrong/">&lArr; Previous Post<br><b>We are making authentication systems wrong</b></a>
+        
+      </div>
+      <div class="col-md-6 next-post">
+        
+      </div>
+    </div>
+  </div>
+</div><footer class="text-center footer">
+
+  <div class="container footer-content">
+    <div class="row">
+
+      <div class="col-md-6 text-left">
+        <div><img src="https://thesecurityvault.github.io/website/img/logo.png"></div>
+      </div>
+
+      <div class="col-md-6 text-right">
+        <div>
+          <a href="/sitemap.xml">Sitemap</a> |
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms">Terms of Use</a>
+        </div>
+        <div>
+          Copyright 2019-2022 The Security Vault. All rights reserved.
+        </div>
+      </div>
+    </div>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/ab4860f980.js"
+  integrity="sha384-AbZOA7GYMJh1wZbW0vLI9LLjXjJcIago4vs45qRTQmAlaelCTcLcXNn1dpEmI2Jo" crossorigin="anonymous"></script>
+
+<script>
+
+  
+  const links = document.getElementsByTagName("a")
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i]
+    link.addEventListener("click", (evt) => {
+      const a = evt.currentTarget
+      const isImage = a.href.endsWith(".jpg") || a.href.endsWith(".png") || a.href.endsWith(".jpeg") || a.href.endsWith(".gif")
+      const external = a.href.startsWith("http" && !a.href.startsWith(window.location.origin))
+
+      if (isImage || external) {
+        evt.currentTarget.target = "_blank"
+        evt.currentTarget.rel = "noopener noreferrer"
+      }
+    })
+  }
+
+
+  
+  const headers = document.querySelectorAll(".single-post-content > h2,.single-post-content > h3,.single-post-content > h4,.single-post-content > h5,.single-post-content > h6")
+  const icon = document.createElement("i")
+  icon.className = "fas fa-link"
+  icon.textContent = " "
+  icon.style.marginLeft = "5px"
+  icon.style.fontSize = "20px"
+
+  for (let i = 0; i < headers.length; i++) {
+    const h = headers[i]
+    h.insertAdjacentElement("beforeend", icon.cloneNode())
+    h.onclick = () => window.location.hash = h.id
+
+  }
+
+</script></body>
+
+</html>
