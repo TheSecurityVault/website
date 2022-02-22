@@ -17,8 +17,8 @@ keywords:
   - pwd
   - strings
   - trufflehog
-alias:
-  - appsec/hardcoded-passwords
+aliases:
+  - appsec/hardcoded-passwords/
 type: post
 lastmod: '2022-02-20T13:42:27.332Z'
 ---

@@ -11,7 +11,7 @@ keywords:
   - inspection
   - memory
   - password
-alias:
+aliases:
   - appsec/heap-inspection
 type: post
 lastmod: '2022-02-20T13:42:27.326Z'

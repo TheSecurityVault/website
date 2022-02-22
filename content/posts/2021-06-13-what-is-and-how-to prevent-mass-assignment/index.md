@@ -15,7 +15,7 @@ keywords:
   - strong
 aliases:
   - appsec/what-is-and-how-to prevent-mass-assignment
-  - asd
+  - appsec/asd
 type: post
 lastmod: '2022-02-20T13:42:27.322Z'
 ---
