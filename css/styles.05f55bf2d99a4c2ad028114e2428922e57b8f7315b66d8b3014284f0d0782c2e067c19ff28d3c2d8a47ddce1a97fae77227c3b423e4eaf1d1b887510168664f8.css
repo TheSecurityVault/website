@@ -421,6 +421,18 @@ footer {
   padding-top: 0px;
 }
 
+.search-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(100, 100, 100, 0.5);
+  margin-top: 5px;
+}
+
+.search-input:focus {
+  width: 500px !important;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(100, 100, 100, 0.5);
+}
+
 .post-details, .single-post-details {
   text-transform: capitalize;
   font-size: 14px;
@@ -900,6 +912,18 @@ footer {
   width: 100%;
   padding: 10px;
   padding-top: 0px;
+}
+
+.search-input {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(100, 100, 100, 0.5);
+  margin-top: 5px;
+}
+
+.search-input:focus {
+  width: 500px !important;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-color: rgba(100, 100, 100, 0.5);
 }
 
 .post-details, .single-post-details {
