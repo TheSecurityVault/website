@@ -1,0 +1,20 @@
+<script>
+
+window.searchIndex = {
+    // You can specify your blog section only:
+    {{ range site.RegularPages  }}
+    // For all pages in your site, use "range .Site.Pages"
+    // You can use any unique identifier here
+    "{{ .Permalink }}": {
+        // You can customize your searchable fields using any .Page parameters
+        "title": "{{ .Title  }}",
+        "tags": [{{ range .Params.Tags }}"{{ . }}",{{ end }}],
+        "content": {{ .Content | plainify }}, // Strip out HTML tags
+        "url": "{{ .Permalink }}",
+        "summary": "{{truncate 300 .Summary }}",
+        "preview": "{{.Permalink}}/{{.Params.preview}}"
+    },
+    {{ end }}
+}
+
+</script>

@@ -1,0 +1,38 @@
+{{ define "main" }}
+{{ $paginator := .Paginate (where ( where site.RegularPages "Type" "in" site.Params.mainSections) "Draft" false) 5 }}
+
+<section class="body">
+  <div class="container main">
+    <div class="row">
+      <div class="col-lg-8" style="padding:'0px'">
+        <section class="posts-container">
+          <section class="post-preview post-template">
+            <img class="post-image" src="" />
+            <div class="post-preview-padding">
+
+              <div class="col-md-12">
+                <h3><a href="" class="post-preview-title-link"></a></h3>
+                <div class="post-preview-excerpt"></div>
+                <div class="post-preview-read-more"><a href="">Continue Reading</a></div>
+              </div>
+            </div>
+          </section>
+          <section class="post-preview text-center">
+            <div class="post-preview-padding"></div>
+            <div class="post-preview-padding"></div>
+            <div class="post-preview-padding"></div>
+            <h3>No results for your search...</h3>
+            <div class="post-preview-padding"></div>
+            <div class="post-preview-padding"></div>
+            <div class="post-preview-padding"></div>
+          </section>
+        </section>
+      </div>
+      <div class="col-lg-4">
+        {{- partial "sidebar.html" . -}}
+      </div>
+    </div>
+  </div>
+</section>>
+
+{{ end }}

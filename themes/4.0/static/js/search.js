@@ -1,0 +1,62 @@
+const queryParams = new URLSearchParams(window.location.search);
+const q = queryParams.get("q");
+
+const idx = lunr(function () {
+  // Search these fields
+  this.ref('id')
+  this.field('title', {
+    boost: 15
+  })
+  this.field('tags')
+  this.field('content', {
+    boost: 10
+  })
+
+  // Add the documents from your search index to
+  // provide the data to idx
+  for (const key in window.searchIndex) {
+    this.add({
+      id: key,
+      title: window.searchIndex[key].title,
+      tags: window.searchIndex[key].category,
+      content: window.searchIndex[key].content
+    })
+  }
+})
+
+if (q) {
+  // create the search result list
+  // we use ".post-preview" in themes/4.0/layouts/search/list.html as a template
+  // clone it, change the fields, and inject into the view
+  const results = idx.search(q)
+
+  const postContainer = $('.posts-container')
+  const postTemplate = postContainer.find(".post-template")
+
+  if (results.length > 0) {
+
+    const l = results.map(r => {
+      const item = window.searchIndex[r.ref]
+      const post = postTemplate.clone()
+
+      const titleLink = post.find(".post-preview-title-link")
+      titleLink.text(item.title)
+      titleLink.attr("href", item.url)
+
+      post.find(".post-preview-excerpt").html(item.summary)
+      post.find(".post-preview-read-more a").attr("href", item.url)
+      post.find(".post-image").attr("src", item.preview)
+
+      return post
+    })
+
+    postContainer.html("")
+    postContainer.append(l)
+  }
+  else {
+    postTemplate.hide()
+  }
+
+}
+
+
