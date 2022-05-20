@@ -3,7 +3,9 @@
 document.getElementById("search").addEventListener("keydown", (e) => {
   if (e.keyCode === 13) {
     e.preventDefault();
-    window.location = "/search?q=" + encodeURI(document.getElementById("search").value);
+    const q = document.getElementById("search").value;
+    const navigateTo = "/search?q=" + encodeURI(q);
+    window.location.href = navigateTo;
   }
 })
 
