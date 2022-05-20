@@ -1,6 +1,14 @@
-const queryParams = new URLSearchParams(window.location.search);
-const q = queryParams.get("q");
 
+//triggers the search when user hits enter on the search box
+document.getElementById("search").addEventListener("keydown", (e) => {
+  if (e.keyCode === 13) {
+    e.preventDefault();
+    window.location = "/search?q=" + encodeURI(document.getElementById("search").value);
+  }
+})
+
+
+// prepare the search index
 const idx = lunr(function () {
   // Search these fields
   this.ref('id')
@@ -24,6 +32,10 @@ const idx = lunr(function () {
   }
 })
 
+
+// if a search was done
+const queryParams = new URLSearchParams(window.location.search);
+const q = queryParams.get("q");
 if (q) {
   // create the search result list
   // we use ".post-preview" in themes/4.0/layouts/search/list.html as a template

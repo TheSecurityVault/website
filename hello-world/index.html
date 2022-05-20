@@ -560,15 +560,6 @@ window.searchIndex = {
 
 <script>
 
-
-
-  document.getElementById("search").addEventListener("keydown", (e) => {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      window.location = "/search?q=" + encodeURI(document.getElementById("search").value);
-    }
-  })
-
   
   const links = document.getElementsByTagName("a")
   for (let i = 0; i < links.length; i++) {
@@ -584,7 +575,6 @@ window.searchIndex = {
       }
     })
   }
-
 
   
   const headers = document.querySelectorAll(".single-post-content > h2,.single-post-content > h3,.single-post-content > h4,.single-post-content > h5,.single-post-content > h6")
