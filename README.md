@@ -29,6 +29,6 @@ git stash pop -q
 
 ## Running locally
 
-```
+```bash
 hugo server -w
 ```
