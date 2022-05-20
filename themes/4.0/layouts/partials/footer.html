@@ -36,15 +36,6 @@
 
 <script>
 
-
-
-  document.getElementById("search").addEventListener("keydown", (e) => {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      window.location = "/search?q=" + encodeURI(document.getElementById("search").value);
-    }
-  })
-
   //make all links to external websites open in new tabs as well as internal images
   const links = document.getElementsByTagName("a")
   for (let i = 0; i < links.length; i++) {
@@ -60,7 +51,6 @@
       }
     })
   }
-
 
   // create hover link/icon for headers
   const headers = document.querySelectorAll(".single-post-content > h2,.single-post-content > h3,.single-post-content > h4,.single-post-content > h5,.single-post-content > h6")
