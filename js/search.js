@@ -36,13 +36,12 @@ const idx = lunr(function () {
 
 
 // if a search was done
-const queryParams = new URLSearchParams(window.location.search);
-const q = queryParams.get("q");
-if (q) {
+
+if (query) {
   // create the search result list
   // we use ".post-preview" in themes/4.0/layouts/search/list.html as a template
   // clone it, change the fields, and inject into the view
-  const results = idx.search(q)
+  const results = idx.search(query)
 
   const postContainer = $('.posts-container')
   const postTemplate = postContainer.find(".post-template")
