@@ -32,7 +32,16 @@
 <script src="https://unpkg.com/lunr@2.3.9/lunr.js"
   integrity="sha384-Mrc0XsDxndfJgV5jLnEeThch4j9dNEXAE1vbWeyzmERxSvF8siQfuEczzgUelQQH" crossorigin="anonymous"></script>
 
-<script src="/js/search.js"></script>
+<script>
+  const queryParams = new URLSearchParams(window.location.search);
+  const query = queryParams.get("q");
+  const forceCacheRefresh = query ? window.crypto.randomUUID() : ""
+
+  var scriptElement = document.createElement("script");
+  scriptElement.src = `/js/search.js?d=${forceCacheRefresh}`
+  document.head.appendChild(scriptElement);
+</script>
+
 
 <script>
 
