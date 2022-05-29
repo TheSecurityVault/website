@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright 2019-{year} The Security Vault. All rights reserved.</copyright>
-    <lastBuildDate>Sat, 19 Feb 2022 00:15:40 +0000</lastBuildDate><atom:link href="https://thesecurityvault.com/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 May 2022 15:37:27 +0000</lastBuildDate><atom:link href="https://thesecurityvault.com/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Path Traversal &amp; LFI can be worst than you think</title>
+      <link>https://thesecurityvault.com/path-traversal-lfi-can-be-worst-than-you-think/</link>
+      <pubDate>Sun, 29 May 2022 15:37:27 +0000</pubDate>
+      
+      <guid>https://thesecurityvault.com/path-traversal-lfi-can-be-worst-than-you-think/</guid>
+      <description>LFI and Path traversal are not a new thing, but what most people don&amp;rsquo;t understand is the full impact of the vulnerability.
+In this post I&amp;rsquo;ll cover different attack scenarios when exploiting a LFI vulnerability, like enumerating process, dumping environment variables, and on more extreme cases remote code execution (RCE).
+LFI Recap This type of attack happens when the application loads a file from the the filesystem and somehow the user can exploit this behavior to load unintended files and eventually retrieve its content.</description>
+    </item>
+    
     <item>
       <title>Securing Github Actions</title>
       <link>https://thesecurityvault.com/securing-github-actions/</link>

@@ -3,18 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://thesecurityvault.com/category/appsec/</loc>
-    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
+    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/category/</loc>
-    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
+    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.com/path-traversal-lfi-can-be-worst-than-you-think/</loc>
+    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/posts/</loc>
-    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
-  </url><url>
-    <loc>https://thesecurityvault.com/securing-github-actions/</loc>
-    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
+    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/</loc>
+    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.com/securing-github-actions/</loc>
     <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/we-are-making-authentication-systems-wrong/</loc>

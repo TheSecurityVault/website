@@ -3,9 +3,7 @@
 document.getElementById("search").addEventListener("keydown", (e) => {
   if (e.keyCode === 13) {
     e.preventDefault();
-    const q = document.getElementById("search").value;
-    const navigateTo = "/search?q=" + encodeURI(q);
-    window.location.href = navigateTo;
+    window.location = "/search?q=" + encodeURI(document.getElementById("search").value);
   }
 })
 
@@ -36,12 +34,13 @@ const idx = lunr(function () {
 
 
 // if a search was done
-
-if (query) {
+const queryParams = new URLSearchParams(window.location.search);
+const q = queryParams.get("q");
+if (q) {
   // create the search result list
   // we use ".post-preview" in themes/4.0/layouts/search/list.html as a template
   // clone it, change the fields, and inject into the view
-  const results = idx.search(query)
+  const results = idx.search(q)
 
   const postContainer = $('.posts-container')
   const postTemplate = postContainer.find(".post-template")
