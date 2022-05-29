@@ -1,0 +1,16 @@
+#!/bin/bash
+
+markdownlint --fix .
+
+
+# Stash unstaged changes
+git stash -q --keep-index
+
+exiftool -r -all= -ext jpg -ext gif -ext png .
+find . -name "*_original" | xargs rm
+
+# Stage updated files
+git add -u
+
+# Re-apply original unstaged changes
+git stash pop -q
