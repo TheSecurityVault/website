@@ -44,28 +44,6 @@ There are a few ways to do this, but these are the 2 most common:
 - Just before the app enters background open a new view. This is usually done with just the app logofor that. When the app is opened again, hide the screen
 - Hide the fields with sensitive information when the application is being backgrounded. Revert the operation when opening back.
 
-### Android
-
-Android has native ways to add this protection, being the easiest one, showing a blank screen by specifying a [secure flag](https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html#FLAG_SECURE)
-
-This can be done by registering the relevant activities as secure in the onCreate method like so:
-
-getWindow().setFlags(
-   WindowManager.LayoutParams.FLAG_SECURE,
-   WindowManager.LayoutParams.FLAG_SECURE
-);
-
-{{< raw >}}
-<a href="images/image.png">
-  <img style="width:49%" src="images/image.png" alt="no screen caching protection" />
-</a>
-
-<a href="images/image-1.png">
-  <img style="width:49%"src="images/image-1.png" alt="screen caching protection" />
-</a>
-  </p>
-{{< /raw >}}
-
 ### iOS
 
 For iOS the easiest way to accomplish this is by using the methods 'sceneWillResignActive' and 'sceneDidBecomeActive' from AppDelegate/SceneDelegate.
@@ -120,9 +98,37 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 </a>
   </p>
 {{< /raw >}}
+*Screenshots of before and after the fix*
 
 You can use this as well to show a splash screen or something similar.
 
 This code only works for UIKit App Delegate's App lifecycle. If you chose to manage the app lifecycle with SwiftUI I'll update this post with the code for that in the future
 
 Another nice trick for iOS is to blur the background. There's a nice comment on [StackOverflow](https://stackoverflow.com/a/53503787) for that.
+
+### Android
+
+Android has native ways to add this protection, being the easiest one, showing a blank screen by specifying a [secure flag](https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html#FLAG_SECURE)
+
+This can be done by registering the relevant activities as secure in the onCreate method like so:
+
+```java
+getWindow().setFlags(
+   WindowManager.LayoutParams.FLAG_SECURE,
+   WindowManager.LayoutParams.FLAG_SECURE
+);
+```
+
+The downside of this approach is that it will also prevent screenshots from being taken. Instead you can use a similar approach to iOS. Check [this StackOverflow answer](https://stackoverflow.com/a/50399581)
+
+{{< raw >}}
+<a href="images/image.png">
+  <img style="width:49%" src="images/image.png" alt="no screen caching protection" />
+</a>
+
+<a href="images/image-1.png">
+  <img style="width:49%"src="images/image-1.png" alt="screen caching protection" />
+</a>
+  </p>
+{{< /raw >}}
+*Screenshots of before and after the fix*
