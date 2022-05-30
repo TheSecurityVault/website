@@ -19,6 +19,12 @@ keywords:
   - passwords
   - envionment
   - variables
+  - rce
+  - remote
+  - code
+  - execution
+  - image
+  - upload
 draft: false
 lastmod: '2022-05-29T15:37:27.214Z'
 type: post
@@ -106,6 +112,36 @@ Using a LFI with `/proc/[PID]/environ` we can leverage an attacker to dump secre
 The best approach is to use a [secret manager](https://thesecurityvault.com/hardcoded-passwords/#secret-managers) like Hashicorp's [Vault](https://www.hashicorp.com/products/vault) or [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/). This way your secrets are stored safely and when you retrieve them they only need to be kept in memory while the app runs.
 
 **Bonus Tip**: Don't trust your secrets directly to these services, instead, encrypt them before storing them in the secret manager. You can keep the key to decrypt it in the code or env var or config file as this is just an extra security layer, like [peppering](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#peppering) when doing an hash.
+
+## Remote Code Execution (RCE)
+
+Local file inclusion can in some cases also result in a RCE.
+This will depend on the technology stack used by the server as well as some of the features and configurations available.
+
+Having in mind the code sample from above, the php code will include a file passed as parameter.
+
+As you may have noticed already, this is not restricted to php only files. PHP will include any file type and if it’s not a php file will just render its content, but if it has php enclosure tags it will interpret it.
+
+We can leverage this behavior to include a malicious uploaded file, in case the application offers this feature.
+
+This usually works because applications tend to do a poor file upload validation by just checking the right file extension or mine type.
+
+To exploit this we can create a simple php code (or use a php web shell for example) and save it with a .jpg extension (in case the application accepts this extension).
+
+Example:
+  
+```php
+// some-image.jpg
+<?php echo 'test';?>
+```
+
+The file will usually pass validations and we can then do a LFi to the file we just uploaded. As it is PHP code it will be interpreted and our code will run.
+
+**Have in mind that this extension confusion is not PHP specific**. For example *Node* has the same issue, as allows to require any file extension. Python on the other hand doesn't allow this using the regular import directive as the file would need to be a .py file, but there are other ways to import files that will not have this constraint.
+
+If the application doesn’t offer an upload feature you may try to do a file inclusion to a remote file. This only works if [a specific config is enabled](https://www.php.net/manual/en/filesystem.configuration.php#ini.allow-url-include)
+
+There are other attack methods like exploring php wrappers.
 
 <!-- ## Prevention
 
