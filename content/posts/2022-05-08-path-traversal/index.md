@@ -50,6 +50,12 @@ else
 ?>
 ```
 
+To exploit this scenario one could just manipulate the `file` param to read a random file like so:
+
+```text
+https://example.com?file=../../../../../../etc
+```
+
 ## Enumeration
 
 When you find a LFI you can start retrieving some common files to get some basic information about the system. Here's a short list of the most common ones:
@@ -142,6 +148,22 @@ The file will usually pass validations and we can then do a LFi to the file we j
 If the application doesn’t offer an upload feature you may try to do a file inclusion to a remote file. This only works if [a specific config is enabled](https://www.php.net/manual/en/filesystem.configuration.php#ini.allow-url-include)
 
 There are other attack methods like exploring php wrappers.
+
+## Leveraging protocols and wrappers
+
+Keeping up with a PHP environment, we can leverage [PHP supported protocols and wrappers](https://www.php.net/manual/en/wrappers.php) to get some more interesting stuff.
+
+For example, if [expect](https://www.php.net/manual/en/wrappers.expect.php) is enabled we can leverage it to get code execution as well.
+
+An interesting wrapper is the php://filter
+
+An example on how to use is:
+
+```text
+https://example.com?file=php://filter/convert.base64-encode/resource=/etc/passwd
+```
+
+But have in mind that when using protocols and wrappers you need to have full control of the path being injected. which in the example used at the begining of the document we don't have (it starts with "pages/")
 
 <!-- ## Prevention
 
