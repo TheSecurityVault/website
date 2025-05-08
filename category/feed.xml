@@ -4,27 +4,31 @@
     <title>Category on The Security Vault</title>
     <link>https://thesecurityvault.com/category/</link>
     <description>Recent content in Category on The Security Vault</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Copyright 2019-{year} The Security Vault. All rights reserved.</copyright>
-    <lastBuildDate>Sun, 29 May 2022 15:37:27 +0000</lastBuildDate><atom:link href="https://thesecurityvault.com/category/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 07 May 2025 15:37:27 +0000</lastBuildDate>
+    <atom:link href="https://thesecurityvault.com/category/feed.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>appsec</title>
+      <title>Appsec</title>
       <link>https://thesecurityvault.com/category/appsec/</link>
-      <pubDate>Sun, 29 May 2022 15:37:27 +0000</pubDate>
-      
+      <pubDate>Wed, 07 May 2025 15:37:27 +0000</pubDate>
       <guid>https://thesecurityvault.com/category/appsec/</guid>
       <description></description>
     </item>
-    
     <item>
-      <title>pentest</title>
+      <title>Pentest</title>
       <link>https://thesecurityvault.com/category/pentest/</link>
       <pubDate>Sat, 15 Aug 2020 00:00:00 +0000</pubDate>
-      
       <guid>https://thesecurityvault.com/category/pentest/</guid>
       <description></description>
     </item>
-    
+    <item>
+      <title>Appsec&#34;</title>
+      <link>https://thesecurityvault.com/category/appsec/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://thesecurityvault.com/category/appsec/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

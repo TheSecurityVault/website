@@ -3,22 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://thesecurityvault.com/category/appsec/</loc>
-    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
+    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.com/bots-to-the-rescue-how-i-built-an-ai-security-wingman/</loc>
+    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/category/</loc>
-    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
+    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.com/posts/</loc>
+    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.com/</loc>
+    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/path-traversal-lfi-can-be-worst-than-you-think/</loc>
     <lastmod>2022-05-29T15:37:27+00:00</lastmod>
-  </url><url>
-    <loc>https://thesecurityvault.com/posts/</loc>
-    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
-  </url><url>
-    <loc>https://thesecurityvault.com/</loc>
-    <lastmod>2022-05-29T15:37:27+00:00</lastmod>
-  </url><url>
-    <loc>https://thesecurityvault.com/securing-github-actions/</loc>
-    <lastmod>2022-02-20T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/we-are-making-authentication-systems-wrong/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
@@ -45,6 +45,9 @@
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/understanding-cors-and-sop-bypass-techniques/</loc>
+    <lastmod>2022-02-20T13:42:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.com/category/appsec/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/auth-token-in-localstorage/</loc>
@@ -82,8 +85,6 @@
   </url><url>
     <loc>https://thesecurityvault.com/hello-world/</loc>
     <lastmod>2022-02-20T13:42:27+00:00</lastmod>
-  </url><url>
-    <loc>https://thesecurityvault.com/about/</loc>
   </url><url>
     <loc>https://thesecurityvault.com/search/</loc>
   </url><url>
