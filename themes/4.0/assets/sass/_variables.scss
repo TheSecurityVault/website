@@ -12,15 +12,16 @@ $menu-color: $dark-color;
 
 $radius: 4px;
 
-$main-color: #000;
-$alt-color1: #0197F6;
-$alt-color2: #D7263D;
+$main-color: #76ABAE;
+$alt-color1: #76ABAE;
+$alt-color2: #76ABAE;
 $alt-color3: #02182B;
-$bg-color: #f5f8fd;
-$text-color: #576477;
-$link-color: $alt-color2;
-$header-color: $main-color;
+$bg-color: #EEEEEE;
+$text-color: #31363F;
+$alt-text-color: #FFFFFF;
+$link-color: $alt-color1;
+$header-color: $alt-color1;
 
-@include smallscreen{
+@include smallscreen {
   $header-alt-size: 20px;
 }

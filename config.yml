@@ -1,0 +1,84 @@
+baseURL: https://thesecurityvault.com
+languageCode: en-us
+title: The Security Vault
+theme: "4.0"
+copyright: Copyright 2019-{year} The Security Vault. All rights reserved.
+enableRobotsTXT: true
+postsFolder: posts
+params:
+  author: Luis Fontes
+  images:
+    - /banner.png
+  description: Because Security Matters - Demystifying those weird and dark
+    security vulnerabilities nobody talks about
+  mainSections:
+    - post
+  logo: /img/logo.png
+  ads_title: My Projects
+  social_title: Social
+  author_on_posts: false
+taxonomies:
+  category: category
+  tag: tag
+permalinks:
+  posts: /:title
+  categories: /:slug/
+urlRewrite:
+  /category/(.*?)/(.*): /$1/$2
+outputs:
+  home:
+    - RSS
+    - HTML
+outputFormats:
+  RSS:
+    mediatype: application/rss
+    baseName: feed
+markup:
+  highlight:
+    anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    hl_Lines: ""
+    lineAnchors: ""
+    lineNoStart: 1
+    lineNos: true
+    lineNumbersInTable: true
+    noClasses: true
+    style: tango
+    tabWidth: 4
+menu:
+  main:
+    - identifier: home
+      name: Home
+      url: /
+      weight: 5
+    - identifier: aboutme
+      name: About me
+      url: /about/
+      weight: 30
+  social:
+    - identifier: linkedin
+      name: LinkedIn
+      url: https://pt.linkedin.com/in/luisfontes19
+    - identifier: github
+      name: GitHub
+      url: https://github.com/luisfontes19
+    - identifier: rss
+      name: Rss
+      url: https://thesecurityvault.com/feed
+  ads:
+    - identifier: 0-OrgSec Guide
+      url: https://luisfontes19.github.io/orgsec-guide/
+      pre: https://raw.githubusercontent.com/luisfontes19/orgsec-guide/main/src/images/banner.png
+    - identifier: 1-XXExploiter
+      url: https://github.com/luisfontes19/xxexploiter
+      pre: https://raw.githubusercontent.com/luisfontes19/xxexploiter/master/banner.png
+    - identifier: 2-Swissknife
+      url: https://marketplace.visualstudio.com/items?itemName=luisfontes19.vscode-swissknife
+      pre: https://github.com/luisfontes19/vscode-swissknife/raw/master/data/swissknife_banner.png
+    - identifier: 3-CSRFER
+      url: https://github.com/luisfontes19/CSRFER
+      pre: /img/csrfer.png
+    - identifier: 5-DamnVulnerableCryptoApp
+      url: https://github.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp
+      pre: https://raw.githubusercontent.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp/master/frontend/src/Images/logo.png

@@ -1,7 +1,7 @@
 @import 'variables.scss';
 
-.btn{
-  font-family: "Josefin Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+.btn {
+  font-family: "Roboto", sans-serif;
   text-transform: uppercase;
   font-size: 13px !important;
   padding: 10px;
@@ -11,6 +11,6 @@
   font-weight: 700;
 }
 
-.btn-outline-primary{
+.btn-outline-primary {
   border-color: $text-color;
 }

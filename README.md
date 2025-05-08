@@ -1,6 +1,3 @@
----
-lastmod: '2022-02-20T00:51:37.554Z'
----
 # The security Vault website
 
 ## Environment Setup

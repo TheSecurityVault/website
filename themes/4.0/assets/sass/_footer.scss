@@ -1,13 +1,14 @@
-footer{
-  background-color:#000;
+footer {
+  background-color: $main-color;
+  color: $alt-text-color;
 
   @media print {
-    display:none; 
+    display: none;
   }
 
 }
 
-.banner-footer{
-  filter: invert(100%); 
-  width:150px
+.banner-footer {
+  filter: invert(100%);
+  width: 150px
 }

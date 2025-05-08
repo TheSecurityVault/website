@@ -54,14 +54,14 @@
   <div class="single-post-pagination">
     <div class="row post-pagination">
       <div class="col-md-6 previous-post">
-        {{ if .PrevPage }}
-        <a href="{{ .PrevPage.Permalink }}">&lArr; Previous Post<br><b>{{ .PrevPage.Title | truncate 50 "..."
+        {{ if .Prev }}
+        <a href="{{ .Prev.Permalink }}">&lArr; Previous Post<br><b>{{ .Prev.Title | truncate 50 "..."
             }}</b></a>
         {{ end }}
       </div>
       <div class="col-md-6 next-post">
-        {{ if .NextPage }}
-        <a href="{{ .NextPage.Permalink }}"> Next Post &rArr;<br><b>{{ .NextPage.Title | truncate 50 "..." }}</b></a>
+        {{ if .Next }}
+        <a href="{{ .Next.Permalink }}"> Next Post &rArr;<br><b>{{ .Next.Title | truncate 50 "..." }}</b></a>
         {{ end }}
       </div>
     </div>

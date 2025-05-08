@@ -22,9 +22,8 @@
 {{ partial "twitter_cards.html" . }}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&family=Roboto:ital,wght@1,900&display=swap"
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
   rel="stylesheet">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
@@ -35,7 +34,7 @@
 
 {{- $options := (dict "targetPath" "css/styles.css" "outputStyle" "expanded" "enableSourceMap" "true") -}}
 {{ $mainSassFile := "sass/style.scss" }}
-{{- $styles := resources.Get $mainSassFile | resources.ExecuteAsTemplate $mainSassFile . | resources.ToCSS $options |
+{{- $styles := resources.Get $mainSassFile | resources.ExecuteAsTemplate $mainSassFile . | css.Sass $options |
 resources.Fingerprint "sha512" }}
 <link rel="stylesheet" href="{{ $styles.Permalink }}">
 

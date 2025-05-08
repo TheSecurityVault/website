@@ -1,0 +1,35 @@
+{
+    "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+    "name": "thesecurityvault",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "postStartCommand": "hugo server -w",
+    "forwardPorts": [
+        8787
+    ],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "editor.suggestSelection": "first",
+                "editor.tabSize": 4,
+                "editor.formatOnPaste": true,
+                "editor.formatOnSave": true,
+                "editor.inlineSuggest.enabled": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "always"
+                },
+                "editor.multiCursorModifier": "ctrlCmd",
+                "editor.unicodeHighlight.invisibleCharacters": false,
+                "editor.unicodeHighlight.ambiguousCharacters": false
+            },
+            "extensions": [
+                "davidanson.vscode-markdownlint",
+                "streetsidesoftware.code-spell-checker",
+                "luisfontes19.vscode-swissknife",
+                "github.copilot",
+                "yzhang.markdown-all-in-one"
+            ]
+        }
+    }
+}

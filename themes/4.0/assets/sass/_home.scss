@@ -8,11 +8,19 @@
   background-color: rgba(0, 0, 0, 0.3);
   border-color: rgba(100, 100, 100, 0.5);
   margin-top: 5px;
+  border-radius: 5px;
+  transition: width 0.5s ease;
+  color: $alt-text-color;
 
   &:focus {
     width: 500px !important;
     background-color: rgba(0, 0, 0, 0.3);
     border-color: rgba(100, 100, 100, 0.5);
+    color: $alt-text-color
+  }
+
+  &::placeholder {
+    color: $alt-text-color
   }
 }
 
@@ -61,8 +69,9 @@
     }
 
     a {
+      font-size: 15px;
       text-decoration: none;
-      color: $main-color;
+      color: $link-color;
     }
 
     &-img {
@@ -74,8 +83,6 @@
     text-decoration: none;
     color: $main-color;
   }
-
-  &-excerpt {}
 
   &-read-more {
     margin-top: 30px;
@@ -167,6 +174,10 @@
 
   .adz-container {
     padding: 0px;
+
+    .ad {
+      margin: 5px
+    }
   }
 
   &-content {

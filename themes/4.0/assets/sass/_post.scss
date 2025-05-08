@@ -1,29 +1,31 @@
 @import 'variables.scss';
 @import 'home.scss';
 
-.post{
+.post {
   padding-bottom: 100px;
 }
 
-.post-image{
-  width:100%;
+
+
+.post-image {
+  width: 100%;
   max-height: 365px;
   border-top-left-radius: $radius;
   border-top-right-radius: $radius;
 }
 
-.post-image-side{
-  width:100%;
-  height:175;
+.post-image-side {
+  width: 100%;
+  height: 175;
 }
 
-.post-content{
+.post-content {
   padding-top: 30px;
   padding-bottom: 30px
 }
 
 
-.page{
+.page {
   position: relative;
   margin-top: 120px;
   background-color: #FFF;
@@ -35,111 +37,119 @@
 
 
 
-.single-post{
+.single-post {
   @extend .white-bg;
 
-  &-image{
-    width:100%;
+  &-image {
+    width: 100%;
     max-height: 555px;
   }
 
-  &-header{
-    margin-top:50px;
+  &-header {
+    margin: 100px;
   }
 
-  &-comments{
+  &-comments {
     @extend .white-bg;
-    padding:70px;
+    padding: 70px;
 
     //more on _comments.scss
-    
+
   }
 
-  &-details{
+  &-details {
     @extend .post-details;
-    margin-bottom:50px;
   }
 
-  &-content{
+  &-content {
     padding-left: 230px;
     padding-right: 230px;
 
-    img{
+    img {
       width: 100%;
     }
 
-    @include smallscreen{
-      padding-left:20px;
-      padding-right:20px;
+    @include smallscreen {
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
-    h1,h2,h3,h4{
+    h1,
+    h2,
+    h3,
+    h4 {
       //margin-top: 50px;
       margin-bottom: 20px;
     }
 
-    .post-pagination{
-      padding-top:80px;
+    h3 {
+      font-size: 20px;
+    }
+
+    h4 {
+      font-size: 15px;
+    }
+
+    .post-pagination {
+      padding-top: 80px;
     }
   }
 
-  &-pagination{
-    
-    margin-top:50px;
-    margin-bottom:50px;
-    padding:50px;
-    padding-top:20px;
-    padding-bottom:20px;
+  &-pagination {
+
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 50px;
+    padding-top: 20px;
+    padding-bottom: 20px;
     @extend .white-bg;
 
-    .previous-post{
-      height:150px;
-      padding-top:50px;
+    .previous-post {
+      height: 150px;
+      padding-top: 50px;
 
-      @include smallscreen{
+      @include smallscreen {
         text-align: center;
       }
 
     }
 
-    .next-post{
+    .next-post {
       text-align: right;
-      padding-top:50px;
-      height:150px;
+      padding-top: 50px;
+      height: 150px;
 
-      @include smallscreen{
+      @include smallscreen {
         text-align: center;
       }
     }
 
-     @media print {
-       display: none;
-     }
+    @media print {
+      display: none;
+    }
   }
 }
 
 
-.post-about-author{
-  padding-top:70px;
+.post-about-author {
+  padding-top: 70px;
 }
 
-.post-about-author-bio{ 
-  h4{
-    margin-top:0px;
-    font-weight:normal;
+.post-about-author-bio {
+  h4 {
+    margin-top: 0px;
+    font-weight: normal;
     text-transform: uppercase;
-  } 
+  }
 
 
 }
 
-.post-about-author-img{
-  padding:40px;
-  padding-top:0px;
+.post-about-author-img {
+  padding: 40px;
+  padding-top: 0px;
 
-  img{
-    width:100%;
+  img {
+    width: 100%;
   }
 }
-
-

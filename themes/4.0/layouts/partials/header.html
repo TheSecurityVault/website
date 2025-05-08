@@ -1,4 +1,3 @@
-<section id="header" class="header-alt"></section>
 <section class="container-fluid menu-container">
   <div>
     <nav id="navbar" class="navbar navbar-expand-lg navbar-default sticky" style="z-index:10;">
@@ -18,17 +17,13 @@
         <div class="navbar-nav mr-auto"></div>
 
         <ul class="navbar-nav">
-          {{ range .Site.Menus.main }}
-          <li class="nav-item">
-            <a class="nav-link" href="{{ .URL }}">
-              {{ .Name }}
-            </a>
-          </li>
-          {{ end }}
           <li>
-            <input id="search" class="form-control search-input" type="search" placeholder="Search" aria-label="Search">
+            <input id="search" class="form-control search-input" type="search" placeholder="Search..."
+              aria-label="Search" autocomplete="off">
             </form>
           </li>
+
+
         </ul>
         <div class="form-inline">
 
