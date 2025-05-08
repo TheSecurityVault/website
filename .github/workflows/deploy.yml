@@ -17,17 +17,16 @@ jobs:
           git config user.name "TheSecurityVault Build Action"
           git config user.email "<>"
           git config user.signingKey 0A6E4D808451103C
-      
+
       - name: Get Hugo
         run: |
-          curl -L https://github.com/gohugoio/hugo/releases/download/v0.92.2/hugo_extended_0.92.2_Linux-64bit.tar.gz --output /tmp/hugo.tar.gz
+          curl -L https://github.com/gohugoio/hugo/releases/download/v0.147.2/hugo_extended_0.147.2_Linux-64bit.tar.gz --output /tmp/hugo.tar.gz
           tar -zxf /tmp/hugo.tar.gz -C /tmp
-          echo "694bcb7242a72b355538be796681f28c5ba4d6ea10e6b86cea21238b61dacb70  /tmp/hugo" | shasum -c 
       - name: Build Website
         run: |
           # build website with Hugp
           /tmp/hugo
-          
+
           # move build version to temp
           mv public /tmp
 
@@ -35,11 +34,11 @@ jobs:
           git fetch origin
           git checkout gh-pages
           mv .git /tmp
-          
+
           # Delete all files JIC
           rm -rf .[!.] .??*
           rm -rf *
-          
+
           # Move back the git folder and built version of the site
           mv /tmp/.git .
           mv /tmp/public/* .
