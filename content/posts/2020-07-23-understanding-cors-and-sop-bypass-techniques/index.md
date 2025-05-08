@@ -106,7 +106,7 @@ fetch("https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87", {method: 'GET
 
 [![request blocked, but succeded, without preflight](images/image.png)](images/image.png)
 
-As you can see, we had a CORS error, as the page at 'https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87' is not allowing CORS requests.
+As you can see, we had a CORS error, as the page at `https://webhook.site/17ac55b4-c06e-4a7a-9c5a-314c60b57b87` is not allowing CORS requests.
 
 But lets see what heppens, at the webhook side:
 
