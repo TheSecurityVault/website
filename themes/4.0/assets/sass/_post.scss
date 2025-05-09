@@ -47,6 +47,14 @@
 
   &-header {
     margin: 100px;
+
+    @include smallscreen {
+      margin: 40px;
+
+      h1 {
+        font-size: 30px;
+      }
+    }
   }
 
   &-comments {

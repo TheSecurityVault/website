@@ -4,6 +4,7 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
+    "postCreateCommand": "git config core.hooksPath .githooks",
     "postStartCommand": "hugo server -w",
     "forwardPorts": [
         8787
