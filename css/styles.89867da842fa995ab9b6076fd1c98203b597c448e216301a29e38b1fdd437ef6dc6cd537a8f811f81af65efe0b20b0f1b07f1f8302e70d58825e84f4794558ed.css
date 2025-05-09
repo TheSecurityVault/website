@@ -1278,6 +1278,15 @@ blockquote {
   margin: 100px;
 }
 
+@media all and (max-width: 992px) {
+  .single-post-header {
+    margin: 40px;
+  }
+  .single-post-header h1 {
+    font-size: 30px;
+  }
+}
+
 .single-post-comments {
   padding: 70px;
 }
