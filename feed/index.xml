@@ -7,14 +7,21 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Copyright 2019-{year} The Security Vault. All rights reserved.</copyright>
-    <lastBuildDate>Wed, 07 May 2025 15:37:27 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Dec 2025 15:37:27 +0000</lastBuildDate>
     <atom:link href="https://thesecurityvault.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building MirageVM: A JavaScript Virtual Machine for Code Obfuscation</title>
+      <link>https://thesecurityvault.com/building-miragevm-a-javascript-virtual-machine-for-code-obfuscation/</link>
+      <pubDate>Mon, 15 Dec 2025 15:37:27 +0000</pubDate>
+      <guid>https://thesecurityvault.com/building-miragevm-a-javascript-virtual-machine-for-code-obfuscation/</guid>
+      <description>&lt;p&gt;Modern web applications face a persistent challenge: automated attacks that bypass traditional security measures. Captcha farms and AI-powered tools have made it increasingly difficult to distinguish between legitimate users and malicious bots. Services like &lt;a href=&#34;https://anti-captcha.com/&#34;&gt;anti-captcha&lt;/a&gt; and &lt;a href=&#34;https://2captcha.com/&#34;&gt;2captcha&lt;/a&gt;  can solve a lot of commercially available captchas, while AI tools enable sophisticated scripts to interact with web pages in ways that mimic human behavior or even solve captchas as well.&lt;/p&gt;&#xA;&lt;p&gt;While the response was increasing captcha challenge complexity, these often frustrate legitimate users without effectively stopping determined attackers. The escalating arms race between security measures and bypass techniques has led many to seek alternative approaches.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Bots to the Rescue: How I Built an AI Security Wingman</title>
       <link>https://thesecurityvault.com/bots-to-the-rescue-how-i-built-an-ai-security-wingman/</link>
       <pubDate>Wed, 07 May 2025 15:37:27 +0000</pubDate>
       <guid>https://thesecurityvault.com/bots-to-the-rescue-how-i-built-an-ai-security-wingman/</guid>
-      <description>&lt;p&gt;Let’s face it—security engineers spend way too much time doing repetitive support work: answering the same questions, triaging issues, nudging people through processes. What if we could delegate all that to a friendly assistant who &lt;em&gt;never gets tired&lt;/em&gt;?&lt;/p&gt;&#xA;&lt;p&gt;Well, I just built that. A helpful, AI powered Slack assistant (AKA Security Assistant) that handles all the boring, but necessary stuff. Here’s how we did it, what I learned, and how I kept it safe.&lt;/p&gt;</description>
+      <description>&lt;p&gt;Security operations teams spend a fair amount of time on repetitive administrative tasks. Answering recurring process questions, manually triaging alerts, guiding teams through procedures, maintaining documentation and tickets. The operational overhead is substantial.&lt;/p&gt;&#xA;&lt;p&gt;Historically, these tasks required human oversight because they demanded enough contextual understanding to need judgment calls, yet followed predictable patterns. With recent advances in LLM capabilities for understanding context and executing complex instructions, many of these operational tasks can now be effectively automated.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Path Traversal &amp; LFI can be worst than you think</title>

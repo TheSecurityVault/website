@@ -20,18 +20,19 @@ body {
   word-break: break-word;
   background-color: #E6E6E6;
   font-family: "roboto", sans-serif;
+  font-size: 0.9em;
   letter-spacing: 0.2px;
   line-height: 1.8em;
 }
 
 a {
   word-break: break-word;
-  color: #003162;
+  color: #0065ca;
   transition: 0.5s;
 }
 
 a:hover {
-  color: black;
+  color: #003264;
   text-decoration: none;
 }
 
@@ -42,7 +43,6 @@ h5::before,
 h6::before {
   content: '';
   display: block;
-  margin-top: 40px;
   visibility: hidden;
 }
 
@@ -90,7 +90,7 @@ hr {
   margin-bottom: 30px;
 }
 
-.white-bg, .single-post-pagination, .single-post-comments, .single-post, .sidebar .author, .top-posts .author, .sidebar .side-container, .top-posts .side-container, .post-preview {
+.white-bg, .single-post-pagination, .single-post-comments, .single-post, .side-container, .post-preview {
   box-shadow: 20px 0 50px rgba(85, 92, 121, 0.08);
   background-color: #FFF;
   border-radius: 4px;
@@ -278,18 +278,19 @@ body {
   word-break: break-word;
   background-color: #E6E6E6;
   font-family: "roboto", sans-serif;
+  font-size: 0.9em;
   letter-spacing: 0.2px;
   line-height: 1.8em;
 }
 
 a {
   word-break: break-word;
-  color: #003162;
+  color: #0065ca;
   transition: 0.5s;
 }
 
 a:hover {
-  color: black;
+  color: #003264;
   text-decoration: none;
 }
 
@@ -300,7 +301,6 @@ h5::before,
 h6::before {
   content: '';
   display: block;
-  margin-top: 40px;
   visibility: hidden;
 }
 
@@ -348,7 +348,7 @@ hr {
   margin-bottom: 30px;
 }
 
-.white-bg, .single-post-pagination, .single-post-comments, .single-post, .sidebar .author, .top-posts .author, .sidebar .side-container, .top-posts .side-container, .post-preview {
+.white-bg, .single-post-pagination, .single-post-comments, .single-post, .side-container, .post-preview {
   box-shadow: 20px 0 50px rgba(85, 92, 121, 0.08);
   background-color: #FFF;
   border-radius: 4px;
@@ -496,7 +496,6 @@ blockquote {
 .search-input {
   background-color: rgba(0, 0, 0, 0.3);
   border-color: rgba(100, 100, 100, 0.5);
-  margin-top: 5px;
   border-radius: 5px;
   transition: width 0.5s ease;
   color: #FFFFFF;
@@ -563,11 +562,12 @@ blockquote {
 .post-preview-author a {
   font-size: 15px;
   text-decoration: none;
-  color: #003162;
+  color: #0065ca;
 }
 
 .post-preview-title-link {
   text-decoration: none;
+  color: #003162;
 }
 
 .post-preview-read-more {
@@ -589,8 +589,8 @@ blockquote {
 .post-preview-read-more:before {
   width: 10px;
   height: 10px;
-  border-top: 2px solid #003162;
-  border-right: 2px solid #003162;
+  border-top: 2px solid #0065ca;
+  border-right: 2px solid #0065ca;
   content: "";
   position: absolute;
   top: 2px;
@@ -606,7 +606,7 @@ blockquote {
   content: "";
   height: 2px;
   width: 10px;
-  background: #003162;
+  background: #0065ca;
   right: 0;
   transition: 0.3s;
   left: 8px;
@@ -614,23 +614,9 @@ blockquote {
   margin: 3px;
 }
 
-.sidebar .side-container, .top-posts .side-container {
-  margin-top: 50px;
+.side-container {
   padding: 40px;
   padding-bottom: 50px;
-}
-
-.sidebar .side-container h4:after, .top-posts .side-container h4:after {
-  display: inline-block;
-  position: relative;
-  content: "";
-  height: 2px;
-  width: 40px;
-  background: #003162;
-  right: 0;
-  transition: 0.3s;
-  left: 8px;
-  margin: 5px;
 }
 
 .sidebar-social-menu {
@@ -819,18 +805,19 @@ body {
   word-break: break-word;
   background-color: #E6E6E6;
   font-family: "roboto", sans-serif;
+  font-size: 0.9em;
   letter-spacing: 0.2px;
   line-height: 1.8em;
 }
 
 a {
   word-break: break-word;
-  color: #003162;
+  color: #0065ca;
   transition: 0.5s;
 }
 
 a:hover {
-  color: black;
+  color: #003264;
   text-decoration: none;
 }
 
@@ -841,7 +828,6 @@ h5::before,
 h6::before {
   content: '';
   display: block;
-  margin-top: 40px;
   visibility: hidden;
 }
 
@@ -889,7 +875,7 @@ hr {
   margin-bottom: 30px;
 }
 
-.white-bg, .single-post-pagination, .single-post-comments, .single-post, .post-preview, .sidebar .side-container, .top-posts .side-container, .sidebar .author, .top-posts .author {
+.white-bg, .single-post-pagination, .single-post-comments, .single-post, .post-preview, .side-container {
   box-shadow: 20px 0 50px rgba(85, 92, 121, 0.08);
   background-color: #FFF;
   border-radius: 4px;
@@ -1037,7 +1023,6 @@ blockquote {
 .search-input {
   background-color: rgba(0, 0, 0, 0.3);
   border-color: rgba(100, 100, 100, 0.5);
-  margin-top: 5px;
   border-radius: 5px;
   transition: width 0.5s ease;
   color: #FFFFFF;
@@ -1104,11 +1089,12 @@ blockquote {
 .post-preview-author a {
   font-size: 15px;
   text-decoration: none;
-  color: #003162;
+  color: #0065ca;
 }
 
 .post-preview-title-link {
   text-decoration: none;
+  color: #003162;
 }
 
 .post-preview-read-more {
@@ -1130,8 +1116,8 @@ blockquote {
 .post-preview-read-more:before {
   width: 10px;
   height: 10px;
-  border-top: 2px solid #003162;
-  border-right: 2px solid #003162;
+  border-top: 2px solid #0065ca;
+  border-right: 2px solid #0065ca;
   content: "";
   position: absolute;
   top: 2px;
@@ -1147,7 +1133,7 @@ blockquote {
   content: "";
   height: 2px;
   width: 10px;
-  background: #003162;
+  background: #0065ca;
   right: 0;
   transition: 0.3s;
   left: 8px;
@@ -1155,23 +1141,9 @@ blockquote {
   margin: 3px;
 }
 
-.sidebar .side-container, .top-posts .side-container {
-  margin-top: 50px;
+.side-container {
   padding: 40px;
   padding-bottom: 50px;
-}
-
-.sidebar .side-container h4:after, .top-posts .side-container h4:after {
-  display: inline-block;
-  position: relative;
-  content: "";
-  height: 2px;
-  width: 40px;
-  background: #003162;
-  right: 0;
-  transition: 0.3s;
-  left: 8px;
-  margin: 5px;
 }
 
 .sidebar-social-menu {

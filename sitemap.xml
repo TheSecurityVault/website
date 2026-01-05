@@ -3,18 +3,21 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://thesecurityvault.com/category/appsec/</loc>
-    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
+    <lastmod>2025-12-15T15:37:27+00:00</lastmod>
   </url><url>
-    <loc>https://thesecurityvault.com/bots-to-the-rescue-how-i-built-an-ai-security-wingman/</loc>
-    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
+    <loc>https://thesecurityvault.com/building-miragevm-a-javascript-virtual-machine-for-code-obfuscation/</loc>
+    <lastmod>2025-12-15T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/category/</loc>
-    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
+    <lastmod>2025-12-15T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/posts/</loc>
-    <lastmod>2025-05-07T15:37:27+00:00</lastmod>
+    <lastmod>2025-12-15T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/</loc>
+    <lastmod>2025-12-15T15:37:27+00:00</lastmod>
+  </url><url>
+    <loc>https://thesecurityvault.com/bots-to-the-rescue-how-i-built-an-ai-security-wingman/</loc>
     <lastmod>2025-05-07T15:37:27+00:00</lastmod>
   </url><url>
     <loc>https://thesecurityvault.com/path-traversal-lfi-can-be-worst-than-you-think/</loc>
