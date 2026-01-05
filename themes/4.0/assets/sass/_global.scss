@@ -6,6 +6,7 @@ body {
   word-break: break-word;
   background-color: $bg-color;
   font-family: "roboto", sans-serif;
+  font-size: 0.9em;
   letter-spacing: 0.2px;
   line-height: 1.8em;
 }
@@ -29,8 +30,8 @@ h5::before,
 h6::before {
   content: '';
   display: block;
-  margin-top: 40px;
   visibility: hidden;
+  // margin-top: 40px;
 }
 
 h1,

@@ -7,7 +7,6 @@
 .search-input {
   background-color: rgba(0, 0, 0, 0.3);
   border-color: rgba(100, 100, 100, 0.5);
-  margin-top: 5px;
   border-radius: 5px;
   transition: width 0.5s ease;
   color: $alt-text-color;
@@ -81,7 +80,7 @@
 
   &-title-link {
     text-decoration: none;
-
+    color: $alt-color1;
   }
 
   &-read-more {
@@ -136,31 +135,13 @@
   }
 }
 
+.side-container {
+  @extend .white-bg;
+  padding: 40px;
+  padding-bottom: 50px;
+}
 
 .sidebar {
-
-  .side-container {
-    @extend .white-bg;
-    margin-top: 50px;
-    padding: 40px;
-    padding-bottom: 50px;
-
-    h4 {
-      &:after {
-        display: inline-block;
-        position: relative;
-        content: "";
-        height: 2px;
-        width: 40px;
-        background: $link-color;
-        right: 0;
-        transition: 0.3s;
-        left: 8px;
-        margin: 5px;
-      }
-    }
-  }
-
 
   &-social-menu {
     display: flex;
@@ -185,8 +166,6 @@
   }
 
   .author {
-    @extend .white-bg;
-
     .author-img-container {
       // height:350px;
       // @include smallscreen{
