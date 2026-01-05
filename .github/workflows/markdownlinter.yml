@@ -13,4 +13,4 @@ jobs:
       - name: Run Linter
         run: |
           npm install -g markdownlint-cli
-          markdownlint .
+          markdownlint --config ../../../.markdownlint.json .
