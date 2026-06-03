@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Appsec · The Security Vault</title><meta name="description" content="Because Security Matters - Demystifying those weird and dark security vulnerabilities nobody talks about" />
+
+<meta name="author" content="Luis Fontes">
+
+<link rel="canonical" href="https://thesecurityvault.com/category/appsec/">
+<meta name="robots" content="noindex, follow">
+<link rel="prev" href="https://thesecurityvault.com/category/appsec/">
+
+<link rel="icon" type="image/svg+xml" href="https://thesecurityvault.com/img/icon.svg">
+<link rel="icon" type="image/x-icon" href="https://thesecurityvault.com/favicon/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="https://thesecurityvault.com/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://thesecurityvault.com/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://thesecurityvault.com/favicon/apple-touch-icon.png">
+<link rel="manifest" href="https://thesecurityvault.com/favicon/site.webmanifest">
+
+
+
+<meta property="og:title" content="Appsec" />
+<meta property="og:description" content="Because Security Matters - Demystifying those weird and dark security vulnerabilities nobody talks about" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://thesecurityvault.com/category/appsec/" />
+<meta property="og:locale" content=" en_US" />
+<meta property="og:site_name" content="The Security Vault" />
+<meta property="og:image" content="https://thesecurityvault.com/banner.png" />
+
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://thesecurityvault.com/banner.png" />
+<meta name="twitter:title" content="Appsec" />
+<meta name="twitter:description" content="Because Security Matters - Demystifying those weird and dark security vulnerabilities nobody talks about" />
+
+
+
+<link rel="alternate" type="application/rss+xml" href="https://thesecurityvault.com/category/appsec/feed.xml" title="The Security Vault" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+  rel="stylesheet">
+<link rel="stylesheet" href="https://thesecurityvault.com/css/styles.0273157a427523d15c5167dbc3c19ce74a5c12426404354a32aa27b0e7035d66740a6b5c413c124f942f75c3dcd3807f3d63b59c276d527d95e1749f83f43df9.css" integrity="sha512-AnMVekJ1I9FcUWfbw8Gc50pcEkJkBDVKMqonsOcDXWZ0CmtcQTwST5QvdcPc04B/PWO1nCdtUn2V4XSfg/Q9&#43;Q==">
+</head>
+
+<body><header class="nav" id="navbar">
+  <div class="container nav-inner">
+    <a href="/" class="nav-brand">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+      </svg>
+      <span>The Security Vault</span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="nav-menu" id="navMenu" role="navigation">
+      <a href="/#about" class="nav-link">About</a>
+      <a href="/#projects" class="nav-link">Projects</a>
+      <a href="/posts/" class="nav-link">Blog</a>
+      <button class="nav-search-btn" id="searchOpen" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="search-overlay-inner">
+    <div class="search-overlay-bar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="search" id="search" class="search-overlay-input" placeholder="Search articles..." autocomplete="off">
+      <button class="search-overlay-close" id="searchClose" aria-label="Close search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    <div id="search-results" class="search-overlay-results"></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const navbar = document.getElementById('navbar');
+    const toggle = document.getElementById('navToggle');
+    const menu = document.getElementById('navMenu');
+    const searchOpen = document.getElementById('searchOpen');
+    const searchOverlay = document.getElementById('searchOverlay');
+    const searchClose = document.getElementById('searchClose');
+    const searchInput = document.getElementById('search');
+
+    
+    window.addEventListener('scroll', function () {
+      navbar.classList.toggle('nav--scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    
+    toggle.addEventListener('click', function () {
+      const open = menu.classList.toggle('nav-menu--open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    
+    menu.querySelectorAll('.nav-link').forEach(function (link) {
+      link.addEventListener('click', function () {
+        menu.classList.remove('nav-menu--open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    
+    function openSearch() {
+      searchOverlay.classList.add('search-overlay--open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () { searchInput.focus(); }, 100);
+    }
+    function closeSearch() {
+      searchOverlay.classList.remove('search-overlay--open');
+      document.body.style.overflow = '';
+    }
+
+    searchOpen.addEventListener('click', openSearch);
+    searchClose.addEventListener('click', closeSearch);
+    searchOverlay.addEventListener('click', function (e) {
+      if (e.target === searchOverlay) closeSearch();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeSearch();
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+    });
+  })();
+</script>
+<main>
+
+
+<div class="archive">
+  <div class="container">
+    <header class="archive-header">
+      <h1 class="archive-title">Appsec</h1>
+      <p class="archive-sub">21 articles on application security, vulnerabilities and research</p>
+    </header>
+
+    <div class="posts-grid">
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/screen-caching/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/screen-caching/images/banner.png" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/screen-caching/">Screen Caching</a></h3>
+          <p class="post-card-excerpt"><p>Screen Caching is another of those vulnerabilities nobody is paying attention to, and this one is quite important.</p>
+<p>As an example, …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2020-11-01">Nov 1, 2020</time>
+            <span>·</span>
+            <span>3 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/understanding-cors-and-sop-bypass-techniques/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/understanding-cors-and-sop-bypass-techniques/images/banner.png" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/understanding-cors-and-sop-bypass-techniques/">Understanding CORS and SOP bypass techniques</a></h3>
+          <p class="post-card-excerpt"><p><strong>CORS</strong> which stands for Cross-Origin Resource Sharing is a system designed to help &lsquo;bypass&rsquo; some of the restrictions …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2020-07-23">Jul 23, 2020</time>
+            <span>·</span>
+            <span>6 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/security-of-the-npm-packages/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/security-of-the-npm-packages/images/banner.png" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/security-of-the-npm-packages/">Security of the NPM Packages</a></h3>
+          <p class="post-card-excerpt"><p>Javascript (and typescript) is now one of the most used languages in new projects. It has an awesome performance, and Promises …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2020-03-27">Mar 27, 2020</time>
+            <span>·</span>
+            <span>9 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/breaking_c_sharp_securestring/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/breaking_c_sharp_securestring//../images/banner.jpeg" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/breaking_c_sharp_securestring/">Breaking C# SecureString</a></h3>
+          <p class="post-card-excerpt"><p>As discussed previously in <a href="https://thesecurityvault.com/heap-inspection/">Heap Inspection post</a> keeping passwords and other sensitive data in memory may be insecure as they can …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2020-01-18">Jan 18, 2020</time>
+            <span>·</span>
+            <span>8 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/reverse-tabnabbing/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/reverse-tabnabbing/images/banner.jpeg" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/reverse-tabnabbing/">Reverse Tabnabbing</a></h3>
+          <p class="post-card-excerpt"><p>Reverse Tabnabbing or also known as Unsafe Target Blank is one of the most underrated vulnerability, and this is the one I like …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2019-06-26">Jun 26, 2019</time>
+            <span>·</span>
+            <span>3 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/insecure-deserialization-in-java/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/insecure-deserialization-in-java/images/banner.jpeg" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/insecure-deserialization-in-java/">Insecure Deserialization in Java</a></h3>
+          <p class="post-card-excerpt"><p>Insecure deserialization got in <a href="https://www.owasp.org/index.php/Top_10-2017_A8-Insecure_Deserialization">OWASP top 10</a> in 2017 as most of web applications written in Java and .net where found vulnerable …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2019-06-17">Jun 17, 2019</time>
+            <span>·</span>
+            <span>7 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/weak-random/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/weak-random/images/banner.png" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/weak-random/">Weak Random</a></h3>
+          <p class="post-card-excerpt"><p>A lot of developers don&rsquo;t know that regular Random is a weak random implementation. In fact its quite predictable. A lot of …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2019-06-17">Jun 17, 2019</time>
+            <span>·</span>
+            <span>7 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/xml-external-entities-xxe/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/xml-external-entities-xxe/images/banner.png" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/xml-external-entities-xxe/">XML External Entities (XXE)</a></h3>
+          <p class="post-card-excerpt"><p>XML and JSON are two formats ruling the web right now.<br>
+Although JSON&rsquo;s adoption is increasing significantly specially with …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2019-06-17">Jun 17, 2019</time>
+            <span>·</span>
+            <span>6 min read</span>
+          </div>
+        </div>
+      </article>
+      
+      
+      <article class="post-card">
+        
+        <a href="https://thesecurityvault.com/heap-inspection/" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="https://thesecurityvault.com/heap-inspection/images/banner.png" alt="Appsec" class="post-card-img" loading="lazy">
+        </a>
+        
+        <div class="post-card-body">
+          
+          <span class="post-card-tag">appsec</span>
+          
+          <h3 class="post-card-title"><a href="https://thesecurityvault.com/heap-inspection/">Heap Inspection</a></h3>
+          <p class="post-card-excerpt"><p>Heap Inspection is a vulnerability that most of the times developers don&rsquo;t care about, since it is not easy to mitigate, and …</p></p>
+          <div class="post-card-meta">
+            <time datetime=" 2019-06-16">Jun 16, 2019</time>
+            <span>·</span>
+            <span>10 min read</span>
+          </div>
+        </div>
+      </article>
+      
+    </div>
+
+    
+    
+    <nav class="pagination" aria-label="Pagination">
+      
+      <a href="/category/appsec/" class="pagination-btn">← Newer</a>
+      
+
+      <span class="pagination-info">Page 2 of 2</span>
+
+      
+      <span class="pagination-btn pagination-btn--disabled">Older →</span>
+      
+    </nav>
+    
+  </div>
+</div>
+
+
+  </main><script>
+  window.searchIndex = {
+  { { - range site.RegularPages } }
+  "https:\/\/thesecurityvault.com\/category\/appsec\/": {
+    "title": "Appsec",
+      "tags": [],
+  "content": "",
+    "url": "https:\/\/thesecurityvault.com\/category\/appsec\/",
+      "summary": "",
+        "preview": "https:\/\/thesecurityvault.com\/category\/appsec\/"
+  },
+  { { - end } }
+};
+</script>
+
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <a href="/" class="nav-brand">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>The Security Vault</span>
+      </a>
+      <p class="footer-tagline">Because Security Matters - Demystifying those weird and dark security vulnerabilities nobody talks about</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4 class="footer-col-title">Navigate</h4>
+        <a href="/" class="footer-link">Home</a>
+        <a href="/#about" class="footer-link">About</a>
+        <a href="/#projects" class="footer-link">Projects</a>
+        <a href="/posts/" class="footer-link">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Connect</h4>
+        
+        <a href="https://github.com/luisfontes19" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        
+        <a href="https://pt.linkedin.com/in/luisfontes19" class="footer-link" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        
+        <a href="https://thesecurityvault.com/feed" class="footer-link" target="_blank" rel="noopener noreferrer">Rss</a>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <span>Copyright 2019-2026 The Security Vault. All rights reserved.</span>
+      <div class="footer-bottom-links">
+        <a href="/sitemap.xml">Sitemap</a>
+        <a href="/feed">RSS</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lunr@2.3.9/lunr.js"
+  integrity="sha384-Mrc0XsDxndfJgV5jLnEeThch4j9dNEXAE1vbWeyzmERxSvF8siQfuEczzgUelQQH" crossorigin="anonymous"></script>
+<script src="/js/search.js"></script>
+
+<script>
+  
+  document.querySelectorAll('a[href]').forEach(function (a) {
+    const href = a.getAttribute('href');
+    if (href && href.startsWith('http') && !href.startsWith(window.location.origin)) {
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener noreferrer');
+    }
+  });
+
+  
+  document.querySelectorAll('.prose h2, .prose h3, .prose h4').forEach(function (h) {
+    if (!h.id) return;
+    const a = document.createElement('a');
+    a.href = '#' + h.id;
+    a.className = 'heading-anchor';
+    a.setAttribute('aria-hidden', 'true');
+    a.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
+    h.appendChild(a);
+  });
+</script>
+</body>
+
+</html>

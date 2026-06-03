@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Copyright 2019-{year} The Security Vault. All rights reserved.</copyright>
-    <lastBuildDate>Mon, 15 Dec 2025 15:37:27 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 02 Jun 2026 15:37:27 +0000</lastBuildDate>
     <atom:link href="https://thesecurityvault.com/category/appsec/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Protecting developers from supply chain attacks</title>
+      <link>https://thesecurityvault.com/protecting-developers-from-supply-chain-attacks/</link>
+      <pubDate>Tue, 02 Jun 2026 15:37:27 +0000</pubDate>
+      <guid>https://thesecurityvault.com/protecting-developers-from-supply-chain-attacks/</guid>
+      <description>&lt;p&gt;Developers have quietly become one of the most valuable targets in the modern threat landscape. Not because of who they are as individuals, but because of what sits on their machines: source code, SSH keys, AWS credentials, GitHub tokens, &lt;code&gt;.env&lt;/code&gt; files, CI/CD secrets. A single compromised developer laptop is a beachhead into the entire engineering organization.&lt;/p&gt;&#xA;&lt;p&gt;The attacks have been making headlines. TeamPCP has been on a rampage since early 2026. It started with the &lt;a href=&#34;https://www.wiz.io/blog/trivy-compromised-teampcp-supply-chain-attack&#34;&gt;Trivy compromise in March&lt;/a&gt;, where they injected credential-stealing malware into Aqua Security&amp;rsquo;s widely-used vulnerability scanner, poisoning its GitHub Actions tags and official release binaries. The stolen credentials cascaded downstream: Checkmarx developers using Trivy in their pipelines had their tokens harvested, which TeamPCP then used to &lt;a href=&#34;https://checkmarx.com/blog/ongoing-security-updates/&#34;&gt;publish malicious VS Code extensions and GitHub Actions&lt;/a&gt; to thousands of downstream users. That same campaign reached &lt;a href=&#34;https://opensourcemalware.com/blog/teampcp-litellm-pypi-supply-chain-attack&#34;&gt;LiteLLM&amp;rsquo;s PyPI package&lt;/a&gt;, where the maintainer&amp;rsquo;s account was hijacked and a malicious version deployed a &lt;code&gt;.pth&lt;/code&gt; file that executed a credential stealer on every Python startup. No import required.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Building MirageVM: A JavaScript Virtual Machine for Code Obfuscation</title>
       <link>https://thesecurityvault.com/building-miragevm-a-javascript-virtual-machine-for-code-obfuscation/</link>
@@ -92,20 +99,6 @@
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0000</pubDate>
       <guid>https://thesecurityvault.com/breaking_c_sharp_securestring/</guid>
       <description>&lt;p&gt;As discussed previously in &lt;a href=&#34;https://thesecurityvault.com/heap-inspection/&#34;&gt;Heap Inspection post&lt;/a&gt; keeping passwords and other sensitive data in memory may be insecure as they can be inspected or dumped.&lt;/p&gt;&#xA;&lt;p&gt;Although it is almost impossible to completely mitigate &lt;a href=&#34;https://thesecurityvault.com/heap-inspection/&#34;&gt;Heap Inspection&lt;/a&gt; there are several techniques to reduce the time frame sensitive data keeps in memory, lowering the risk of exposure.&lt;/p&gt;&#xA;&lt;p&gt;Lets review some of them:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Don&amp;rsquo;t store sensitive data as strings,&lt;/li&gt;&#xA;&lt;li&gt;Use char arrays, and override their values when not needed anymore&lt;/li&gt;&#xA;&lt;li&gt;Keep the data as less time as possible in memory&lt;/li&gt;&#xA;&lt;li&gt;keep data encrypted if needed&lt;/li&gt;&#xA;&lt;li&gt;Use as few instances of the data as possible&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;But besides these tricks there are also some constraints that will prevent you from doing it right:&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Secure Password Hashing</title>
-      <link>https://thesecurityvault.com/secure-password-hashing/</link>
-      <pubDate>Wed, 30 Oct 2019 00:00:00 +0000</pubDate>
-      <guid>https://thesecurityvault.com/secure-password-hashing/</guid>
-      <description>&lt;p&gt;&lt;strong&gt;Password Hashing 101&lt;/strong&gt;: MD5 and SHA1 which are quite common, are already considered unsafe. So if you are using them, replace them with a secure algorithm. Even for checksums should not considered secure. Check references for more info.&lt;/p&gt;&#xA;&lt;p&gt;Now that we put that aside lets start from the basics.&lt;/p&gt;&#xA;&lt;p&gt;User passwords should always be stored in a one way hash.&lt;br&gt;&#xA;This means that after hashing it the original content cannot be retrieved.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Hardcoded Passwords</title>
-      <link>https://thesecurityvault.com/hardcoded-passwords/</link>
-      <pubDate>Fri, 19 Jul 2019 00:00:00 +0000</pubDate>
-      <guid>https://thesecurityvault.com/hardcoded-passwords/</guid>
-      <description>&lt;p&gt;Hardcoded passwords&amp;hellip; This is a problem quite common, and most of the projects that I get my hands on have a hardcoded password somewhere.&lt;/p&gt;&#xA;&lt;p&gt;But, what&amp;rsquo;s the problem of having for example the password of the database in the code?&lt;/p&gt;&#xA;&lt;p&gt;Well, actually, a lot!&lt;/p&gt;&#xA;&lt;p&gt;Lets start by the most straightforward scenario. Hardcoded passwords, (and when I say passwords I mean credentials, not just passwords) get into source control. From there its impossible to remove. If you share source control between all the developers, if you open source the project, everybody with access to it can see those credentials, and depending on the scenarios use them to login on a service. If you are concerned with &lt;a href=&#34;https://thesecurityvault.com/heap-inspection&#34;&gt;Heap Inspection&lt;/a&gt; its also bad.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Reverse Tabnabbing</title>
