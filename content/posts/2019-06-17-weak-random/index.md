@@ -22,7 +22,7 @@ A lot of developers don't know that regular Random is a weak random implementati
 
 I'm going to focus on Java, but a lot of the concepts are the same for other languages
 
-### How Java (weak) Random Works
+## How Java (weak) Random Works
 
 There are some nice articles about this on the net, the one that caught my eye when learning about this a long time ago was the one from [Franklin To](https://franklinta.com/2014/08/31/predicting-the-next-math-random-in-java/). This is an awesome article explaining how he replicated the Random class from java. Its quite easy to understand and I recommend everybody to read it.
 
@@ -65,7 +65,7 @@ If you look at the LCG algorithm that is understandable. The x0 which is our see
 
 If you change the seed from one of the instances, or if you remove them results will be different.
 
-### Replicating Java Random
+## Replicating Java Random
 
 So we now have a fair understanding how this works, but you are probably thinking that you still need to guess the exact time the weak Random instance was created to get the seed, or guess the seed of an application so that you could replicate the random.
 
@@ -111,7 +111,7 @@ There are also other tools that help you "guess" the next numbers from weak Rand
 
 So regular Random is quite easy to predict. What are the alternatives?
 
-### Secure Random
+## Secure Random
 
 SecureRandom is your way to go.
 
@@ -153,13 +153,13 @@ If you run on a Unix based environment you will see much more options like [NATI
 
 Lets start by explaining the Unix ones.
 
-#### NATIVEPRNGBLOCKING
+## NATIVEPRNGBLOCKING
 
 NATIVEPRNGBLOCKING makes use of /dev/random which is a file [fed by the OS](https://elixir.bootlin.com/linux/latest/source/drivers/char/random.c) with random data from multiple souces. It collects "noise" from drivers, interrupts, etc.
 
 At the end you get unpredictable values. /dev/random works with what is called an entropy pool, where API's get the values from. When this pool runs out of data, you will have to wait until new data is generated, and since this uses hardware based events and others, this can take some time. This is why /dev/random is blocking. If no data is available you will have to wait until it has the necessary data.
 
-#### NATIVEPRNGNONBLOCKING
+## NATIVEPRNGNONBLOCKING
 
 On the other hand, you have [/dev/urandom](http://man7.org/linux/man-pages/man4/urandom.4.html) (used by NATIVEPRNGNONBLOCKING) which is non blocking. This means that you won't have to wait for new random data. It uses /dev/random to get a seed to feed a PRNG algorithm.  
 If it can't get a seed then theoretically, since this is non-blocking, it will return a [preditable value](https://linux.die.net/man/4/urandom)
@@ -169,11 +169,11 @@ This is the default configuration, and its safe :)
 
 Lets now take a quick look at the available options for windows.
 
-#### WINDOWS-PRNG
+## WINDOWS-PRNG
 
 WINDOWS-PRNG uses [native crypto api](https://docs.microsoft.com/en-us/windows/desktop/api/wincrypt/nf-wincrypt-cryptgenrandom)'s from windows to return random data, which is also considered safe. If you send the same seed to two different instances the output will be different.
 
-#### SHA1PRNG
+## SHA1PRNG
 
 Lets move to SHA1PRNG. This one is available on all systems since its a pure java implementation. The security of this algorithm is directly linked with the source of entropy. Two instances with the same seed generate the same value. Also a lot of experts in the field have [claimed](https://android-developers.googleblog.com/2016/06/security-crypto-provider-deprecated-in.html) this method is not that secure.
 
@@ -204,11 +204,11 @@ public class SafeSecureRandomWindows {
 }
 ```
 
-##### DRBG
+## DRBG
 
 From Java 9 and above you now have a new option: DRBG (from Deterministic Random Bit Generator and this is the **new default for windows environments**. There are some nice options you can configure from the java.security file, but the defaults are good
 
-#### **;TLDR**
+## **;TLDR**
 
 - Random is unfit for security related stuff, or other scenarios where you need unpredictability
 - SecureRandom is the way to go

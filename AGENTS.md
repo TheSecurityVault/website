@@ -78,7 +78,7 @@ This document defines the writing style used across blog posts on TheSecurityVau
 ## Common Anti-Patterns to Avoid
 
 | Anti-pattern | Replace with |
-|---|---|
+| --- | --- |
 | `So what is X?` (question header) | `## What X Is` or a direct statement header |
 | `Lets start by...` | Just start |
 | `I'm going to talk about...` | Just talk about it |

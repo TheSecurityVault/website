@@ -1,6 +1,6 @@
 <script>
   window.searchIndex = {
-  { { - range site.RegularPages } }
+  {{- range site.RegularPages }}
   "{{ .Permalink }}": {
     "title": "{{ .Title }}",
       "tags": [{{ range .Params.Tags }} "{{ . }}", {{ end }}],
@@ -9,6 +9,6 @@
       "summary": "{{ .Summary | plainify | truncate 200 }}",
         "preview": "{{ .Permalink }}{{ .Params.preview }}"
   },
-  { { - end } }
+  {{- end }}
 };
 </script>

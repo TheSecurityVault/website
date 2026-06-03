@@ -23,7 +23,7 @@ Screen Caching is another of those vulnerabilities nobody is paying attention to
 
 As an example, even most bank applications are usually 'vulnerable' to this issue (most of mine are). And this is a reality even for those focusing on security, like web based only banks.
 
-### So what is screen caching?
+## So what is screen caching?
 
 Screen caching is a mobile vulnerability, caused due to a performance/usability feature present in mobile OS's.
 
@@ -33,7 +33,7 @@ When you grab back your phone and eventually open the "Recent Apps" screen you'l
 
 [![Screen Caching example](images/image.png)](images/image.png)
 
-### How to Fix it
+## How to Fix it
 
 This is an intended behavior from iOS as well as Android, that take a snapshot of the application right before it is backgrounded, to be shown in the App Switcher (iOS) or "Recent App" screen (Android).
 
@@ -44,7 +44,7 @@ There are a few ways to do this, but these are the 2 most common:
 - Just before the app enters background open a new view. This is usually done with just the app logofor that. When the app is opened again, hide the screen
 - Hide the fields with sensitive information when the application is being backgrounded. Revert the operation when opening back.
 
-### iOS
+## iOS
 
 For iOS the easiest way to accomplish this is by using the methods 'sceneWillResignActive' and 'sceneDidBecomeActive' from AppDelegate/SceneDelegate.
 
@@ -106,7 +106,7 @@ This code only works for UIKit App Delegate's App lifecycle. If you chose to man
 
 Another nice trick for iOS is to blur the background. There's a nice comment on [StackOverflow](https://stackoverflow.com/a/53503787) for that.
 
-### Android
+## Android
 
 Android has native ways to add this protection, being the easiest one, showing a blank screen by specifying a [secure flag](https://developer.android.com/reference/android/view/WindowManager.LayoutParams.html#FLAG_SECURE)
 

@@ -27,7 +27,7 @@ Insecure deserialization got in [OWASP top 10](https://www.owasp.org/index.php/T
 
 So lets see how this vulnerability works, how to exploit it and how to prevent it.
 
-### Deserialization in Java and the Read Object
+## Deserialization in Java and the Read Object
 
 ```java
 package org.securitywhitepapers.deserialization;
@@ -183,7 +183,7 @@ public class UnsafeObject implements java.io.Serializable {
 }
 ```
 
-### Exploiting Unsafe Deserialization
+## Exploiting Unsafe Deserialization
 
 Now if you accept this object serialized, and an attacker sends a malicious crafter payload where the command invokes "calc.exe" this will run and a calculator will open.
 
@@ -241,7 +241,7 @@ If you create a static block on a class that is going to be deserialized, this c
 
 [![read object called](images/image-8-1.png)](images/image-8-1.png)
 
-### Protecting your code
+## Protecting your code
 
 The problem with the way java deserializes objects is that it stores in the serialized file the type of the object to be deserialized. This is how an attacker can get to the Apache Commons library for example. So we need to fixed that.
 

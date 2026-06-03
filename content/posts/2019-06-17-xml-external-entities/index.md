@@ -33,7 +33,7 @@ What most of developers don't know is that most of the XML parsers out there by 
 
 Lets start by the basics and understand the problem.
 
-### Xml Entities
+## Xml Entities
 
 XML by default has what is called an Entity. You can see this as a shortcut, or like a variable. If you need for example, to put the same value in multiple elements you can create an entity, and refer to entity in the elements, like so:
 
@@ -64,7 +64,7 @@ In the example above we are telling that the post element will have an entity ca
   
 This is called an internal entity.
 
-### External Entities
+## External Entities
 
 And since we have internal entities we also have external entities.  
 External entities get their value from an external source, like so:
@@ -99,7 +99,7 @@ And this is the XXE vulnerability.
 Since this is from the XML specification, most parsers comply with it, and do the request to the url, to get the values for the entities.  
 So with XML XXE, you can do Server Side Request Forgery (SSRF) where you manipulate server requests, Port Scanning, File Disclosure, and sometimes Remote Code Execution (RCE).
 
-#### Attacking External Entities
+## Attacking External Entities
 
 Lets get our hands dirty and test some scenarios. I'll explain the vulnerability with Java code, and at the end i'll also do a quick overview in C#  
 
@@ -173,7 +173,7 @@ This can be leveraged to get other files from the file system, as long as you kn
 
 To get RCE its harder and you need the server application to use PHP. I won't be getting in to details, just check this [link](//gardienvirtuel.ca/fr/actualites/from-xml-to-rce.php) on how it happens.
 
-### XXE in XStream
+## XXE in XStream
 
 There is also a known vulnerability in old versions of [XStream](https://x-stream.github.io/security.html) that allows you to do RCE, but this is specific to this library and its not XXE, although its with XML as well . Lets see very quickly how it works.
 
@@ -215,7 +215,7 @@ And if you run it, you will see a calculator opening. To prevent this you either
 
 And now how can you fix XXE for the other parsers?
 
-### Preventing External Entities attacks
+## Preventing External Entities attacks
 
 To prevent this vulnerability we need to disable entities. This is the [recommendation from OWASP](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.md):
 
@@ -253,7 +253,7 @@ You can find at the end of the article a project's source project **with** multi
 
 Unmarshaller from java 8 and above is secure by default.
 
-### For C\#
+## For C\#
 
 .Net framework disabled the external entities by default in version 4.5.2 so this examples only work with versions bellow.
 
@@ -279,7 +279,7 @@ namespace XXEPOC
 }
 ```
 
-### **Test it yourself**
+## **Test it yourself**
 
 You can get the source code of the project used for this article, with tests for multiple java parsers [here](https://github.com/TheSecurityVault/xxe).
 

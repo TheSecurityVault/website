@@ -28,7 +28,7 @@ lastmod: '2022-02-20T13:42:27.320Z'
 Getting right to the point: storing a token in LocalStorage is insecure.  
 It's getting more and more common to use token based authentication, specially on Single Page Applications (SPA) that need to communicate with an API. That is a good thing, and I really like the idea of JWT tokens.
 
-### Why localStorage is bad
+## Why localStorage is bad
 
 Well, when working with cookies, the golden rule is that when storing sensitive information like an auth token, or a session, the cookie should be marked as [httpOnly](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Session_Management_Cheat_Sheet.md#cookies). This means that it cannot be accessed by javascript, preventing this way an attacker from stealing the sessions from other users if they find for example an XSS attack or if a javascript dependency included in the app gets compromised.
 
@@ -36,7 +36,7 @@ So the same way we want cookies to be httpOnly (and nowadays also to have the Se
 
 SessionStorage has an identical concept, WebSQL and IndexedDB are also accessible through javascript. So where to go?
 
-### Cookies
+## Cookies
 
 Yeah, I know... You have an API and stuff and your API's shouldn't use cookies, because it's considered a bad practice.
 
@@ -46,7 +46,7 @@ You can also set the cookie as secure, which means that the cookie is being sent
 
 But sometimes cookies are not the solution...
 
-### When cookies are not the solution
+## When cookies are not the solution
 
 If you have an application that doesn't have a backend (which is not that common) you can't generate cookies. In this case you have two options:
 
@@ -55,7 +55,7 @@ If you have an application that doesn't have a backend (which is not that common
 
 If your login system is in a different domain besides the withCredentials that you need to set in the XHR requests you also need to change the CORS rules to allow the requests from the domain of the frontend.
 
-### Don't forget CSRF
+## Don't forget CSRF
 
 Not using cookies had its advantages and one of them was that you didn't have CSRF attack vectors (unless using BasicAuth). If you get back to cookies you may have this old attack vector back. But not always.
 

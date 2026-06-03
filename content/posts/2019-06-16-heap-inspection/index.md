@@ -20,7 +20,7 @@ lastmod: '2022-02-20T13:42:27.326Z'
 
 Heap Inspection is a vulnerability that most of the times developers don't care about, since it is not easy to mitigate, and most of libraries/frameworks are not prepared to handle it.
 
-### So what is Heap Inspection?
+## So what is Heap Inspection?
 
 Basically it's just when you get access to a machine and get access to process memory data. Then you can search for passwords or other sensitive information.
 
@@ -34,30 +34,30 @@ Ok, so let's see a really exploitation of this vulnerability, that has a high im
 
 A few years ago, when an attacker gained access to a Windows machine, one common task to do was to extract the users' hash password from the SAM file. Then they needed to bruteforce the hash, to retrieve the real password. This brute force could take from hours to days or years.
 
-Nowadays attackers have a much easier way to retrieve user passwords, since windows needs them to be in memory.  
+Nowadays attackers have a much easier way to retrieve user passwords, since windows needs them to be in memory.
 So Mimikatz was created. This tool is known for extracting users' passwords from memory in plaintext.
 
 [![mimikatz](images/image-23.png)](images/image-23.png)
 
 This is one of the most extreme exploitations of this vulnerability.
 
-### How to dump process memory
+## How to dump process memory
 
-Lets start by seeing how you can dump the heap of a process.  
+Lets start by seeing how you can dump the heap of a process.
 The easiest way is by using the task manager:
 
 [![process dump with process explorer](images/image.png)](images/image.png)
 
 Then you can use hex editors like HxD (in windows) to open and search the file.
 
-### Java Example
+## Java Example
 
 Lets take a look at a small java application to understand how does Heap Inspection happen, and how to prevent it.
 
-First you need to know that a String in java is usually immutable.  
+First you need to know that a String in java is usually immutable.
 What this means is that, if you have String a = "hello"; and you change a to a = "hello world" you will end up with two strings in memory. "hello" and "hello world", since the string cannot be changed.
 
-Every time you 'change' a string, a new instance is being created in memory and assigned to that variable. (we are going to see bellow the exceptions)  
+Every time you 'change' a string, a new instance is being created in memory and assigned to that variable. (we are going to see bellow the exceptions)
 The problem is that the old strings are not cleaned up.
 
 Take a look at the next example
@@ -72,7 +72,7 @@ public class OverrideString {
     public static void main(String\[\] args) {
         String s = "Im a string";
         s = "Im a new string";
-        
+
         new Scanner(System.in).next();
     }
 }
@@ -82,7 +82,7 @@ In the example above I created the string s and then overwrite its value. The sc
 
 Now we need something to dump the heap. I'm not going to use task manager, first because only works on windows, second because we have better ways to do this in java.
 
-I'm going to use a tool called [**VisualVM**](https://visualvm.github.io/download.html). You can dump the heap by code and import to VisualVM or just dump it in VisualVM which is the approach i'm going to.  
+I'm going to use a tool called [**VisualVM**](https://visualvm.github.io/download.html). You can dump the heap by code and import to VisualVM or just dump it in VisualVM which is the approach i'm going to.
 I have an example on how to do dump through source in the source code at the end of the post.
 
 You can also use jhat for example, which is a tool that comes with java installation that can be used to navigate the dumps
@@ -93,7 +93,7 @@ On the left side identify the process of your application, right click it and hi
 
 [![dump java process in visualvm](images/image-11-1.png)](images/image-11-1.png)
 
-This will generate a dump bellow the process.  
+This will generate a dump bellow the process.
 To see the objects of your app follow the next image:
 
 [![see dumped objects in visual vm
@@ -120,9 +120,9 @@ And as you can see we found two:
 
 [![strings found in dump](images/image-5-1.png)](images/image-5-1.png)
 
-We now know for sure that when 'changing' a string what happens down the hood is that a new instance is created.  
+We now know for sure that when 'changing' a string what happens down the hood is that a new instance is created.
 
-### **What about Garbage Collector?**
+## **What about Garbage Collector?**
 
 Take a look at this example:
 
@@ -136,27 +136,27 @@ public class StringLiteralNewStringAndGC {
 
     public static void main(String\[\] args) {
         doIt();
-        
+
         System.gc();
-        
-        String s4 = new String("string4"); 
-        String s5 = "string5"; 
-        
+
+        String s4 = new String("string4");
+        String s5 = "string5";
+
         char c2\[\] = {'s', 't','r','i','n','g','6'};
-        String s6 = new String(c2); 
+        String s6 = new String(c2);
         Arrays.fill(c2, '0');
-        
+
         new Scanner(System.in).next();
     }
-    
+
     private static void doIt(){
         char c\[\] = {'s', 't','r','i','n','g','1'};
-        String s = new String(c); 
+        String s = new String(c);
         Arrays.fill(c, '0');
-        
-        String s2 = "string2"; 
-        
-        String s3 = new String("string3"); 
+
+        String s2 = "string2";
+
+        String s3 = new String("string3");
     }
 }
 ```
@@ -189,7 +189,7 @@ Now for the most important part, and this is where a lot of people get it wrong.
 
 In other terms, it says that specific addresses in memory can be rewritten, that the content there is not important anymore, but the content stays in memory until it gets overwritten.
 
-Lets make sure of it. Go ahead and dump the process from the sample above through process manager.  
+Lets make sure of it. Go ahead and dump the process from the sample above through process manager.
 In Linux I believe you can use programs like gcore (i'm sorry but I didn't test it ).
 
 Now lets open the dump in an hex editor. I like to use HxD
@@ -198,12 +198,12 @@ If you do a find for the content String1 you will find it there:
 
 [![string1 in process manager dump](images/image-7-2.png)](images/image-7-2.png)
 
-So to prevent strings from staying in memory we can create a string with the new keyword with a char array as a parameter (that you need to clear), and when you don't need it set it to null (or run GC).  
-An easier way is to just use the char array and clear it afterwards.  
+So to prevent strings from staying in memory we can create a string with the new keyword with a char array as a parameter (that you need to clear), and when you don't need it set it to null (or run GC).
+An easier way is to just use the char array and clear it afterwards.
 
 This is a reason when using crypto related methods, keys are sent as byte\[\] or char\[\] and not as a String.
 
-### Preventing Heap Inspection
+## Preventing Heap Inspection
 
 Lets then see (again) how to prevent this with a char array:
 
@@ -216,7 +216,7 @@ import java.util.Scanner;
 public class ClearArray {
 
     public static void main(String\[\] args) {
-        
+
         char\[\] t2 =
         {
             'c', 'h', 'a', 'r', 'a', 'r', 'r', 'a', 'y', '2'
@@ -224,13 +224,13 @@ public class ClearArray {
 
         //this will be cleared
         Arrays.fill(t2, '0');
-     
+
         new Scanner(System.in).next();
 }
 ```
 
-In this example we are creating an array and replacing all positions with a zeros  
-  
+In this example we are creating an array and replacing all positions with a zeros
+
 Let's run it and check again the dump
 
 ```sql
@@ -247,7 +247,7 @@ Here it is :D
 
 If you need to add extra security on top of that you can use GuardedString, or SealedObject which basically keep data encrypted in memory, but GuardedString keeps the key in memory and SealedObject puts cipher management on your side, so at the end it's not much, but it's something. It adds a security layer and may get unnoticed.
 
-### **And what about WebApps?**
+## **And what about WebApps?**
 
 So this is probably the part that you are really interested...
 
@@ -278,7 +278,7 @@ public class IndexController {
     @ResponseBody
     public String parsedBody(@RequestBody User user) {
         user.cleanPassword();
-      
+
         return "";
     }
 }
@@ -313,22 +313,22 @@ select s from \[C s where s.toString() == "00000000000000"
 
 [![string not cleared in visualvm](images/image-8-2.png)](images/image-8-2.png)
 
-Looks like I did...  
+Looks like I did...
 So how can we clean that extra string? As far as I know, you can't ...
 
 Really? All of this to tell that we can't?
 
-Yes :)  
-  
+Yes :)
+
 You need to wait until these internal variables get overwritten in memory.
 
 Is this only happening because of Spring?
 
 No. This also happens with normal servlets for example. If you have a parameter in the request you are already done, because parameters are always strings. You can open a reader for the body, parse the body with an array buffer, do what you need to do, close the reader and clean the buffer. You solved the problem from your side, you still have other variables from the GlassfishServer or from the Servlets.
 
-Have in mind that even if you could just clean all the variables, if an attacker does a dump of the process in the exact moment you receive a password into a char array it will be able anyway to see it. So at the end, the best approach is to have passwords in clear text in memory as less time as possible since there is no way to completely solve this problem.  
+Have in mind that even if you could just clean all the variables, if an attacker does a dump of the process in the exact moment you receive a password into a char array it will be able anyway to see it. So at the end, the best approach is to have passwords in clear text in memory as less time as possible since there is no way to completely solve this problem.
 
-### Long story short
+## Long story short
 
 Heap inspection is really difficult to prevent, and most of times is impossible.
 

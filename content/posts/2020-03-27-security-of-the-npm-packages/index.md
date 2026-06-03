@@ -70,7 +70,7 @@ And if you run it, the ls command will be executed:
 
 [![running an npm script](images/image-1.png)](images/image-1.png)
 
-### Executing commands without the user knowing
+## Executing commands without the user knowing
 
 This is where things start to go south. You can create commands to do basically anything, but tricking an user of your module to run them is not that easy... first because they need to know the name of the script to run, and when they look at it they may find out that its doing something shady... But what if the user didn't had to run anything?
 
@@ -97,13 +97,13 @@ Yes, that is possible due to the default script hooks available by NPM. The foll
 
 We can see some interesting callbacks here: **preinstall** and **install**. This hooks will run before installing the package, and after installing it (respectively). If we add the ls command on the install hook, everytime an user installs the package the ls command will run. Can you see the possible security problems here?
 
-### Adding Javascript to the mix
+## Adding Javascript to the mix
 
 One of the things that Javascript does quite well is the sandbox. Javascript has a really secure sandbox, preventing you from accessing for example the FileSystem. On the other side, Node "breaks" all of this security, so you can access the filesystem or even execute commands through Node's API.
 
 Instead of just running OS commands (which is also good) you can leverage Javascript with the Node's API to have a more friendly language (well, at least for me :) )to write some malicious code. At the end you can call your script through node in the install hook.
 
-### Some NPM Statistics
+## Some NPM Statistics
 
 This already is a bit (a lot) scary, and thinking that there are more than one million packages and billions of downloads monthly gets even darker.
 
@@ -113,7 +113,7 @@ You may be carefull when installing a package, and even review the source code o
 
 The open source community is something awesome both for individuals and for companies, its a huge help for all developers, and everybody should contribute to it. But it is also a giant attack vector for people with bad intentions.
 
-### Getting into the packages and dependencies
+## Getting into the packages and dependencies
 
 Lets see a real example, and understand the implications of the dependencies of a module.
 
@@ -133,7 +133,7 @@ npm install --save express@4.16.2
 
 As you can see from NPM's output, it installed 51 packages. And from my stats I god around 22 000 lines of code. Have in mind that this is not a problem just for NPM, it is for all package manager all across (specially) the open source community.
 
-### The .lock file and the package versions
+## The .lock file and the package versions
 
 I forced NPM to install a specific version, and by the time of this writing the actual version was 4.17.1. Let's tell in the package json that it can install from 4.16.2 and newer version:
 
@@ -163,7 +163,7 @@ As we just saw, NPM uses the lock file to get the exact versions to install. A m
 
 You can create a package that seems to be a legitime package with some nice functionalities but that has a dependency of another package which has some kind of vulnerability. Most of the times if dependencies are checked, only the direct dependencies are reviewed.
 
-### "Stealing" a package
+## "Stealing" a package
 
 Another problem is if an attacker manages to get control of a legitimate package which has already some reputation. This can happen due to some different reasons:
 
@@ -172,13 +172,13 @@ Another problem is if an attacker manages to get control of a legitimate package
 
 Check out my post about [hardcoded credentials](https://thesecurityvault.com/appsec/hardcoded-passwords/) for more info.
 
-### NPM And Source Control
+## NPM And Source Control
 
 Another issue is that you can do a version bump to your package, commit it to lets say, github, and there you'll see a tag with the new version, and then, do some more changes in the code locally and build/publish it to NPM. What this means is that you can bump a new version push the source code and then, with new commits, change that "version" code adding malicious code and send it to NPM. This is a common attack technique being widely used.
 
 If you want to review the source code of a package never do it on the official repo, install it first on a machine (without the NPM hooks) and check the source in the NPM package.
 
-### Security Measures
+## Security Measures
 
 To wrap up everything that was talked in this post, these are the security precautions you should have when working with NPM packages:
 

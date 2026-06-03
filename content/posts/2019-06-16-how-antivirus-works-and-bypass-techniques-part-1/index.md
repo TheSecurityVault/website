@@ -25,7 +25,7 @@ lastmod: '2022-02-20T13:42:27.331Z'
 
 This time i'm not going to talk about a specific vulnerability. Instead I'm going to show how attackers disguise malware in order to bypass antivirus.
 
-### Antivirus 101
+## Antivirus 101
 
 To start, we need to understand how AV works.  
 I'm just going to touch on the basics, but they should be enough to understand the logic behind all of this.
@@ -40,7 +40,7 @@ The biggest disadvantage of this approach is that AV vendors need to know the ma
 This is why they usually use what is called HoneyPots. A HoneyPot is a fake vulnerable public machine that is expected to be exploited. From the exploit the AV vendor can find new malware, and new techniques, then just need to add them to the AV.  
 Nowadays a lot of attackers also use HoneyPots, to mess with other attackers, to find themselves new malware, to learn new stuff, etc.
 
-#### ClamAV
+## ClamAV
 
 To reallyunderstand how an antivirus operates we need to see one working  
 I'm going to use ClamAV to do demos since it is a free and opensource antivirus, and its awesome for testing this kind of stuff.
@@ -65,7 +65,7 @@ cd /tmp
 wget https://github.com/thesecurityvault/ILOVEYOU/blob/master/LOVE-LETTER-FOR-YOU.TXT.vbs
 ```
 
-##### ClamAV Basics
+## ClamAV Basics
 
 Since we need to understand how AV's work I'm going to spend some time explaining ClamAV. Its opensource, there's (good) public documentation, and its really nice to see it working :)
 
@@ -108,7 +108,7 @@ We get the following results:
 
 [![clamav results for ILOVEYOU](images/image-12.png)](images/image-12.png)
 
-##### ClamAV Signatures
+## ClamAV Signatures
 
 Ok, so ClamAV identified ILOVEYOU worm, but how?  
 Lets see which signatures identified the virus  
@@ -139,7 +139,7 @@ The interesting part is the "DECODED SIGNATURE" section
 This is the actual human readable ClamAV signature for the ILOVEYOU worm. In other words this is how ClamAV identifies the malicious file.  
 If you look at the code you will find this snippet in line 329.
 
-##### Bypassing ClamAV signature
+## Bypassing ClamAV signature
 
 So if the AV uses this line to identify ILOVEYOU what about if we change it?  
 Replace that line (329) by the following two lines:
@@ -173,7 +173,7 @@ If we now upload the changed version lets see what happens:
 
 Here we have it. 38 out of 57. Signatures are different on other AV's and that's why we could only bypass ClamAV.
 
-##### ClamAV & Eicar
+## ClamAV & Eicar
 
 Lets test a different scenario. For this we are going to use the EICAR test file. This is nothing more then a text file defined as a standard for testing AV's. This means that every compliant AV vendor added signatures for this file in their AV's even not being malicious. Again, is a way of testing if the AV is working properly.
 
@@ -223,7 +223,7 @@ Running a new scan, its not flagged anymore:
 
 [![bypassed eicar on clamav](images/image-20.png)](images/image-20.png)
 
-#### Why signatures are bad
+## Why signatures are bad
 
 Using file hash as a signature may be quite effective if you don't have access to the code to manipulate it.
 
@@ -239,7 +239,7 @@ So I downloaded the code and compiled it with Visual Studio. For my surprise Cla
 
 Lets try to test this with another real and nice scenario then.
 
-#### Bypassing Meterpreter signature
+## Bypassing Meterpreter signature
 
 (if you don't know what is [metasploit](https://www.metasploit.com/) and meterpreter you don't know what you are missing)
 
