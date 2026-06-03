@@ -119,18 +119,48 @@
       const img = item.preview
         ? `<a href="${item.url}" class="post-card-img-link" tabindex="-1" aria-hidden="true"><img src="${item.preview}" alt="" class="post-card-img" loading="lazy"></a>`
         : '';
-      const summary = stripTags(item.summary || '').slice(0, 130);
+      const excerpt = buildExcerpt(item, query);
       return `<article class="post-card">
         ${img}
         <div class="post-card-body">
           <h3 class="post-card-title"><a href="${item.url}">${escapeHtml(item.title)}</a></h3>
-          <p class="post-card-excerpt">${escapeHtml(summary)}</p>
+          <p class="post-card-excerpt">${excerpt}</p>
           <div class="post-card-meta"><a href="${item.url}" class="btn btn--ghost btn--sm">Read more →</a></div>
         </div>
       </article>`;
     }).join('');
 
     container.innerHTML = html;
+  }
+
+  // Find the query term in content and return a highlighted snippet.
+  // Falls back to the article summary when no match is found in body text.
+  function buildExcerpt(item, query) {
+    const term = query.trim().toLowerCase();
+    const content = stripTags(item.content || '');
+    const idx = content.toLowerCase().indexOf(term);
+
+    if (idx !== -1) {
+      const snippetRadius = 120;
+      const start = Math.max(0, idx - snippetRadius);
+      const end = Math.min(content.length, idx + term.length + snippetRadius);
+      const prefix = start > 0 ? '…' : '';
+      const suffix = end < content.length ? '…' : '';
+      const snippet = content.slice(start, end);
+      // Highlight all occurrences of the term (case-insensitive)
+      const highlighted = snippet.replace(
+        new RegExp('(' + escapeRegExp(term) + ')', 'gi'),
+        '<mark>$1</mark>'
+      );
+      return prefix + highlighted + suffix;
+    }
+
+    // Term not found verbatim — show summary (lunr may have matched a stemmed form)
+    return escapeHtml(stripTags(item.summary || '').slice(0, 250));
+  }
+
+  function escapeRegExp(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   // ─── Helpers ─────────────────────────────────────────────────────────────────

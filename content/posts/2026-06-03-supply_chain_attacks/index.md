@@ -43,7 +43,7 @@ There's no single control that stops all of this. The threat surface is too broa
 
 Here's what I've been implementing.
 
-## Dev Containers
+### Dev Containers
 
 This is, by a wide margin, the most impactful control in the stack.
 
@@ -63,7 +63,7 @@ The developer experience with dev containers is genuinely good, and that matters
 
 From a scaling perspective, dev containers are exceptional. The configuration lives in the repository, so every developer gets the same hardened environment without any per-machine setup effort. Security updates and configuration changes ship as pull requests.
 
-## Dependency Scanning
+### Dependency Scanning
 
 Dev containers dramatically reduce what a malicious package can access. But they don't prevent the package from running in the first place. That's where [Aikido SafeChain](https://github.com/AikidoSec/safe-chain/) comes in.
 
@@ -79,7 +79,7 @@ We run SafeChain on developer machines, inside dev containers, and in CI/CD pipe
 
 The combination of SafeChain and dev containers creates good layered coverage. If a malicious package somehow slips past SafeChain's detection, the dev container limits what it can steal. If the container isolation is somehow bypassed, SafeChain may have already blocked the initial infection. Neither layer depends on the other to work.
 
-## Watchtower: VS Code Security Scanner
+### Watchtower: VS Code Security Scanner
 
 SafeChain and dev containers handle the dependency hijack vector well. The malicious project vector (fake interview repos, poisoned coding assessments) needs a different kind of attention for detection, because the threat is embedded in the project structure itself before any package is installed.
 
@@ -105,7 +105,7 @@ The intended workflow maps directly to how VS Code's trust model works. When you
 
 This fits naturally into the dev container workflow: open the project in restricted mode on the host, run Watchtower, verify it's clean, then reopen in the container for actual development. The scanning happens before anything executes. Although the ideal flow requires developers to start the project in restricted mode, Watchtower's presence and the visibility of its findings create a strong incentive to follow that flow. The scan runs independently if you're in a untrusted workspace, so even if you forget to open in restricted mode, you'll still get alerted to any malicious configurations before you run them. Not perfect, but a meaningful improvement over blind trust.
 
-## Application Restriction on Host Machines
+### Application Restriction on Host Machines
 
 The first two layers focus on the container environment. The third focuses on the host itself, limiting the damage if something escapes the container or finds a different path to execution.
 

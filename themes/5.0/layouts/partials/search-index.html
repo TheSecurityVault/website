@@ -1,14 +1,14 @@
 <script>
   window.searchIndex = {
-  { { range site.RegularPages } }
+  { { - range site.RegularPages } }
   "{{ .Permalink }}": {
     "title": "{{ .Title }}",
       "tags": [{{ range .Params.Tags }} "{{ . }}", {{ end }}],
-  "content": { { .Content | plainify } },
-  "url": "{{ .Permalink }}",
-    "summary": "{{ truncate 200 .Summary }}",
-      "preview": "{{ .Permalink }}{{ .Params.preview }}"
+  "content": "{{ .Content | plainify }}",
+    "url": "{{ .Permalink }}",
+      "summary": "{{ .Summary | plainify | truncate 200 }}",
+        "preview": "{{ .Permalink }}{{ .Params.preview }}"
   },
-  { { end } }
-}
+  { { - end } }
+};
 </script>

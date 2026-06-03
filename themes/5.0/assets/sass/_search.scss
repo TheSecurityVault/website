@@ -40,3 +40,12 @@
   color: $color-muted;
   font-size: 1rem;
 }
+
+// ─── Search result highlight ──────────────────────────────────────────────────
+.post-card-excerpt mark {
+  background: rgba($color-primary, .18);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 2px;
+  font-style: normal;
+}
