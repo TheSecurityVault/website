@@ -1,0 +1,33 @@
+@import 'variables';
+
+// Hugo syntax highlighting override – dark theme for code blocks
+.highlight {
+  .lnt {
+    color: #4A5568;
+    user-select: none;
+    margin-right: 4px;
+  }
+
+  .ln {
+    color: #4A5568;
+    user-select: none;
+    margin-right: 12px;
+  }
+}
+
+// Print styles
+@media print {
+
+  .nav,
+  .footer {
+    display: none;
+  }
+
+  .single-nav {
+    display: none;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+}

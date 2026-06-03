@@ -1,0 +1,294 @@
+@import 'variables';
+@import 'mixins';
+
+// ─── Navbar ───────────────────────────────────────────────────────────────────
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: $nav-height;
+  background: rgba($color-white, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color $transition, box-shadow $transition;
+
+  &--scrolled {
+    border-bottom-color: $color-border;
+    box-shadow: $shadow-sm;
+  }
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+// Brand
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: $color-dark;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  flex-shrink: 0;
+
+  svg {
+    color: $color-primary;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: $color-primary;
+  }
+}
+
+// Menu
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link {
+  padding: 6px 12px;
+  color: $color-muted;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: $r-sm;
+  transition: color $transition, background $transition;
+  text-decoration: none;
+
+  &:hover {
+    color: $color-dark;
+    background: $color-bg;
+  }
+}
+
+.nav-search-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid $color-border;
+  border-radius: $r-sm;
+  background: transparent;
+  color: $color-muted;
+  cursor: pointer;
+  transition: all $transition;
+  margin-left: 8px;
+
+  &:hover {
+    color: $color-dark;
+    border-color: $color-primary;
+    background: $color-tag-bg;
+  }
+}
+
+// Mobile toggle
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid $color-border;
+  border-radius: $r-sm;
+  cursor: pointer;
+  padding: 8px;
+
+  span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: $color-text;
+    border-radius: 2px;
+    transition: transform $transition, opacity $transition;
+  }
+
+  @include md {
+    display: flex;
+  }
+}
+
+@include md {
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: $nav-height;
+    left: 0;
+    right: 0;
+    background: $color-white;
+    border-bottom: 1px solid $color-border;
+    padding: 12px 24px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    box-shadow: $shadow-md;
+
+    &--open {
+      display: flex;
+    }
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: 10px 12px;
+  }
+
+  .nav-search-btn {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: $r-sm;
+    height: auto;
+
+    &::after {
+      content: 'Search';
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: $color-muted;
+    }
+  }
+}
+
+// Spacer so content isn't hidden behind fixed nav
+body {
+  padding-top: $nav-height;
+}
+
+// ─── Search Overlay ───────────────────────────────────────────────────────────
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba($color-dark, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 80px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity $transition;
+
+  &--open {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.search-overlay-inner {
+  width: 100%;
+  max-width: 640px;
+  background: $color-white;
+  border-radius: $r-lg;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+
+  @include sm {
+    margin: 0 16px;
+    border-radius: $r-md;
+  }
+}
+
+.search-overlay-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid $color-border;
+  color: $color-muted;
+}
+
+.search-overlay-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: $font-sans;
+  color: $color-dark;
+  background: transparent;
+
+  &::placeholder {
+    color: $color-muted;
+  }
+}
+
+.search-overlay-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: $color-bg;
+  border: none;
+  border-radius: $r-sm;
+  color: $color-muted;
+  cursor: pointer;
+  transition: all $transition;
+  flex-shrink: 0;
+
+  &:hover {
+    color: $color-dark;
+    background: $color-border;
+  }
+}
+
+.search-overlay-results {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 8px 0;
+
+  .search-result-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: $color-text;
+    transition: background $transition;
+
+    &:hover {
+      background: $color-bg;
+    }
+  }
+
+  .search-result-img {
+    width: 60px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: $r-sm;
+    flex-shrink: 0;
+  }
+
+  .search-result-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: $color-dark;
+    margin-bottom: 2px;
+  }
+
+  .search-result-summary {
+    font-size: 0.8rem;
+    color: $color-muted;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

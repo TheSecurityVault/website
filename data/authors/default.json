@@ -1,7 +1,72 @@
 {
   "name": "Luís Fontes",
   "username": "luisfontes19",
-  "bio": "Security professional with a background in application and blockchain security. Previously reviewed critical source code for vulnerabilities at major enterprises while at Checkmarx, and later helped secure smart contracts and decentralized apps at RootstockLabs. For the past three years, doing product security at Xapo Bank but contributing across the full security spectrum. Occasional speaker, tech nerd, and AI enthusiast.",
+  "bio": "I've been writing code for more than 20 years, and at some point that passion for building things became an obsession with making them secure — across web apps, smart contracts, and everything in between. I still code constantly, still find new ways to harden systems, and still haven't run out of side projects. This blog is where both worlds collide.",
   "avatar": "/img/luisfontes19.jpeg",
-  "jobTitle": "Application Security Engineer | eMAPT | eWPTXv2"
+  "jobTitle": "Principal Product Security Engineer",
+  "projects": [
+    {
+      "name": "OrgSec Guide",
+      "url": "https://luisfontes19.github.io/orgsec-guide/",
+      "image": "https://raw.githubusercontent.com/luisfontes19/orgsec-guide/main/src/images/banner.png",
+      "description": "A comprehensive checklist and guide for organizations looking to implement a robust cybersecurity program."
+    },
+    {
+      "name": "XXExploiter",
+      "url": "https://github.com/luisfontes19/xxexploiter",
+      "image": "https://raw.githubusercontent.com/luisfontes19/xxexploiter/master/banner.png",
+      "description": "Tool to help exploit XXE vulnerabilities. Generates XML payloads and automatically starts a server to serve DTDs or perform data exfiltration."
+    },
+    {
+      "name": "VSCode Swissknife",
+      "url": "https://marketplace.visualstudio.com/items?itemName=luisfontes19.vscode-swissknife",
+      "image": "https://github.com/luisfontes19/vscode-swissknife/raw/master/data/swissknife_banner.png",
+      "description": "Scriptable VS Code extension to generate or manipulate data. Stop pasting sensitive data into webpages."
+    },
+    {
+      "name": "DamnVulnerableCryptoApp",
+      "imagePosition": "center 20%",
+      "url": "https://github.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp",
+      "image": "https://raw.githubusercontent.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp/master/frontend/src/Images/logo.png",
+      "description": "An app with intentionally insecure crypto. Perfect for testing and exploiting weak cryptographic implementations and learning crypto without diving deep into the math."
+    },
+    {
+      "name": "Watchtower",
+      "url": "https://github.com/luisfontes19/watchtower",
+      "image": "https://raw.githubusercontent.com/luisfontes19/watchtower/refs/heads/main/data/images/logo.png",
+      "imagePosition": "center 20%",
+      "description": "VS Code extension that scans your workspace for malicious configurations, invisible Unicode threats, and dangerous IDE attack vectors — fully local, fully open source."
+    },
+    {
+      "name": "Warden",
+      "url": "https://luisfontes19.github.io/warden/",
+      "image": "https://github.com/luisfontes19/warden/raw/master/docs/assets/images/mascot.png",
+      "imagePosition": "center 15%",
+      "description": "Enforce file-based policies on managed machines by automatically detecting and correcting config files that drift from approved values."
+    },
+    {
+      "name": "Coup Sheet",
+      "url": "https://luisfontes19.github.io/coup-sheet/",
+      "image": "/img/coup-sheet.jpg",
+      "description": "If you like the board game Coup as much as I do, you'll find this sheet super helpful."
+    },
+    {
+      "name": "MirageVM",
+      "url": "",
+      "image": "/img/miragevm.png",
+      "description": "JavaScript virtual machine for code obfuscation. Protects sensitive client-side logic with custom bytecode through a low-level language that supports all JavaScript features. (Private project)"
+    },
+    {
+      "name": "How To Test Secrets",
+      "url": "https://github.com/luisfontes19/how-to-test-secrets",
+      "image": "https://opengraph.githubassets.com/1/luisfontes19/how-to-test-secrets",
+      "description": "A visual, interactive cheat-sheet for testing whether leaked API keys and secrets are still valid — pick a service and get a ready-to-run command."
+    },
+    {
+      "name": "hash-identifier-js",
+      "url": "https://github.com/luisfontes19/hash-identifier-js",
+      "image": "https://opengraph.githubassets.com/1/luisfontes19/hash-identifier-js",
+      "description": "JavaScript port of hash-identifier. Identifies the hashing algorithm used to generate any supplied hash value."
+    }
+  ]
 }

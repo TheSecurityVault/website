@@ -1,0 +1,53 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
+
+{{- $desc := "" -}}
+{{- if .Description -}}{{- $desc = .Description -}}{{- else if .IsPage -}}{{- $desc = .Summary | plainify | truncate 160
+-}}{{- else -}}{{- $desc = .Site.Params.description -}}{{- end -}}
+<meta name="description" content="{{ $desc }}" />
+{{ with .Params.keywords }}
+<meta name="keywords" content='{{ delimit . ", " }}' />{{ end }}
+<meta name="author" content="{{ $.Site.Params.author }}">
+
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{- if .IsPage | not }}
+{{- with .Paginator }}
+{{- if gt .PageNumber 1 }}
+<meta name="robots" content="noindex, follow">{{ end }}
+{{- if .HasPrev }}
+<link rel="prev" href="{{ .Prev.URL | absURL }}">{{ end }}
+{{- if .HasNext }}
+<link rel="next" href="{{ .Next.URL | absURL }}">{{ end }}
+{{- end }}
+{{- end }}
+
+<link rel="icon" type="image/svg+xml" href="{{ "/img/icon.svg" | absURL }}">
+<link rel="icon" type="image/x-icon" href="{{ "/favicon/favicon.ico" | absURL }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "/favicon/favicon-32x32.png" | absURL }}">
+<link rel="icon" type="image/png" sizes="16x16" href="{{ "/favicon/favicon-16x16.png" | absURL }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ "/favicon/apple-touch-icon.png" | absURL }}">
+<link rel="manifest" href="{{ "/favicon/site.webmanifest" | absURL }}">
+
+{{ partial "site_schema.html" . }}
+{{ partial "opengraph.html" . }}
+{{ partial "twitter_cards.html" . }}
+
+{{ with .OutputFormats.Get "rss" -}}
+{{ printf `
+<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+{{ end -}}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap"
+  rel="stylesheet">
+
+{{- $options := (dict "targetPath" "css/styles.css" "outputStyle" "compressed" "enableSourceMap" "false") -}}
+{{ $mainSassFile := "sass/style.scss" }}
+{{- $styles := resources.Get $mainSassFile | resources.ExecuteAsTemplate $mainSassFile . | css.Sass $options |
+resources.Fingerprint "sha512" }}
+<link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}">

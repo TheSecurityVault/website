@@ -1,0 +1,41 @@
+@import 'variables';
+
+// ─── 404 ─────────────────────────────────────────────────────────────────────
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px - 200px);
+  padding: 80px 24px;
+}
+
+.not-found-inner {
+  text-align: center;
+}
+
+.not-found-code {
+  display: block;
+  font-size: clamp(5rem, 20vw, 10rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: $color-border;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.not-found-title {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  margin-bottom: 12px;
+}
+
+.not-found-sub {
+  color: $color-muted;
+  margin-bottom: 32px;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

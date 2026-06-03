@@ -1,0 +1,204 @@
+@import 'variables';
+@import 'mixins';
+
+// ─── Archive / Blog list ──────────────────────────────────────────────────────
+.archive {
+  padding: 60px 0 100px;
+
+  @include sm {
+    padding: 40px 0 64px;
+  }
+}
+
+.archive-header {
+  margin-bottom: 48px;
+}
+
+.archive-title {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.archive-sub {
+  color: $color-muted;
+  font-size: 1rem;
+}
+
+// ─── Pagination ───────────────────────────────────────────────────────────────
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid $color-border;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 20px;
+  border: 1px solid $color-border;
+  border-radius: $r-full;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $color-text;
+  text-decoration: none;
+  transition: all $transition;
+
+  &:hover {
+    border-color: $color-primary;
+    color: $color-primary;
+    background: $color-tag-bg;
+  }
+
+  &--disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.pagination-info {
+  font-size: 0.875rem;
+  color: $color-muted;
+}
+
+// ─── About page ───────────────────────────────────────────────────────────────
+.about-hero {
+  display: flex;
+  gap: 64px;
+  align-items: flex-start;
+  padding: 20px 0 60px;
+
+  @include md {
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.about-hero-img-wrap {
+  flex-shrink: 0;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid $color-border;
+
+  @include sm {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+.about-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-hero-name {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.about-hero-role {
+  font-size: 1rem;
+  color: $color-primary;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.about-hero-bio {
+  font-size: 1rem;
+  color: $color-muted;
+  line-height: 1.75;
+  max-width: 600px;
+  margin-bottom: 24px;
+}
+
+.about-hero-social {
+  display: flex;
+  gap: 10px;
+
+  @include md {
+    justify-content: center;
+  }
+}
+
+// ─── About extended sections ──────────────────────────────────────────────────
+.about-section {
+  padding: 48px 0 60px;
+  border-top: 1px solid $color-border;
+}
+
+.about-section-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+
+  @include md {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+.about-block-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+
+.about-block-text {
+  font-size: 1rem;
+  color: $color-muted;
+  line-height: 1.75;
+  margin-bottom: 16px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.about-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.about-stack-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.about-stack-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $color-muted;
+}
+
+.about-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.about-tag {
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 4px 14px;
+  background: $color-tag-bg;
+  color: $color-tag-text;
+  border-radius: $r-full;
+  border: 1px solid rgba(13, 148, 136, 0.2);
+}

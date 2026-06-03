@@ -1,0 +1,58 @@
+{{ define "main" }}
+{{ $paginator := .Paginate (where (where site.RegularPages "Type" "in" site.Params.mainSections) "Draft" false) 9 }}
+
+<div class="archive">
+  <div class="container">
+    <header class="archive-header">
+      <h1 class="archive-title">{{ if .IsHome }}All Posts{{ else }}{{ .Title }}{{ end }}</h1>
+      <p class="archive-sub">{{ len (where (where site.RegularPages "Type" "in" site.Params.mainSections) "Draft" false)
+        }} articles on application security, vulnerabilities and research</p>
+    </header>
+
+    <div class="posts-grid">
+      {{ range $paginator.Pages }}
+      {{ $postPermalink := .Permalink }}
+      <article class="post-card">
+        {{ with .Params.preview }}
+        <a href="{{ $postPermalink }}" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="{{ $postPermalink }}{{ . }}" alt="{{ $.Title }}" class="post-card-img" loading="lazy">
+        </a>
+        {{ end }}
+        <div class="post-card-body">
+          {{ with .Params.category }}
+          <span class="post-card-tag">{{ . }}</span>
+          {{ end }}
+          <h3 class="post-card-title"><a href="{{ $postPermalink }}">{{ .Title }}</a></h3>
+          <p class="post-card-excerpt">{{ .Summary | truncate 130 }}</p>
+          <div class="post-card-meta">
+            <time datetime="{{ dateFormat " 2006-01-02" .Date }}">{{ dateFormat "Jan 2, 2006" .Date }}</time>
+            <span>·</span>
+            <span>{{ .ReadingTime }} min read</span>
+          </div>
+        </div>
+      </article>
+      {{ end }}
+    </div>
+
+    <!-- Pagination -->
+    {{ if gt $paginator.TotalPages 1 }}
+    <nav class="pagination" aria-label="Pagination">
+      {{ if $paginator.HasPrev }}
+      <a href="{{ $paginator.Prev.URL }}" class="pagination-btn">← Newer</a>
+      {{ else }}
+      <span class="pagination-btn pagination-btn--disabled">← Newer</span>
+      {{ end }}
+
+      <span class="pagination-info">Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}</span>
+
+      {{ if $paginator.HasNext }}
+      <a href="{{ $paginator.Next.URL }}" class="pagination-btn">Older →</a>
+      {{ else }}
+      <span class="pagination-btn pagination-btn--disabled">Older →</span>
+      {{ end }}
+    </nav>
+    {{ end }}
+  </div>
+</div>
+
+{{ end }}

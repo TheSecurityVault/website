@@ -1,0 +1,144 @@
+{{ define "main" }}
+{{ $author := index .Site.Data.authors "default" }}
+
+<!-- ─── HERO / ABOUT ─── -->
+<section class="hero" id="about">
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <h1 class="hero-name">{{ $author.name }}</h1>
+      <p class="hero-role">{{ $author.jobTitle }}</p>
+      <p class="hero-bio">{{ $author.bio }}</p>
+
+      <div class="hero-social">
+        {{ range .Site.Menus.social }}
+        <a href="{{ .URL }}" class="hero-social-link" target="_blank" rel="noopener noreferrer"
+          aria-label="{{ .Name }}">
+          {{- if eq .Identifier "github" -}}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path
+              d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+            </path>
+          </svg>
+          {{- else if eq .Identifier "linkedin" -}}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+          {{- else if eq .Identifier "rss" -}}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 11a9 9 0 0 1 9 9"></path>
+            <path d="M4 4a16 16 0 0 1 16 16"></path>
+            <circle cx="5" cy="19" r="1"></circle>
+          </svg>
+          {{- else -}}
+          <span>{{ .Name }}</span>
+          {{- end -}}
+        </a>
+        {{ end }}
+      </div>
+
+      <div class="hero-cta">
+        <a href="/posts/" class="btn btn--primary">Read the Blog</a>
+        <a href="/#projects" class="btn btn--ghost">View Projects</a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <div class="hero-image-ring">
+        <img src="{{ .Site.BaseURL }}{{ $author.avatar }}" alt="{{ $author.name }}" class="hero-avatar" width="320"
+          height="320">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROJECTS ─── -->
+<section class="section projects" id="projects">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-sub">Some of the tools and resources I've built</p>
+    </div>
+
+    <div class="projects-grid">
+      {{ range $author.projects }}
+      {{ if .url }}
+      <a href="{{ .url }}" class="project-card" target="_blank" rel="noopener noreferrer">
+        {{ else }}
+        <div class="project-card project-card--private">
+          {{ end }}
+          <div class="project-card-img-wrap">
+            <img src="{{ .image }}" alt="{{ .name }}" class="project-card-img" loading="lazy"{{ with .imagePosition }} style="object-position: {{ . }}"{{ end }}>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title">{{ .name }}</h3>
+            {{ with .description }}
+            <p class="project-card-desc">{{ . }}</p>
+            {{ end }}
+          </div>
+          <div class="project-card-footer">
+            {{ if .url }}
+            <span class="project-card-cta">View Project</span>
+            <svg class="project-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+            {{ else }}
+            <span class="project-card-private">Private</span>
+            {{ end }}
+          </div>
+          {{ if .url }}
+      </a>
+      {{ else }}
+    </div>
+    {{ end }}
+    {{ end }}
+  </div>
+  </div>
+</section>
+
+<!-- ─── BLOG ─── -->
+<section class="section blog" id="blog">
+  <div class="container">
+    <div class="section-head section-head--row">
+      <div>
+        <h2 class="section-title">Latest Posts</h2>
+        <p class="section-sub">Security research, deep dives and tutorials</p>
+      </div>
+      <a href="/posts/" class="btn btn--outline">View all posts →</a>
+    </div>
+
+    <div class="posts-grid">
+      {{ $posts := where (where site.RegularPages "Type" "in" site.Params.mainSections) "Draft" false }}
+      {{ range first 6 $posts }}
+      {{ $postPermalink := .Permalink }}
+      <article class="post-card">
+        {{ with .Params.preview }}
+        <a href="{{ $postPermalink }}" class="post-card-img-link" tabindex="-1" aria-hidden="true">
+          <img src="{{ $postPermalink }}{{ . }}" alt="{{ $.Title }}" class="post-card-img" loading="lazy">
+        </a>
+        {{ end }}
+        <div class="post-card-body">
+          {{ with .Params.category }}
+          <span class="post-card-tag">{{ . }}</span>
+          {{ end }}
+          <h3 class="post-card-title"><a href="{{ $postPermalink }}">{{ .Title }}</a></h3>
+          <p class="post-card-excerpt">{{ .Summary | truncate 130 }}</p>
+          <div class="post-card-meta">
+            <time datetime="{{ .Date.Format " 2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time>
+            <span>·</span>
+            <span>{{ .ReadingTime }} min read</span>
+          </div>
+        </div>
+      </article>
+      {{ end }}
+    </div>
+  </div>
+</section>
+
+{{ end }}

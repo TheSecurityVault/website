@@ -1,0 +1,42 @@
+@import 'variables';
+@import 'mixins';
+
+// ─── Search page ─────────────────────────────────────────────────────────────
+.search-page-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border: 1px solid $color-border;
+  border-radius: $r-md;
+  background: $color-white;
+  margin-bottom: 48px;
+  color: $color-muted;
+  transition: border-color $transition, box-shadow $transition;
+
+  &:focus-within {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, .12);
+  }
+}
+
+.search-page-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: $font-sans;
+  color: $color-dark;
+  background: transparent;
+
+  &::placeholder {
+    color: $color-muted;
+  }
+}
+
+.search-empty {
+  text-align: center;
+  padding: 64px 0;
+  color: $color-muted;
+  font-size: 1rem;
+}

@@ -1,0 +1,174 @@
+@import 'variables';
+@import 'mixins';
+
+// ─── Reset ───────────────────────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: $nav-height + 16px;
+}
+
+body {
+  font-family: $font-sans;
+  font-size: 16px;
+  line-height: 1.75;
+  color: $color-text;
+  background-color: $color-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: $color-primary;
+  text-decoration: none;
+  transition: color $transition;
+
+  &:hover {
+    color: $color-primary-h;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-sans;
+  color: $color-dark;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+// ─── Utilities ───────────────────────────────────────────────────────────────
+.container {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: 0 $gap;
+}
+
+.section {
+  padding: 96px 0;
+
+  @include md {
+    padding: 64px 0;
+  }
+
+  @include sm {
+    padding: 48px 0;
+  }
+}
+
+.section-head {
+  margin-bottom: 48px;
+
+  @include sm {
+    margin-bottom: 32px;
+  }
+}
+
+.section-head--row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+
+  @include sm {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.section-sub {
+  color: $color-muted;
+  font-size: 1rem;
+}
+
+// ─── Buttons ─────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: $r-full;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: $font-sans;
+  cursor: pointer;
+  transition: all $transition;
+  white-space: nowrap;
+  border: 2px solid transparent;
+  text-decoration: none;
+
+  &--primary {
+    background: $color-primary;
+    color: #fff;
+
+    &:hover {
+      background: $color-primary-h;
+      color: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba($color-primary, .35);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $color-text;
+    border-color: $color-border;
+
+    &:hover {
+      border-color: $color-primary;
+      color: $color-primary;
+      background: $color-tag-bg;
+    }
+  }
+
+  &--outline {
+    background: transparent;
+    color: $color-primary;
+    border-color: $color-primary;
+
+    &:hover {
+      background: $color-primary;
+      color: #fff;
+    }
+  }
+
+  &--sm {
+    padding: 6px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+// ─── Tags / badges ───────────────────────────────────────────────────────────
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  background: $color-tag-bg;
+  color: $color-tag-text;
+  border-radius: $r-full;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

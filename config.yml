@@ -1,7 +1,7 @@
 baseURL: https://thesecurityvault.com
 languageCode: en-us
 title: The Security Vault
-theme: "4.0"
+theme: "5.0"
 copyright: Copyright 2019-{year} The Security Vault. All rights reserved.
 enableRobotsTXT: true
 postsFolder: posts
@@ -25,6 +25,8 @@ permalinks:
   categories: /:slug/
 urlRewrite:
   /category/(.*?)/(.*): /$1/$2
+pagination:
+  pagerSize: 9
 outputs:
   home:
     - RSS
@@ -66,19 +68,3 @@ menu:
     - identifier: rss
       name: Rss
       url: https://thesecurityvault.com/feed
-  ads:
-    - identifier: 0-OrgSec Guide
-      url: https://luisfontes19.github.io/orgsec-guide/
-      pre: https://raw.githubusercontent.com/luisfontes19/orgsec-guide/main/src/images/banner.png
-    - identifier: 1-XXExploiter
-      url: https://github.com/luisfontes19/xxexploiter
-      pre: https://raw.githubusercontent.com/luisfontes19/xxexploiter/master/banner.png
-    - identifier: 2-Swissknife
-      url: https://marketplace.visualstudio.com/items?itemName=luisfontes19.vscode-swissknife
-      pre: https://github.com/luisfontes19/vscode-swissknife/raw/master/data/swissknife_banner.png
-    - identifier: 3-CSRFER
-      url: https://github.com/luisfontes19/CSRFER
-      pre: /img/csrfer.png
-    - identifier: 5-DamnVulnerableCryptoApp
-      url: https://github.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp
-      pre: https://raw.githubusercontent.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp/master/frontend/src/Images/logo.png

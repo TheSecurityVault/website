@@ -1,0 +1,42 @@
+{{ define "main" }}
+
+<div class="archive">
+  <div class="container">
+    <header class="archive-header">
+      <h1 class="archive-title">Search</h1>
+      <p class="archive-sub">Find articles by keyword</p>
+    </header>
+
+    <div class="search-page-bar">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="search" id="search" class="search-page-input" placeholder="Type to search..." autocomplete="off"
+        autofocus>
+    </div>
+
+    <div id="search-results" class="posts-grid">
+      <!-- populated by search.js -->
+    </div>
+
+    <!-- Template used by search.js -->
+    <section class="post-card post-template" style="display:none">
+      <a class="post-card-img-link" tabindex="-1" aria-hidden="true">
+        <img class="post-card-img" loading="lazy">
+      </a>
+      <div class="post-card-body">
+        <h3 class="post-card-title"><a class="post-preview-title-link" href=""></a></h3>
+        <p class="post-card-excerpt post-preview-excerpt"></p>
+        <a href="" class="btn btn--ghost btn--sm post-preview-read-more">Read more →</a>
+      </div>
+    </section>
+
+    <section class="search-empty" style="display:none">
+      <p>No results found. Try a different keyword.</p>
+    </section>
+  </div>
+</div>
+
+{{ end }}

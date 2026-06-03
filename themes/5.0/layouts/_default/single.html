@@ -1,0 +1,67 @@
+{{- define "main" }}
+{{ $author := index .Site.Data.authors (.Params.author | default "default") }}
+
+<article class="single">
+  <div class="container single-inner">
+
+    <!-- Header -->
+    <header class="single-header">
+      {{ with .Params.category }}
+      <a href="/category/{{ . | urlize }}" class="single-tag">{{ . }}</a>
+      {{ end }}
+      <h1 class="single-title">{{ .Title }}</h1>
+      <div class="single-meta">
+        <div class="single-meta-author">
+          <img src="{{ .Site.BaseURL }}{{ $author.avatar }}" alt="{{ $author.name }}" class="single-meta-avatar"
+            width="36" height="36">
+          <span>{{ $author.name }}</span>
+        </div>
+        <span class="single-meta-sep">·</span>
+        <time datetime="{{ dateFormat " 2006-01-02" .Date }}">{{ dateFormat "January 2, 2006" .Date }}</time>
+        <span class="single-meta-sep">·</span>
+        <span>{{ .ReadingTime }} min read</span>
+      </div>
+    </header>
+
+    <!-- Cover image -->
+    {{ with .Params.preview }}
+    <div class="single-cover">
+      <img src="{{ $.Permalink }}{{ . }}" alt="{{ $.Title }}" class="single-cover-img" loading="eager">
+    </div>
+    {{ end }}
+
+    <!-- Content -->
+    <div class="single-content prose">
+      {{ .Content }}
+    </div>
+
+    <!-- Tags -->
+    {{ with .Params.keywords }}
+    <div class="single-tags">
+      {{ range . }}
+      <span class="tag">{{ . }}</span>
+      {{ end }}
+    </div>
+    {{ end }}
+
+    <!-- Prev / Next -->
+    <nav class="single-nav" aria-label="Post navigation">
+      {{ if .Prev }}
+      <a href="{{ .Prev.Permalink }}" class="single-nav-item single-nav-item--prev">
+        <span class="single-nav-label">← Previous</span>
+        <span class="single-nav-title">{{ .Prev.Title | truncate 60 "…" }}</span>
+      </a>
+      {{ else }}
+      <div></div>
+      {{ end }}
+      {{ if .Next }}
+      <a href="{{ .Next.Permalink }}" class="single-nav-item single-nav-item--next">
+        <span class="single-nav-label">Next →</span>
+        <span class="single-nav-title">{{ .Next.Title | truncate 60 "…" }}</span>
+      </a>
+      {{ end }}
+    </nav>
+
+  </div>
+</article>
+{{- end }}

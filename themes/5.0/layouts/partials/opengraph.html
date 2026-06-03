@@ -1,0 +1,29 @@
+{{- $desc := "" -}}
+{{- if .Description -}}{{- $desc = .Description -}}{{- else if .IsPage -}}{{- $desc = .Summary | plainify | truncate 200
+-}}{{- else -}}{{- $desc = .Site.Params.description -}}{{- end -}}
+
+<meta property="og:title" content="{{ .Title }}" />
+<meta property="og:description" content="{{ $desc }}" />
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:locale" content="{{ .Params.locale | default " en_US" }}" />
+<meta property="og:site_name" content="{{ .Site.Title }}" />
+
+{{- if $.Params.preview }}
+<meta property="og:image" content="{{ .Permalink }}{{ $.Params.preview }}" />
+{{- else -}}
+{{- with $.Site.Params.images }}
+<meta property="og:image" content="{{ index . 0 | absURL }}" />
+{{- end }}
+{{- end }}
+
+{{- if .IsPage }}
+{{- $iso8601 := "2006-01-02T15:04:05-07:00" -}}
+{{- $postAuthor := index .Site.Data.authors (.Params.author | default "default") }}
+<meta property="article:section" content="{{ .Section }}" />
+<meta property="article:author" content="{{ $postAuthor.name }}" />
+{{ with .PublishDate }}
+<meta property="article:published_time" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end }}
+{{ with .Lastmod }}
+<meta property="article:modified_time" {{ .Format $iso8601 | printf "content=%q" | safeHTMLAttr }} />{{ end }}
+{{- end }}
