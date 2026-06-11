@@ -18,17 +18,22 @@
       "description": "Tool to help exploit XXE vulnerabilities. Generates XML payloads and automatically starts a server to serve DTDs or perform data exfiltration."
     },
     {
+      "name": "MirageVM",
+      "url": "",
+      "image": "/img/miragevm.png",
+      "description": "JavaScript virtual machine for code obfuscation. Protects sensitive client-side logic with custom bytecode through a low-level language that supports all JavaScript features. (Private project)"
+    },
+    {
+      "name": "Living of the Code (LOC)",
+      "url": "https://luisfontes19.github.io/living-of-the-code/",
+      "image": "/img/loc.png",
+      "description": "A curated list of attack techniques that target software developers in their natural habitat: code."
+    },
+    {
       "name": "VSCode Swissknife",
       "url": "https://marketplace.visualstudio.com/items?itemName=luisfontes19.vscode-swissknife",
       "image": "https://github.com/luisfontes19/vscode-swissknife/raw/master/data/swissknife_banner.png",
       "description": "Scriptable VS Code extension to generate or manipulate data. Stop pasting sensitive data into webpages."
-    },
-    {
-      "name": "DamnVulnerableCryptoApp",
-      "imagePosition": "center 20%",
-      "url": "https://github.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp",
-      "image": "https://raw.githubusercontent.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp/master/frontend/src/Images/logo.png",
-      "description": "An app with intentionally insecure crypto. Perfect for testing and exploiting weak cryptographic implementations and learning crypto without diving deep into the math."
     },
     {
       "name": "Watchtower",
@@ -45,27 +50,28 @@
       "description": "Enforce file-based policies on managed machines by automatically detecting and correcting config files that drift from approved values."
     },
     {
+      "name": "DamnVulnerableCryptoApp",
+      "imagePosition": "center 20%",
+      "url": "https://github.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp",
+      "image": "https://raw.githubusercontent.com/DamnVulnerableCryptoApp/DamnVulnerableCryptoApp/master/frontend/src/Images/logo.png",
+      "description": "An app with intentionally insecure crypto. Perfect for testing and exploiting weak cryptographic implementations and learning crypto without diving deep into the math."
+    },
+    {
       "name": "Coup Sheet",
       "url": "https://luisfontes19.github.io/coup-sheet/",
       "image": "/img/coup-sheet.jpg",
       "description": "If you like the board game Coup as much as I do, you'll find this sheet super helpful."
     },
     {
-      "name": "MirageVM",
-      "url": "",
-      "image": "/img/miragevm.png",
-      "description": "JavaScript virtual machine for code obfuscation. Protects sensitive client-side logic with custom bytecode through a low-level language that supports all JavaScript features. (Private project)"
-    },
-    {
       "name": "How To Test Secrets",
       "url": "https://github.com/luisfontes19/how-to-test-secrets",
-      "image": "https://opengraph.githubassets.com/1/luisfontes19/how-to-test-secrets",
+      "image": "/img/how-to-test-secrets.png",
       "description": "A visual, interactive cheat-sheet for testing whether leaked API keys and secrets are still valid — pick a service and get a ready-to-run command."
     },
     {
       "name": "hash-identifier-js",
       "url": "https://github.com/luisfontes19/hash-identifier-js",
-      "image": "https://opengraph.githubassets.com/1/luisfontes19/hash-identifier-js",
+      "image": "/img/hash-identifier-js.png",
       "description": "JavaScript port of hash-identifier. Identifies the hashing algorithm used to generate any supplied hash value."
     }
   ]

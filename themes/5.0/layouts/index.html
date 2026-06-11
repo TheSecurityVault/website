@@ -56,52 +56,6 @@
   </div>
 </section>
 
-<!-- ─── PROJECTS ─── -->
-<section class="section projects" id="projects">
-  <div class="container">
-    <div class="section-head">
-      <h2 class="section-title">Projects</h2>
-      <p class="section-sub">Some of the tools and resources I've built</p>
-    </div>
-
-    <div class="projects-grid">
-      {{ range $author.projects }}
-      {{ if .url }}
-      <a href="{{ .url }}" class="project-card" target="_blank" rel="noopener noreferrer">
-        {{ else }}
-        <div class="project-card project-card--private">
-          {{ end }}
-          <div class="project-card-img-wrap">
-            <img src="{{ .image }}" alt="{{ .name }}" class="project-card-img" loading="lazy"{{ with .imagePosition }} style="object-position: {{ . }}"{{ end }}>
-          </div>
-          <div class="project-card-body">
-            <h3 class="project-card-title">{{ .name }}</h3>
-            {{ with .description }}
-            <p class="project-card-desc">{{ . }}</p>
-            {{ end }}
-          </div>
-          <div class="project-card-footer">
-            {{ if .url }}
-            <span class="project-card-cta">View Project</span>
-            <svg class="project-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-            {{ else }}
-            <span class="project-card-private">Private</span>
-            {{ end }}
-          </div>
-          {{ if .url }}
-      </a>
-      {{ else }}
-    </div>
-    {{ end }}
-    {{ end }}
-  </div>
-  </div>
-</section>
-
 <!-- ─── BLOG ─── -->
 <section class="section blog" id="blog">
   <div class="container">
@@ -138,6 +92,53 @@
       </article>
       {{ end }}
     </div>
+  </div>
+</section>
+
+<!-- ─── PROJECTS ─── -->
+<section class="section projects" id="projects">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Projects</h2>
+      <p class="section-sub">Some of the tools and resources I've built</p>
+    </div>
+
+    <div class="projects-grid">
+      {{ range $author.projects }}
+      {{ if .url }}
+      <a href="{{ .url }}" class="project-card" target="_blank" rel="noopener noreferrer">
+        {{ else }}
+        <div class="project-card project-card--private">
+          {{ end }}
+          <div class="project-card-img-wrap">
+            <img src="{{ .image }}" alt="{{ .name }}" class="project-card-img" loading="lazy" {{ with .imagePosition }}
+              style="object-position: {{ . }}" {{ end }}>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title">{{ .name }}</h3>
+            {{ with .description }}
+            <p class="project-card-desc">{{ . }}</p>
+            {{ end }}
+          </div>
+          <div class="project-card-footer">
+            {{ if .url }}
+            <span class="project-card-cta">View Project</span>
+            <svg class="project-card-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+            {{ else }}
+            <span class="project-card-private">Private</span>
+            {{ end }}
+          </div>
+          {{ if .url }}
+      </a>
+      {{ else }}
+    </div>
+    {{ end }}
+    {{ end }}
+  </div>
   </div>
 </section>
 
