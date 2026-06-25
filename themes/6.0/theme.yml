@@ -1,0 +1,5 @@
+name: "The Security Vault 6.0"
+license: MIT
+author: Luis Fontes
+description: Interactive 3D terminal/glitch theme with a WebGL threat-globe, scanline CRT aesthetic, and scroll-driven animations.
+min_version: "0.110.0"

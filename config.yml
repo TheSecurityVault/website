@@ -1,12 +1,16 @@
 baseURL: https://thesecurityvault.com
 languageCode: en-us
 title: The Security Vault
-theme: "5.0"
+theme: "6.0"
 copyright: Copyright 2019-{year} The Security Vault. All rights reserved.
 enableRobotsTXT: true
 postsFolder: posts
 params:
   author: Luis Fontes
+  background: c2
+  bgSwitcher: true
+  bootSequence: false
+  intro: true
   images:
     - /banner.png
   description: Because Security Matters - Demystifying those weird and dark
@@ -46,7 +50,7 @@ markup:
     lineNos: true
     lineNumbersInTable: true
     noClasses: true
-    style: tango
+    style: dracula
     tabWidth: 4
 menu:
   main:

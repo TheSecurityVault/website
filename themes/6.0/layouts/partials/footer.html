@@ -1,0 +1,53 @@
+{{ partial "search-index.html" . }}
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <div class="footer-window-bar" aria-hidden="true">
+        <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+        <span class="footer-window-title">~/the-security-vault — bash</span>
+      </div>
+      <p class="footer-line"><span class="footer-prompt">$</span> hostname</p>
+      <p class="footer-out">{{ replace (lower .Site.Title) " " "" }}</p>
+      <p class="footer-line"><span class="footer-prompt">$</span> cat description.txt</p>
+      <p class="footer-out footer-tagline">{{ .Site.Params.description }}</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4 class="footer-col-title">// navigate</h4>
+        <a href="/" class="footer-link">home</a>
+        <a href="/#about" class="footer-link">about</a>
+        <a href="/#projects" class="footer-link">projects</a>
+        <a href="/posts/" class="footer-link">logs</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">// connect</h4>
+        {{ range .Site.Menus.social }}
+        <a href="{{ .URL }}" class="footer-link" target="_blank" rel="noopener noreferrer">{{ .Name | lower }}</a>
+        {{ end }}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <span><span class="footer-prompt">$</span> {{ replace .Site.Copyright "{year}" now.Year }}</span>
+      <div class="footer-bottom-links">
+        <a href="/sitemap.xml">sitemap.xml</a>
+        <a href="/feed">feed.rss</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{{/* ── Search (lunr) ── */}}
+<script src="https://unpkg.com/lunr@2.3.9/lunr.js"
+  integrity="sha384-Mrc0XsDxndfJgV5jLnEeThch4j9dNEXAE1vbWeyzmERxSvF8siQfuEczzgUelQQH" crossorigin="anonymous"></script>
+<script src="/js/search.js"></script>
+
+{{/* ── UI: nav, search overlay, glitch, boot sequence, scroll reveals ── */}}
+<script src="/js/ui.js"></script>
+
+{{/* ── WebGL terminal/glitch 3D scene (ES module) ── */}}
+<script type="module" src="/js/terminal3d.js"></script>

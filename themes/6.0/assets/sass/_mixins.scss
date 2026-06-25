@@ -1,0 +1,21 @@
+// ─── Breakpoints ──────────────────────────────────────────────────────────────
+@mixin md {
+  @media (max-width: 960px) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media (max-width: 640px) {
+    @content;
+  }
+}
+
+// ─── Terminal window chrome ─────────────────────────────────────────────────────
+@mixin panel {
+  background: linear-gradient(180deg, rgba(10, 16, 25, .92), rgba(7, 12, 19, .94));
+  border: 1px solid $color-border;
+  border-radius: $r-md;
+  backdrop-filter: blur(6px);
+  box-shadow: $shadow-panel;
+}

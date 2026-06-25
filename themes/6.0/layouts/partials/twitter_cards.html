@@ -1,0 +1,18 @@
+{{- $desc := "" -}}
+{{- if .Description -}}{{- $desc = .Description -}}{{- else if .IsPage -}}{{- $desc = .Summary | plainify | truncate 200
+-}}{{- else -}}{{- $desc = .Site.Params.description -}}{{- end -}}
+
+{{- if $.Params.preview }}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="{{ .Permalink }}{{ $.Params.preview }}" />
+{{- else }}
+<meta name="twitter:card" content="summary" />
+{{- with $.Site.Params.images }}
+<meta name="twitter:image" content="{{ index . 0 | absURL }}" />
+{{- end }}
+{{- end }}
+<meta name="twitter:title" content="{{ .Title }}" />
+<meta name="twitter:description" content="{{ $desc }}" />
+{{ with .Site.Params.Social.twitter -}}
+<meta name="twitter:site" content="@{{ . }}" />
+{{ end -}}

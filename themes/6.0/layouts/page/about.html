@@ -1,0 +1,117 @@
+{{ define "main" }}
+{{ $author := index .Site.Data.authors (.Params.author | default "default") }}
+
+<div class="archive" data-scene="about">
+  <div class="container">
+    <section class="about-page">
+      <div class="about-hero" data-reveal="up">
+        <div class="about-hero-img-wrap">
+          <div class="term-bar" aria-hidden="true">
+            <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+            <span class="term-title">id.jpeg</span>
+          </div>
+          <img src="{{ .Site.BaseURL }}{{ $author.avatar }}" alt="{{ $author.name }}" class="about-hero-img">
+        </div>
+        <div class="about-hero-content">
+          <p class="section-cmd"><span class="prompt">$</span> finger {{ $author.username }}</p>
+          <h1 class="about-hero-name glitch" data-text="{{ $author.name }}">{{ $author.name }}</h1>
+          <p class="about-hero-role"><span class="hero-role-tag">[role]</span> {{ $author.jobTitle }}</p>
+          <p class="about-hero-bio">{{ $author.bio }}</p>
+          <div class="about-hero-social">
+            {{ range .Site.Menus.social }}
+            <a href="{{ .URL }}" class="hero-social-link" target="_blank" rel="noopener noreferrer"
+              aria-label="{{ .Name }}">
+              {{- if eq .Identifier "github" -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                </path>
+              </svg>
+              <span>github</span>
+              {{- else if eq .Identifier "linkedin" -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+              <span>linkedin</span>
+              {{- else if eq .Identifier "rss" -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 11a9 9 0 0 1 9 9"></path>
+                <path d="M4 4a16 16 0 0 1 16 16"></path>
+                <circle cx="5" cy="19" r="1"></circle>
+              </svg>
+              <span>rss</span>
+              {{- else -}}
+              <span>{{ .Name | lower }}</span>
+              {{- end -}}
+            </a>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <div class="about-section-inner">
+        <div class="about-block" data-reveal="up">
+          <h2 class="about-block-title">// the developer side</h2>
+          <p class="about-block-text">
+            I've been coding for over 20 years, long before "security" became my primary hat. I'm a hands-on, technical person who builds things constantly, from production-grade tools to a long list of personal projects that keep my weekends busy.
+          </p>
+          <p class="about-block-text">
+            Lately I work mainly with React and Python, but my background spans a wide range of languages and ecosystems. I've shipped code in Ruby, PHP, VB.NET, C#, Java, Node.js, and TypeScript, and built on top of frameworks like Rails, Angular, Flask, Django, FastAPI, and Spring Boot.
+          </p>
+          <p class="about-block-text">
+            On the cloud side, I'm a big AWS fan, especially Lambda. Automating things is something I genuinely enjoy, and I've built a ton of workflows and tooling on top of AWS services over the years.
+          </p>
+        </div>
+
+        <div class="about-stack" data-reveal="up">
+          <div class="about-stack-group">
+            <h3 class="about-stack-label">$ languages</h3>
+            <div class="about-tags">
+              <span class="about-tag">Python</span>
+              <span class="about-tag">TypeScript</span>
+              <span class="about-tag">JavaScript</span>
+              <span class="about-tag">Ruby</span>
+              <span class="about-tag">Java</span>
+              <span class="about-tag">C#</span>
+              <span class="about-tag">PHP</span>
+              <span class="about-tag">VB.NET</span>
+            </div>
+          </div>
+
+          <div class="about-stack-group">
+            <h3 class="about-stack-label">$ frameworks</h3>
+            <div class="about-tags">
+              <span class="about-tag">React</span>
+              <span class="about-tag">Angular</span>
+              <span class="about-tag">Flask</span>
+              <span class="about-tag">Django</span>
+              <span class="about-tag">FastAPI</span>
+              <span class="about-tag">Spring Boot</span>
+              <span class="about-tag">Rails</span>
+              <span class="about-tag">Node.js</span>
+            </div>
+          </div>
+
+          <div class="about-stack-group">
+            <h3 class="about-stack-label">$ cloud</h3>
+            <div class="about-tags">
+              <span class="about-tag">AWS</span>
+              <span class="about-tag">Lambda</span>
+              <span class="about-tag">Serverless</span>
+              <span class="about-tag">CI/CD</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+{{ end }}

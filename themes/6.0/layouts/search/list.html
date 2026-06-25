@@ -1,0 +1,28 @@
+{{ define "main" }}
+
+<div class="archive" data-scene="search">
+  <div class="container">
+    <header class="archive-header">
+      <p class="section-cmd"><span class="prompt">$</span> grep -ri "$PATTERN" /var/log/vault/</p>
+      <h1 class="archive-title glitch" data-text="Search">Search</h1>
+      <p class="archive-sub">// find articles by keyword</p>
+    </header>
+
+    <div class="search-page-bar">
+      <span class="search-page-prompt">grep -ri</span>
+      <input type="search" id="search" class="search-page-input" placeholder="pattern..." autocomplete="off"
+        autofocus>
+      <span class="search-page-caret">█</span>
+    </div>
+
+    <div id="search-results" class="posts-grid">
+      <!-- populated by search.js -->
+    </div>
+
+    <section class="search-empty" style="display:none">
+      <p>// no results. try a different pattern.</p>
+    </section>
+  </div>
+</div>
+
+{{ end }}

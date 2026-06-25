@@ -1,0 +1,14 @@
+{{ define "main" }}
+<div class="not-found">
+  <div class="container not-found-inner">
+    <span class="not-found-code glitch" data-text="404">404</span>
+    <p class="not-found-cmd"><span class="prompt">$</span> cat $REQUESTED_PATH</p>
+    <h1 class="not-found-title">segmentation fault: page not found</h1>
+    <p class="not-found-sub">// the resource you requested does not exist or has been moved.</p>
+    <div class="not-found-actions">
+      <a href="/" class="btn btn--primary">$ cd ~</a>
+      <a href="/posts/" class="btn btn--ghost">$ ls ~/logs</a>
+    </div>
+  </div>
+</div>
+{{ end }}

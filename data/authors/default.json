@@ -26,7 +26,7 @@
     {
       "name": "Living of the Code (LOC)",
       "url": "https://luisfontes19.github.io/living-of-the-code/",
-      "image": "/img/loc.png",
+      "image": "/img/loc.jpg",
       "description": "A curated list of attack techniques that target software developers in their natural habitat: code."
     },
     {
@@ -63,16 +63,10 @@
       "description": "If you like the board game Coup as much as I do, you'll find this sheet super helpful."
     },
     {
-      "name": "How To Test Secrets",
-      "url": "https://github.com/luisfontes19/how-to-test-secrets",
-      "image": "/img/how-to-test-secrets.png",
+      "name": "How To Test Api Keys",
+      "url": "https://github.com/luisfontes19/how-to-test-api-keys",
+      "image": "/img/how-to-test-api-keys.jpg",
       "description": "A visual, interactive cheat-sheet for testing whether leaked API keys and secrets are still valid — pick a service and get a ready-to-run command."
-    },
-    {
-      "name": "hash-identifier-js",
-      "url": "https://github.com/luisfontes19/hash-identifier-js",
-      "image": "/img/hash-identifier-js.png",
-      "description": "JavaScript port of hash-identifier. Identifies the hashing algorithm used to generate any supplied hash value."
     }
   ]
 }

@@ -1,0 +1,182 @@
+@import 'variables';
+
+// ─── CRT overlay (fixed, non-interactive) ───────────────────────────────────────
+.crt {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.crt-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, .22) 3px,
+      rgba(0, 0, 0, 0) 4px);
+  opacity: .5;
+}
+
+.crt-flicker {
+  position: absolute;
+  inset: 0;
+  background: rgba(45, 255, 158, .03);
+  animation: crt-flicker 4.5s infinite steps(60);
+}
+
+.crt-vignette {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: multiply;
+  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(0, 0, 0, .55) 100%);
+}
+
+@keyframes crt-flicker {
+
+  0%,
+  100% {
+    opacity: .25;
+  }
+
+  4% {
+    opacity: .45;
+  }
+
+  8% {
+    opacity: .2;
+  }
+
+  12% {
+    opacity: .5;
+  }
+
+  70% {
+    opacity: .3;
+  }
+
+  72% {
+    opacity: .55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-flicker {
+    animation: none;
+    opacity: .25;
+  }
+}
+
+@include sm {
+
+  // scanlines are heavy/distracting on small screens — dial back
+  .crt-scanlines {
+    opacity: .25;
+  }
+
+  .crt-flicker {
+    display: none;
+  }
+}
+
+// ─── Boot sequence (home only) ──────────────────────────────────────────────────
+.boot {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  background: $color-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: opacity .5s ease, visibility .5s ease;
+}
+
+.boot.is-done {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.boot-log {
+  font-family: $font-mono;
+  font-size: clamp(0.72rem, 2.2vw, 0.95rem);
+  line-height: 1.6;
+  color: $color-green;
+  text-shadow: $glow-green;
+  width: 100%;
+  max-width: 640px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.boot-log .ok {
+  color: $color-green;
+}
+
+.boot-log .warn {
+  color: $color-amber;
+}
+
+.boot-log .muted {
+  color: $color-muted;
+}
+
+// ─── Background preview switcher ─────────────────────────────────────────────
+.bg-switch {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  font-family: $font-mono;
+  font-size: 0.74rem;
+  background: rgba(7, 12, 19, .94);
+  border: 1px solid rgba(45, 255, 158, .45);
+  border-radius: $r-sm;
+  backdrop-filter: blur(6px);
+  box-shadow: $shadow-panel, $glow-green;
+
+  .bg-switch-label {
+    color: $color-green;
+    font-weight: 700;
+    margin-right: 2px;
+  }
+
+  select {
+    font-family: $font-mono;
+    font-size: 0.74rem;
+    color: $color-green;
+    background: rgba(4, 6, 10, .9);
+    border: 1px solid rgba(45, 255, 158, .3);
+    border-radius: 3px;
+    padding: 4px 8px;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      border-color: $color-cyan;
+      color: $color-cyan;
+    }
+
+    optgroup {
+      color: $color-muted;
+      background: $color-panel;
+      font-style: normal;
+    }
+
+    option {
+      color: $color-text-bright;
+      background: $color-panel;
+    }
+  }
+
+  @include sm {
+    right: 8px;
+    bottom: 8px;
+  }
+}

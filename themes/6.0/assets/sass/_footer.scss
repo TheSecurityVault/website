@@ -1,0 +1,140 @@
+@import 'variables';
+@import 'mixins';
+
+.footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid $color-border;
+  background: rgba(4, 6, 10, .7);
+  backdrop-filter: blur(6px);
+  margin-top: 40px;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 48px;
+  padding: 56px 24px 40px;
+
+  @include md {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.footer-brand {
+  @include panel;
+  padding: 0 0 16px;
+  overflow: hidden;
+  align-self: start;
+}
+
+.footer-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 14px;
+  background: $color-panel-bar;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: 14px;
+}
+
+.footer-window-title {
+  margin-left: 8px;
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  color: $color-muted;
+}
+
+.footer-line {
+  font-family: $font-mono;
+  font-size: 0.86rem;
+  color: $color-text;
+  padding: 0 16px;
+  margin-top: 6px;
+}
+
+.footer-prompt {
+  color: $color-green;
+  font-weight: 700;
+}
+
+.footer-out {
+  font-family: $font-mono;
+  font-size: 0.86rem;
+  color: $color-cyan;
+  padding: 2px 16px 0 28px;
+}
+
+.footer-tagline {
+  color: $color-muted;
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.footer-links {
+  display: flex;
+  gap: 56px;
+
+  @include sm {
+    gap: 36px;
+  }
+}
+
+.footer-col-title {
+  font-family: $font-mono;
+  font-size: 0.78rem;
+  color: $color-green;
+  margin-bottom: 14px;
+  letter-spacing: 0.04em;
+}
+
+.footer-link {
+  display: block;
+  font-family: $font-mono;
+  font-size: 0.85rem;
+  color: $color-text;
+  padding: 4px 0;
+  transition: color $transition, padding-left $transition;
+
+  &:hover {
+    color: $color-green;
+    padding-left: 5px;
+  }
+}
+
+.footer-bottom {
+  border-top: 1px solid $color-border;
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  span {
+    font-family: $font-mono;
+    font-size: 0.78rem;
+    color: $color-muted;
+  }
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 18px;
+
+  a {
+    font-family: $font-mono;
+    font-size: 0.78rem;
+    color: $color-muted;
+
+    &:hover {
+      color: $color-green;
+    }
+  }
+}

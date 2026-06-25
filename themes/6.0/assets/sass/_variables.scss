@@ -1,0 +1,51 @@
+// ─── Palette: terminal / glitch ──────────────────────────────────────────────
+$color-bg: #04060a; // deep void
+$color-bg-soft: #070c13;
+$color-panel: #0a1019; // terminal window body
+$color-panel-bar: #0e1622; // window title bar
+$color-border: #17222f;
+$color-border-soft: #111a25;
+
+$color-green: #2dff9e; // primary phosphor green
+$color-green-dim: #15b67c;
+$color-cyan: #38e1ff;
+$color-amber: #ffb454;
+$color-magenta: #ff3d7f; // glitch channel
+$color-blue: #5b8cff;
+
+$color-text: #aebcc9; // body text
+$color-text-bright: #e9f5ef;
+$color-muted: #5c6e7d;
+$color-heading: #e9f5ef;
+
+// Semantic aliases (keep names used across partials)
+$color-primary: $color-green;
+$color-primary-h: $color-green-dim;
+$color-accent: $color-cyan;
+$color-tag-bg: rgba(45, 255, 158, .08);
+$color-tag-text: $color-green;
+$color-dark: $color-text-bright;
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+$font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, 'SF Mono', Consolas, monospace;
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+// ─── Layout ───────────────────────────────────────────────────────────────────
+$nav-height: 60px;
+$max-width: 1200px;
+$max-prose: 760px;
+$gap: 24px;
+
+// ─── Radii ────────────────────────────────────────────────────────────────────
+$r-sm: 4px;
+$r-md: 8px;
+$r-lg: 12px;
+$r-full: 9999px;
+
+// ─── Glow / shadow ────────────────────────────────────────────────────────────
+$glow-green: 0 0 12px rgba(45, 255, 158, .35);
+$glow-cyan: 0 0 12px rgba(56, 225, 255, .35);
+$shadow-panel: 0 24px 60px rgba(0, 0, 0, .55), 0 0 0 1px rgba(45, 255, 158, .04);
+
+// ─── Transitions ──────────────────────────────────────────────────────────────
+$transition: 0.18s ease;
