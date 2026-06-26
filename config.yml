@@ -11,8 +11,7 @@ params:
   author: Luis Fontes
   images:
     - /banner.png
-  description: Because Security Matters - Demystifying those weird and dark
-    security vulnerabilities nobody talks about
+  description: Because Security Matters - Deep dives for security defenders
   mainSections:
     - post
   logo: /img/logo.png
