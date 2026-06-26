@@ -2,15 +2,21 @@
 {{ $author := index .Site.Data.authors (.Params.author | default "default") }}
 
 <article class="single" data-scene="article">
+
+  <!-- Floating TOC (populated by JS on wide viewports) -->
+  <aside class="toc-panel" id="tocPanel" aria-label="On this page">
+    <div class="toc-header">
+      <span class="toc-prompt">$</span><span class="toc-label">ls sections/</span>
+    </div>
+    <nav id="tocNav"></nav>
+  </aside>
+
   <div class="container single-inner">
 
     <!-- Header -->
     <header class="single-header" data-reveal="up">
-      <p class="single-breadcrumb"><span class="prompt">$</span> cat ~/logs/<span class="single-breadcrumb-file">{{
+      <p class="single-breadcrumb"><span class="prompt">$</span> cat ~/posts/<span class="single-breadcrumb-file">{{
           .File.BaseFileName }}.md</span></p>
-      {{ with .Params.category }}
-      <a href="/category/{{ . | urlize }}" class="single-tag">{{ . }}</a>
-      {{ end }}
       <h1 class="single-title">{{ .Title }}</h1>
       <div class="single-meta">
         <div class="single-meta-author">
@@ -28,10 +34,6 @@
     <!-- Cover image -->
     {{ with .Params.preview }}
     <div class="single-cover" data-reveal="up">
-      <div class="term-bar" aria-hidden="true">
-        <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
-        <span class="term-title">preview.png</span>
-      </div>
       <img src="{{ $.Permalink }}{{ . }}" alt="{{ $.Title }}" class="single-cover-img" loading="eager">
     </div>
     {{ end }}

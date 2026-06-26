@@ -13,9 +13,9 @@
 
 // ─── Terminal window chrome ─────────────────────────────────────────────────────
 @mixin panel {
-  background: linear-gradient(180deg, rgba(10, 16, 25, .92), rgba(7, 12, 19, .94));
-  border: 1px solid $color-border;
+  background: var(--panel-gradient);
+  border: 1px solid var(--color-border);
   border-radius: $r-md;
   backdrop-filter: blur(6px);
-  box-shadow: $shadow-panel;
+  box-shadow: var(--shadow-panel);
 }

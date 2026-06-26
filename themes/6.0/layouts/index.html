@@ -1,96 +1,20 @@
 {{ define "main" }}
 {{ $author := index .Site.Data.authors "default" }}
 
-{{ if .Site.Params.intro }}
-<!-- ══════════════ INTRO (parallax; scroll to reveal content) ══════════════ -->
-<section class="intro" id="intro" data-scene="intro" aria-label="Intro">
-  <div class="container intro-inner">
-    <span class="intro-tag" data-parallax="0.35">// live feed — operation deepvault</span>
-  </div>
-  <a href="/#about" class="scroll-hint intro-hint" data-parallax="0.18" aria-label="Scroll down">
-    <span class="scroll-hint-text">scroll to access</span>
-    <span class="scroll-hint-arrow">▼</span>
-  </a>
-</section>
-{{ end }}
-
 <!-- ══════════════ HERO ══════════════ -->
-<section class="hero" id="about" data-scene="hero">
-  <div class="container hero-inner">
-    <div class="hero-term" data-reveal="up">
-      <div class="term-bar" aria-hidden="true">
-        <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
-        <span class="term-title">visitor@vault: ~/whoami</span>
-      </div>
-      <div class="term-body">
-        <p class="hero-line"><span class="prompt">$</span> <span class="hero-cmd">whoami</span></p>
-
-        <div class="hero-id">
-          <div class="hero-avatar-frame">
-            <span class="hero-avatar-bracket hero-avatar-bracket--tl" aria-hidden="true"></span>
-            <span class="hero-avatar-bracket hero-avatar-bracket--tr" aria-hidden="true"></span>
-            <span class="hero-avatar-bracket hero-avatar-bracket--bl" aria-hidden="true"></span>
-            <span class="hero-avatar-bracket hero-avatar-bracket--br" aria-hidden="true"></span>
-            <img src="{{ .Site.BaseURL }}{{ $author.avatar }}" alt="{{ $author.name }}" class="hero-avatar"
-              width="150" height="150" loading="eager">
-            <span class="hero-avatar-scan" aria-hidden="true"></span>
-          </div>
-
-          <div class="hero-id-main">
-            <h1 class="hero-name glitch" data-text="{{ $author.name }}">{{ $author.name }}</h1>
-            <p class="hero-role"><span class="hero-role-tag">[role]</span> {{ $author.jobTitle }}</p>
-            <p class="hero-uid"><span class="hero-role-tag">[uid]</span> {{ $author.username }} <span
-                class="hero-uid-sep">·</span> <span class="hero-uid-status">● online</span></p>
-          </div>
-        </div>
-
-        <p class="hero-bio" id="heroBio" data-type="{{ $author.bio }}">{{ $author.bio }}</p>
-
-        <div class="hero-social" aria-label="Social links">
-          {{ range .Site.Menus.social }}
-          <a href="{{ .URL }}" class="hero-social-link" target="_blank" rel="noopener noreferrer"
-            aria-label="{{ .Name }}">
-            {{- if eq .Identifier "github" -}}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" aria-hidden="true">
-              <path
-                d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-              </path>
-            </svg>
-            <span>github</span>
-            {{- else if eq .Identifier "linkedin" -}}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" aria-hidden="true">
-              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-              <rect x="2" y="9" width="4" height="12"></rect>
-              <circle cx="4" cy="4" r="2"></circle>
-            </svg>
-            <span>linkedin</span>
-            {{- else if eq .Identifier "rss" -}}
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" aria-hidden="true">
-              <path d="M4 11a9 9 0 0 1 9 9"></path>
-              <path d="M4 4a16 16 0 0 1 16 16"></path>
-              <circle cx="5" cy="19" r="1"></circle>
-            </svg>
-            <span>rss</span>
-            {{- else -}}
-            <span>{{ .Name | lower }}</span>
-            {{- end -}}
-          </a>
-          {{ end }}
-        </div>
-
-        <div class="hero-cta">
-          <a href="/posts/" class="btn btn--primary">$ read --blog</a>
-          <a href="/#projects" class="btn btn--ghost">$ ls ~/projects</a>
-        </div>
-      </div>
+<section class="home-hero" id="hero">
+  <canvas class="home-hero-canvas" id="heroCanvas"></canvas>
+  <div class="home-hero-content" data-reveal="up">
+    <p class="home-hero-cmd"><span class="prompt">$</span> ./thesecurityvault --init</p>
+    <h1 class="home-hero-title glitch" data-text="{{ .Site.Title }}">{{ .Site.Title }}</h1>
+    <p class="home-hero-sub">{{ .Site.Params.description }}</p>
+    <div class="home-hero-cta">
+      <a href="/posts/" class="btn btn--primary">read the blog</a>
+      <a href="/#about" class="btn btn--ghost">about me</a>
     </div>
   </div>
-
   <a href="/#blog" class="scroll-hint" aria-label="Scroll down">
-    <span class="scroll-hint-text">scroll to decrypt</span>
+    <span class="scroll-hint-text">scroll to explore</span>
     <span class="scroll-hint-arrow">▼</span>
   </a>
 </section>
@@ -101,8 +25,7 @@
     <div class="section-head section-head--row" data-reveal="up">
       <div>
         <p class="section-cmd"><span class="prompt">$</span> tail -n 6 /var/log/vault/research.log</p>
-        <h2 class="section-title glitch" data-text="Latest Logs">Latest Logs</h2>
-        <p class="section-sub">// security research, deep dives and tutorials</p>
+        <h2 class="section-title glitch" data-text="Blog Posts">Blog Posts</h2>
       </div>
       <a href="/posts/" class="btn btn--outline">view all →</a>
     </div>
@@ -112,10 +35,6 @@
       {{ range $i, $p := first 6 $posts }}
       {{ $postPermalink := $p.Permalink }}
       <article class="post-card" data-reveal="up" data-reveal-delay="{{ mul $i 60 }}">
-        <div class="term-bar" aria-hidden="true">
-          <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
-          <span class="term-title">{{ printf "log_%03d.md" (add $i 1) }}</span>
-        </div>
         {{ with $p.Params.preview }}
         <a href="{{ $postPermalink }}" class="post-card-img-link" tabindex="-1" aria-hidden="true">
           <img src="{{ $postPermalink }}{{ . }}" alt="{{ $p.Title }}" class="post-card-img" loading="lazy">
@@ -139,6 +58,42 @@
   </div>
 </section>
 
+<!-- ══════════════ PARALLAX BAND — DASHBOARD ══════════════ -->
+<section class="band band--dashboard" aria-hidden="true">
+  <div class="band-sticky" id="dashBand">
+    <canvas class="band-canvas" data-fx="dashboard"></canvas>
+    <div class="dash-hud">
+      <div class="dash-status" id="dashStatus">// INITIALIZING VAULT</div>
+      <div class="dash-corners" aria-hidden="true">
+        <span class="dash-corner dash-corner--tl"></span>
+        <span class="dash-corner dash-corner--tr"></span>
+        <span class="dash-corner dash-corner--bl"></span>
+        <span class="dash-corner dash-corner--br"></span>
+      </div>
+
+      <!-- Single terminal panel — lines built & revealed by fx-dashboard.js -->
+      <div class="dash-panel" id="dashMain">
+        <div class="dash-panel-bar">
+          <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+          <span class="dash-panel-title" id="dashTitle">root@vault — security-audit</span>
+          <span class="dash-panel-tag" id="dashTag">INIT</span>
+        </div>
+        <div class="dash-panel-body dash-panel-body--term">
+          <div class="dash-term" id="dashTerm"></div>
+          <div class="dash-net-wrap" id="dashNetWrap" aria-hidden="true">
+            <canvas id="dashNetCanvas" class="dash-net-canvas"></canvas>
+            <div class="dash-net-alert" id="dashNetAlert" aria-hidden="true">
+              <span class="dash-net-alert-icon">⚠</span>
+              <span class="dash-net-alert-text">ALL SYSTEMS COMPROMISED</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- .dash-hud -->
+  </div>
+</section>
+
 <!-- ══════════════ PROJECTS ══════════════ -->
 <section class="section projects" id="projects" data-scene="projects">
   <div class="container">
@@ -156,9 +111,13 @@
         {{ else }}
         <div class="project-card project-card--private" data-reveal="up" data-reveal-delay="{{ mul (mod $i 3) 80 }}">
           {{ end }}
+          <div class="term-bar term-bar--card" aria-hidden="true">
+            <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
+            <span class="term-title">{{ $proj.name | lower | replaceRE " " "_" }}</span>
+          </div>
           <div class="project-card-img-wrap">
-            <img src="{{ $proj.image }}" alt="{{ $proj.name }}" class="project-card-img" loading="lazy"
-              {{ with $proj.imagePosition }}style="object-position: {{ . }}"{{ end }}>
+            <img src="{{ $proj.image }}" alt="{{ $proj.name }}" class="project-card-img" loading="lazy" {{ with
+              $proj.imagePosition }}style="object-position: {{ . }}" {{ end }}>
           </div>
           <div class="project-card-body">
             <h3 class="project-card-title">{{ $proj.name }}</h3>
@@ -185,6 +144,60 @@
     {{ end }}
     {{ end }}
   </div>
+  </div>
+</section>
+
+<!-- ══════════════ ABOUT ══════════════ -->
+<section id="about" class="home-about" data-scene="about">
+  <div class="container">
+    <div class="home-about-grid">
+
+      <div class="home-about-id" data-reveal="up">
+        <img src="{{ .Site.BaseURL }}{{ $author.avatar }}" alt="{{ $author.name }}" class="home-about-photo">
+        <div class="home-about-info">
+          <h2 class="ap-name glitch" data-text="{{ $author.name }}">{{ $author.name }}</h2>
+          <p class="ap-role">{{ $author.jobTitle }}</p>
+          <div class="ap-links">
+            {{ range .Site.Menus.social }}
+            <a href="{{ .URL }}" class="ap-link" target="_blank" rel="noopener noreferrer" aria-label="{{ .Name }}">
+              {{- if eq .Identifier "github" -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path
+                  d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                </path>
+              </svg>
+              <span>github</span>
+              {{- else if eq .Identifier "linkedin" -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+              <span>linkedin</span>
+              {{- else if eq .Identifier "rss" -}}
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 11a9 9 0 0 1 9 9"></path>
+                <path d="M4 4a16 16 0 0 1 16 16"></path>
+                <circle cx="5" cy="19" r="1"></circle>
+              </svg>
+              <span>rss</span>
+              {{- else -}}
+              <span>{{ .Name | lower }}</span>
+              {{- end -}}
+            </a>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+
+      <div class="home-about-bio" data-reveal="up">
+        <p>{{ $author.bio }}</p>
+      </div>
+
+    </div>
   </div>
 </section>
 

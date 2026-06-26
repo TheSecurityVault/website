@@ -1,14 +1,18 @@
+{{- $idx := dict -}}
+{{- range site.RegularPages -}}
+{{- $entry := dict
+  "title" .Title
+  "tags" (.Params.tags | default slice)
+  "content" (.Content | plainify)
+  "url" .Permalink
+  "summary" (.Summary | plainify | truncate 200)
+  "preview" (cond (isset .Params "preview") (printf "%s%s" .Permalink (.Params.preview | default "")) "")
+  "date" .Date.Unix
+-}}
+{{- $idx = merge $idx (dict .Permalink $entry) -}}
+{{- end -}}
+<script id="tsv-search-data" type="application/json">{{ $idx | jsonify | safeJS }}</script>
 <script>
-  window.searchIndex = {
-  {{- range site.RegularPages }}
-  "{{ .Permalink }}": {
-    "title": "{{ .Title }}",
-      "tags": [{{ range .Params.Tags }} "{{ . }}", {{ end }}],
-  "content": "{{ .Content | plainify }}",
-    "url": "{{ .Permalink }}",
-      "summary": "{{ .Summary | plainify | truncate 200 }}",
-        "preview": "{{ .Permalink }}{{ .Params.preview }}"
-  },
-  {{- end }}
-};
+  try { window.searchIndex = JSON.parse(document.getElementById('tsv-search-data').textContent); }
+  catch (e) { window.searchIndex = {}; }
 </script>

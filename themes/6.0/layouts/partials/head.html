@@ -1,4 +1,7 @@
 <meta charset="UTF-8">
+<script>
+(function(){var t=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',t==='light'?'light':'dark');})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#05070a">
 
@@ -60,3 +63,8 @@
 {{- $styles := resources.Get $mainSassFile | resources.ExecuteAsTemplate $mainSassFile . | css.Sass $options |
 resources.Fingerprint "sha512" }}
 <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}">
+
+{{/* Inline theme init — runs before first paint to prevent flash of wrong theme */}}
+<script>
+(function(){var t=localStorage.getItem('theme');if(t==='dark'||t==='light'){document.documentElement.setAttribute('data-theme',t);}})();
+</script>

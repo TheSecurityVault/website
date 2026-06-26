@@ -23,7 +23,7 @@
 .crt-flicker {
   position: absolute;
   inset: 0;
-  background: rgba(45, 255, 158, .03);
+  background: rgba(var(--color-green-rgb), .03);
   animation: crt-flicker 4.5s infinite steps(60);
 }
 
@@ -86,7 +86,7 @@
   position: fixed;
   inset: 0;
   z-index: 9500;
-  background: $color-bg;
+  background: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -103,8 +103,8 @@
   font-family: $font-mono;
   font-size: clamp(0.72rem, 2.2vw, 0.95rem);
   line-height: 1.6;
-  color: $color-green;
-  text-shadow: $glow-green;
+  color: var(--color-green);
+  text-shadow: var(--glow-green);
   width: 100%;
   max-width: 640px;
   white-space: pre-wrap;
@@ -112,71 +112,13 @@
 }
 
 .boot-log .ok {
-  color: $color-green;
+  color: var(--color-green);
 }
 
 .boot-log .warn {
-  color: $color-amber;
+  color: var(--color-amber);
 }
 
 .boot-log .muted {
-  color: $color-muted;
-}
-
-// ─── Background preview switcher ─────────────────────────────────────────────
-.bg-switch {
-  position: fixed;
-  right: 14px;
-  bottom: 14px;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 7px 10px;
-  font-family: $font-mono;
-  font-size: 0.74rem;
-  background: rgba(7, 12, 19, .94);
-  border: 1px solid rgba(45, 255, 158, .45);
-  border-radius: $r-sm;
-  backdrop-filter: blur(6px);
-  box-shadow: $shadow-panel, $glow-green;
-
-  .bg-switch-label {
-    color: $color-green;
-    font-weight: 700;
-    margin-right: 2px;
-  }
-
-  select {
-    font-family: $font-mono;
-    font-size: 0.74rem;
-    color: $color-green;
-    background: rgba(4, 6, 10, .9);
-    border: 1px solid rgba(45, 255, 158, .3);
-    border-radius: 3px;
-    padding: 4px 8px;
-    cursor: pointer;
-    outline: none;
-
-    &:hover {
-      border-color: $color-cyan;
-      color: $color-cyan;
-    }
-
-    optgroup {
-      color: $color-muted;
-      background: $color-panel;
-      font-style: normal;
-    }
-
-    option {
-      color: $color-text-bright;
-      background: $color-panel;
-    }
-  }
-
-  @include sm {
-    right: 8px;
-    bottom: 8px;
-  }
+  color: var(--color-muted);
 }

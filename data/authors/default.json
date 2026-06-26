@@ -1,7 +1,7 @@
 {
   "name": "Luís Fontes",
   "username": "luisfontes19",
-  "bio": "I've been writing code for more than 20 years, and at some point that passion for building things became an obsession with making them secure — across web apps, smart contracts, and everything in between. I still code constantly, still find new ways to harden systems, and still haven't run out of side projects. This blog is where both worlds collide.",
+  "bio": "My current work focuses on keeping a bank secure. Over the past few years I've been challenging how security teams work, shifting practices and mindset to keep pace with a threat landscape reshaped by AI.",
   "avatar": "/img/luisfontes19.jpeg",
   "jobTitle": "Principal Product Security Engineer",
   "projects": [

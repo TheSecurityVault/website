@@ -5,12 +5,10 @@ theme: "6.0"
 copyright: Copyright 2019-{year} The Security Vault. All rights reserved.
 enableRobotsTXT: true
 postsFolder: posts
+minify:
+  disableJS: true
 params:
   author: Luis Fontes
-  background: c2
-  bgSwitcher: true
-  bootSequence: false
-  intro: true
   images:
     - /banner.png
   description: Because Security Matters - Demystifying those weird and dark

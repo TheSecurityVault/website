@@ -44,10 +44,20 @@
 {{/* ── Search (lunr) ── */}}
 <script src="https://unpkg.com/lunr@2.3.9/lunr.js"
   integrity="sha384-Mrc0XsDxndfJgV5jLnEeThch4j9dNEXAE1vbWeyzmERxSvF8siQfuEczzgUelQQH" crossorigin="anonymous"></script>
-<script src="/js/search.js"></script>
+<script src="/js/search.js" defer></script>
 
-{{/* ── UI: nav, search overlay, glitch, boot sequence, scroll reveals ── */}}
-<script src="/js/ui.js"></script>
+{{/* ── UI modules (each independent; a bug in one cannot affect others) ── */}}
+<script src="/js/theme.js" defer></script>
+<script src="/js/nav.js" defer></script>
+<script src="/js/search-ui.js" defer></script>
+<script src="/js/glitch.js" defer></script>
+<script src="/js/content.js" defer></script>
+<script src="/js/toc.js" defer></script>
+<script src="/js/terminal.js" defer></script>
+<script src="/js/boot.js" defer></script>
+<script src="/js/reveals.js" defer></script>
+<script src="/js/bio.js" defer></script>
 
-{{/* ── WebGL terminal/glitch 3D scene (ES module) ── */}}
-<script type="module" src="/js/terminal3d.js"></script>
+{{/* ── Band effects ── */}}
+<script src="/js/fx-hero.js" defer></script>
+<script src="/js/fx-dashboard.js" defer></script>

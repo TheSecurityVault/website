@@ -6,7 +6,7 @@ $color-panel-bar: #0e1622; // window title bar
 $color-border: #17222f;
 $color-border-soft: #111a25;
 
-$color-green: #2dff9e; // primary phosphor green
+$color-green: #2dff9e;
 $color-green-dim: #15b67c;
 $color-cyan: #38e1ff;
 $color-amber: #ffb454;
@@ -33,7 +33,7 @@ $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, A
 // ─── Layout ───────────────────────────────────────────────────────────────────
 $nav-height: 60px;
 $max-width: 1200px;
-$max-prose: 760px;
+$max-prose: 860px;
 $gap: 24px;
 
 // ─── Radii ────────────────────────────────────────────────────────────────────
@@ -49,3 +49,54 @@ $shadow-panel: 0 24px 60px rgba(0, 0, 0, .55), 0 0 0 1px rgba(45, 255, 158, .04)
 
 // ─── Transitions ──────────────────────────────────────────────────────────────
 $transition: 0.18s ease;
+
+// ─── CSS Custom Properties (runtime theme switching) ──────────────────────────
+:root {
+  --color-bg: #{$color-bg};
+  --color-bg-rgb: 4, 6, 10;
+  --color-bg-soft: #{$color-bg-soft};
+  --color-bg-soft-rgb: 7, 12, 19;
+  --color-panel: #{$color-panel};
+  --color-panel-rgb: 10, 16, 25;
+  --color-panel-bar: #{$color-panel-bar};
+  --color-panel-bar-rgb: 14, 22, 34;
+  --color-border: #{$color-border};
+  --color-border-soft: #{$color-border-soft};
+
+  --color-green: #{$color-green};
+  --color-green-rgb: 45, 255, 158;
+  --color-green-dim: #{$color-green-dim};
+  --color-cyan: #{$color-cyan};
+  --color-cyan-rgb: 56, 225, 255;
+  --color-amber: #{$color-amber};
+  --color-amber-rgb: 255, 180, 84;
+  --color-magenta: #{$color-magenta};
+  --color-blue: #{$color-blue};
+
+  --color-text: #{$color-text};
+  --color-text-bright: #{$color-text-bright};
+  --color-muted: #{$color-muted};
+  --color-heading: #{$color-heading};
+  --color-tag-bg: #{$color-tag-bg};
+  --color-tag-text: #{$color-tag-text};
+
+  --glow-green: #{$glow-green};
+  --glow-cyan: #{$glow-cyan};
+  --shadow-panel: #{$shadow-panel};
+
+  // Composite/contextual values used in rgba() opacity contexts
+  --nav-bg: rgba(4, 6, 10, .55);
+  --nav-bg-scrolled: rgba(4, 6, 10, .85);
+  --menu-bg: rgba(7, 12, 19, .97);
+  --search-overlay-bg: rgba(2, 4, 7, .8);
+  --panel-gradient: linear-gradient(180deg, rgba(10, 16, 25, .92), rgba(7, 12, 19, .94));
+  --content-bg: rgba(6, 10, 16, .82);
+  --term-out-bg: rgba(7, 12, 19, .98);
+  --band-sticky-bg: radial-gradient(ellipse at center, rgba(8, 14, 22, .4), rgba(4, 6, 10, .94));
+  --footer-bg: rgba(4, 6, 10, .7);
+  --surface-subtle: rgba(255, 255, 255, .02);
+
+  --body-glow-1: rgba(45, 255, 158, .07);
+  --body-glow-2: rgba(56, 225, 255, .06);
+  --body-grid: rgba(45, 255, 158, .025);
+}

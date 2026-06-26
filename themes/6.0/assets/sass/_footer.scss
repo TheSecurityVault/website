@@ -4,8 +4,8 @@
 .footer {
   position: relative;
   z-index: 1;
-  border-top: 1px solid $color-border;
-  background: rgba(4, 6, 10, .7);
+  border-top: 1px solid var(--color-border);
+  background: var(--footer-bg);
   backdrop-filter: blur(6px);
   margin-top: 40px;
 }
@@ -34,8 +34,8 @@
   align-items: center;
   gap: 7px;
   padding: 9px 14px;
-  background: $color-panel-bar;
-  border-bottom: 1px solid $color-border;
+  background: var(--color-panel-bar);
+  border-bottom: 1px solid var(--color-border);
   margin-bottom: 14px;
 }
 
@@ -43,31 +43,31 @@
   margin-left: 8px;
   font-family: $font-mono;
   font-size: 0.72rem;
-  color: $color-muted;
+  color: var(--color-muted);
 }
 
 .footer-line {
   font-family: $font-mono;
   font-size: 0.86rem;
-  color: $color-text;
+  color: var(--color-text);
   padding: 0 16px;
   margin-top: 6px;
 }
 
 .footer-prompt {
-  color: $color-green;
+  color: var(--color-green);
   font-weight: 700;
 }
 
 .footer-out {
   font-family: $font-mono;
   font-size: 0.86rem;
-  color: $color-cyan;
+  color: var(--color-cyan);
   padding: 2px 16px 0 28px;
 }
 
 .footer-tagline {
-  color: $color-muted;
+  color: var(--color-muted);
   font-family: $font-sans;
   font-size: 0.85rem;
   line-height: 1.6;
@@ -85,7 +85,7 @@
 .footer-col-title {
   font-family: $font-mono;
   font-size: 0.78rem;
-  color: $color-green;
+  color: var(--color-green);
   margin-bottom: 14px;
   letter-spacing: 0.04em;
 }
@@ -94,18 +94,18 @@
   display: block;
   font-family: $font-mono;
   font-size: 0.85rem;
-  color: $color-text;
+  color: var(--color-text);
   padding: 4px 0;
   transition: color $transition, padding-left $transition;
 
   &:hover {
-    color: $color-green;
+    color: var(--color-green);
     padding-left: 5px;
   }
 }
 
 .footer-bottom {
-  border-top: 1px solid $color-border;
+  border-top: 1px solid var(--color-border);
 
   .container {
     display: flex;
@@ -120,7 +120,7 @@
   span {
     font-family: $font-mono;
     font-size: 0.78rem;
-    color: $color-muted;
+    color: var(--color-muted);
   }
 }
 
@@ -131,10 +131,10 @@
   a {
     font-family: $font-mono;
     font-size: 0.78rem;
-    color: $color-muted;
+    color: var(--color-muted);
 
     &:hover {
-      color: $color-green;
+      color: var(--color-green);
     }
   }
 }

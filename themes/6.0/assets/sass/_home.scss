@@ -1,109 +1,479 @@
 @import 'variables';
 @import 'mixins';
 
-// ══════════════ INTRO (scroll-to-reveal, parallax) ══════════════
-.intro {
+// ══════════════ PINNED BANDS (scroll drives the animation; visual stays put) ══════════════
+.band {
   position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.intro-inner {
-  display: flex;
-  justify-content: center;
   width: 100%;
-  padding-top: calc(#{$nav-height} + 28px);
+  height: 320vh;            // scroll track — pins for ~220vh of scrolling
 }
 
-.intro-tag {
+.band-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--band-sticky-bg);
+}
+
+.band-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.band-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 26px;
+  text-align: center;
   font-family: $font-mono;
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  color: $color-green;
-  border: 1px solid rgba(45, 255, 158, .3);
-  background: rgba(7, 12, 19, .5);
-  padding: 7px 15px;
-  border-radius: $r-sm;
-  backdrop-filter: blur(4px);
-  will-change: transform;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  color: var(--color-muted);
+  pointer-events: none;
+  z-index: 2;
 }
 
-.scroll-hint.intro-hint {
-  @include sm {
-    display: flex;
+// scroll-driven status caption — compact centered warning box
+.band-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  font-family: $font-mono;
+  font-weight: 700;
+  font-size: clamp(0.68rem, 1.6vw, 0.9rem);
+  letter-spacing: 0.12em;
+  color: var(--color-amber);
+  background: rgba(var(--color-bg-soft-rgb), .85);
+  border: 1px solid rgba(var(--color-amber-rgb), .5);
+  border-radius: $r-sm;
+  padding: 8px 14px;
+  box-shadow: 0 0 18px rgba(var(--color-amber-rgb), .15);
+  pointer-events: none;
+  z-index: 3;
+
+  &::before {
+    content: "⚠";
+    font-size: 1.05em;
+  }
+
+  &:empty {
+    display: none;
   }
 }
 
-// ══════════════ HERO ══════════════
-.hero {
+// ══════════════ DASHBOARD BAND ══════════════
+.band--dashboard {
+  height: 900vh;
+}
+
+// Band dark bg override — additive-blended text needs a dark surface in light mode too
+.band--dashboard .band-sticky {
+  background: #020c14;
+}
+
+.dash-hud {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dash-status {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: $font-mono;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  color: rgba(56, 225, 255, 0.55);
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.dash-corners {
+  position: absolute;
+  inset: 14px;
+  pointer-events: none;
+}
+
+.dash-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-color: rgba(56, 225, 255, 0.12);
+  border-style: solid;
+
+  &--tl { top: 0; left: 0; border-width: 1px 0 0 1px; }
+  &--tr { top: 0; right: 0; border-width: 1px 1px 0 0; }
+  &--bl { bottom: 0; left: 0; border-width: 0 0 1px 1px; }
+  &--br { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+}
+
+.dash-panel {
+  width: 92vw;
+  max-width: 1200px;
+  background: rgba(2, 10, 18, 0.94);
+  border: 1px solid rgba(56, 225, 255, 0.18);
+  border-radius: $r-sm;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(56, 225, 255, 0.04) inset;
+  font-family: $font-mono;
+  font-size: 0.85rem;
+  color: rgba(148, 230, 180, 0.88);
+  transform-origin: center center;
+  will-change: opacity, transform;
+
+  @include sm {
+    font-size: 0.72rem;
+    width: 96vw;
+  }
+}
+
+// Scroll-reveal terminal body — fills most of the viewport height
+.dash-panel-body--term {
+  padding: 0;
+  height: calc(100vh - 160px);
+  max-height: 720px;
+  min-height: 360px;
   position: relative;
-  min-height: 100vh;
+  overflow: hidden;
+
+  @include sm {
+    height: calc(100vh - 140px);
+    max-height: 480px;
+  }
+}
+
+.dash-term {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 14px 18px;
+}
+
+.t-line {
+  display: none;
+  line-height: 1.65;
+  white-space: pre;
+
+  &.t-line--show {
+    display: block;
+    min-height: 1.65em;
+    animation: line-appear 0.18s ease both;
+  }
+}
+
+@keyframes line-appear {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Network canvas overlay — fades in over terminal in final phase
+.dash-net-wrap {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+
+  &.dash-net-wrap--active {
+    opacity: 1;
+  }
+}
+
+.dash-panel-bar {
   display: flex;
   align-items: center;
-  padding: calc(#{$nav-height} + 40px) 0 80px;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(56, 225, 255, 0.03);
+  border-bottom: 1px solid rgba(56, 225, 255, 0.10);
 }
 
-.hero-inner {
+.dash-panel-title {
+  flex: 1;
+  font-size: 0.7rem;
+  color: rgba(56, 225, 255, 0.45);
+  margin-left: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dash-panel-tag {
+  font-size: 0.6rem;
+  padding: 2px 7px;
+  border-radius: 2px;
+  border: 1px solid rgba(56, 225, 255, 0.25);
+  color: rgba(56, 225, 255, 0.65);
+  letter-spacing: 0.08em;
+
+  &--warn { border-color: rgba(255, 180, 84, 0.35); color: rgba(255, 180, 84, 0.75); }
+  &--crit { border-color: rgba(255, 61, 127, 0.35); color: rgba(255, 61, 127, 0.75); }
+  &--ok   { border-color: rgba(45, 255, 158, 0.30); color: rgba(45, 255, 158, 0.80); }
+}
+
+.dash-panel-body {
+  padding: 16px 18px;
+  overflow: hidden;
+}
+
+.dash-pre {
+  margin: 0;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.65;
+  font-size: inherit;
+}
+
+.dash-panel-footer {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px 12px;
+  border-top: 1px solid rgba(56, 225, 255, 0.07);
 }
 
-.hero-term {
+.dash-progress-track {
+  flex: 1;
+  height: 3px;
+  background: rgba(56, 225, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.dash-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, rgba(45, 255, 158, 0.8), rgba(56, 225, 255, 0.8));
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+.dash-progress-label {
+  font-size: 0.62rem;
+  color: rgba(56, 225, 255, 0.45);
+  min-width: 36px;
+  text-align: right;
+}
+
+// Terminal text color utilities (used inside dash-pre)
+.t-ok     { color: rgba(45, 255, 158, 0.90); }
+.t-info   { color: rgba(56, 225, 255, 0.70); }
+.t-warn   { color: rgba(255, 180, 84, 0.80); }
+.t-crit   { color: rgba(255, 61, 127, 0.85); }
+.t-muted  { color: rgba(107, 114, 128, 0.65); }
+.t-bright { color: rgba(233, 245, 239, 0.95); }
+
+// ── Network canvas (inside .dash-net-wrap) ────────────────────────────────
+.dash-net-canvas {
+  display: block;
   width: 100%;
-  max-width: 720px;
+  height: 100%;
+}
+
+.dash-net-alert {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-top: 1px solid transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+
+  &.dash-net-alert--active {
+    opacity: 1;
+    animation: net-alert-pulse 2s ease infinite;
+  }
+}
+
+.dash-net-alert-icon {
+  font-size: 1.8rem;
+  color: rgba(255, 50, 80, 0.92);
+  line-height: 1;
+}
+
+.dash-net-alert-text {
+  font-family: $font-mono;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: rgba(255, 50, 80, 0.92);
+  text-shadow: 0 0 24px rgba(255, 50, 80, 0.55);
+}
+
+@keyframes net-alert-pulse {
+  0%, 100% { background: rgba(255, 20, 60, 0.00); border-top-color: transparent; }
+  50%       { background: rgba(255, 20, 60, 0.08); border-top-color: rgba(255, 20, 60, 0.30); }
+}
+
+// ── Light-theme overrides: all hardcoded dark dashboard colors ────────────
+@mixin dash-light-overrides {
+  .band--dashboard .band-sticky {
+    background: var(--color-bg-soft);
+  }
+
+  .dash-status {
+    color: var(--color-cyan);
+    opacity: 0.7;
+  }
+
+  .dash-corner {
+    border-color: var(--color-border);
+  }
+
+  .dash-panel {
+    background: rgba(var(--color-bg-soft-rgb), 0.97);
+    border-color: var(--color-border);
+    color: var(--color-text);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .dash-panel-bar {
+    background: rgba(0, 0, 0, 0.03);
+    border-bottom-color: var(--color-border-soft);
+  }
+
+  .dash-panel-title   { color: var(--color-muted); }
+
+  .dash-panel-tag {
+    border-color: rgba(var(--color-cyan-rgb), 0.30);
+    color: var(--color-cyan);
+    &--warn { border-color: rgba(var(--color-amber-rgb), 0.35); color: var(--color-amber); }
+    &--crit { border-color: rgba(var(--color-magenta), 0.35); color: var(--color-magenta); }
+  }
+
+  .dash-panel-footer  { border-top-color: var(--color-border-soft); }
+
+  .t-ok     { color: var(--color-green); }
+  .t-info   { color: var(--color-cyan); }
+  .t-warn   { color: var(--color-amber); }
+  .t-crit   { color: var(--color-magenta); }
+  .t-muted  { color: var(--color-muted); }
+  .t-bright { color: var(--color-text-bright); }
+}
+
+html[data-theme="light"] { @include dash-light-overrides; }
+
+@media (prefers-color-scheme: light) {
+  html:not([data-theme="dark"]) { @include dash-light-overrides; }
+}
+
+// ══════════════ HERO ══════════════
+// Outer element is the scroll track for the sticky parallax
+.hero {
+  position: relative;
+  height: 200vh;
+
+  @include sm {
+    height: auto;
+  }
+}
+
+// Sticky layer — stays in viewport while scroll track consumes 200vh
+.hero-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(#{$nav-height} + 24px) 16px 24px;
+
+  @include sm {
+    position: relative;
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+// Two-column terminal card
+.hero-card {
+  width: 100%;
+  max-width: 960px;
   @include panel;
   overflow: hidden;
 }
 
-.term-body {
-  padding: 28px 30px 34px;
+.hero-card-inner {
+  display: grid;
+  grid-template-columns: 240px 1fr;
 
-  @include sm {
-    padding: 20px 18px 26px;
+  @include md {
+    grid-template-columns: 1fr;
   }
 }
 
-.hero-line {
-  font-family: $font-mono;
-  font-size: 0.9rem;
-  color: $color-text;
-  margin-bottom: 18px;
-
-  .hero-cmd {
-    color: $color-text-bright;
-  }
-}
-
-// ─── Identity block (photo + name) ─────────────────────────────────────────────
-.hero-id {
+// Left column — identity
+.hero-id-col {
+  padding: 24px 20px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 24px;
-  margin-bottom: 22px;
+  text-align: center;
+  border-right: 1px solid var(--color-border);
+  gap: 4px;
 
-  @include sm {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 18px;
+  @include md {
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
   }
 }
 
-.hero-id-main {
-  min-width: 0;
+// Right column — bio / stats / skills
+.hero-info-col {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
 }
 
+// Prompt lines inside the card
+.hero-prompt-line {
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  margin-bottom: 10px;
+
+  &--gap {
+    margin-top: 16px;
+  }
+
+  .prompt {
+    color: var(--color-green);
+    margin-right: 6px;
+  }
+}
+
+// ─── Avatar ─────────────────────────────────────────────────────────────────
 .hero-avatar-frame {
   position: relative;
   flex: none;
-  width: 134px;
-  height: 134px;
+  width: 110px;
+  height: 110px;
   padding: 6px;
-  border: 1px solid rgba(45, 255, 158, .35);
+  border: 1px solid rgba(var(--color-green-rgb), .35);
   border-radius: $r-sm;
-  background: rgba(45, 255, 158, .05);
-  box-shadow: $glow-green, inset 0 0 18px rgba(45, 255, 158, .08);
+  background: rgba(var(--color-green-rgb), .05);
+  box-shadow: var(--glow-green), inset 0 0 18px rgba(var(--color-green-rgb), .08);
   overflow: hidden;
 }
 
@@ -121,7 +491,7 @@
   inset: 6px;
   border-radius: 3px;
   background:
-    linear-gradient(180deg, rgba(45, 255, 158, .14), transparent 45%),
+    linear-gradient(180deg, rgba(var(--color-green-rgb), .14), transparent 45%),
     repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0, 0, 0, .25) 3px 4px);
   mix-blend-mode: screen;
   pointer-events: none;
@@ -133,8 +503,8 @@
   right: 6px;
   top: 6px;
   height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(45, 255, 158, .85), transparent);
-  box-shadow: 0 0 8px rgba(45, 255, 158, .8);
+  background: linear-gradient(90deg, transparent, rgba(var(--color-green-rgb), .85), transparent);
+  box-shadow: 0 0 8px rgba(var(--color-green-rgb), .8);
   animation: avatar-scan 3.4s linear infinite;
 }
 
@@ -153,7 +523,7 @@
   }
 
   100% {
-    transform: translateY(122px);
+    transform: translateY(98px);
     opacity: 0;
   }
 }
@@ -162,7 +532,7 @@
   position: absolute;
   width: 12px;
   height: 12px;
-  border: 2px solid $color-cyan;
+  border: 2px solid var(--color-cyan);
   z-index: 2;
 
   &--tl {
@@ -201,79 +571,59 @@
   }
 }
 
+// ─── Name / title / handle ───────────────────────────────────────────────────
 .hero-name {
-  font-size: clamp(2rem, 6vw, 3.4rem);
+  font-size: clamp(1.3rem, 3.5vw, 1.9rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.05;
-  margin-bottom: 12px;
+  text-align: center;
+  margin: 10px 0 4px;
 }
 
-.hero-uid {
+.hero-jobtitle {
   font-family: $font-mono;
-  font-size: 0.85rem;
-  color: $color-muted;
-  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--color-cyan);
+  margin-bottom: 4px;
+  text-align: center;
+}
 
-  .hero-role-tag {
-    color: $color-muted;
-    margin-right: 6px;
+.hero-handle {
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  margin-bottom: 14px;
+
+  .hero-uid-status {
+    color: var(--color-green);
   }
 
   .hero-uid-sep {
-    color: $color-border;
-    margin: 0 6px;
-  }
-
-  .hero-uid-status {
-    color: $color-green;
+    color: var(--color-border);
+    margin: 0 4px;
   }
 }
 
-.hero-role {
-  font-family: $font-mono;
-  font-size: clamp(0.95rem, 2.4vw, 1.15rem);
-  color: $color-cyan;
-  margin-bottom: 22px;
-
-  .hero-role-tag {
-    color: $color-muted;
-    margin-right: 6px;
-  }
-}
-
-.hero-bio {
-  font-family: $font-sans;
-  font-size: 1rem;
-  line-height: 1.8;
-  color: $color-text;
-  max-width: 60ch;
-  margin-bottom: 26px;
-  min-height: 3em; // reduce layout shift while typing
-}
-
-// blinking caret appended by JS at end of typed bio
-.hero-bio .type-caret {
-  color: $color-green;
-  animation: blink 1.05s steps(1) infinite;
-}
-
+// ─── Social links ────────────────────────────────────────────────────────────
 .hero-social {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 28px;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 12px;
 }
 
 .hero-social-link {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   padding: 7px 13px;
   font-family: $font-mono;
   font-size: 0.8rem;
-  color: $color-text;
-  border: 1px solid $color-border;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   border-radius: $r-sm;
   transition: all $transition;
 
@@ -283,17 +633,99 @@
   }
 
   &:hover {
-    color: $color-green;
-    border-color: rgba(45, 255, 158, .4);
-    box-shadow: $glow-green;
+    color: var(--color-green);
+    border-color: rgba(var(--color-green-rgb), .4);
+    box-shadow: var(--glow-green);
     transform: translateY(-2px);
   }
 }
 
+// ─── CTA buttons ─────────────────────────────────────────────────────────────
 .hero-cta {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+
+  .btn {
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+// ─── Bio ─────────────────────────────────────────────────────────────────────
+.hero-bio {
+  font-family: $font-sans;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--color-text);
+  margin-bottom: 0;
+  min-height: 2.5em;
+}
+
+// blinking caret appended by JS at end of typed bio
+.hero-bio .type-caret {
+  color: var(--color-green);
+  animation: blink 1.05s steps(1) infinite;
+}
+
+// ─── Stats grid ──────────────────────────────────────────────────────────────
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+
+  @include sm {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.hero-stat {
+  text-align: center;
+  padding: 10px 6px;
+  background: rgba(var(--color-green-rgb), .04);
+  border: 1px solid rgba(var(--color-green-rgb), .12);
+  border-radius: $r-sm;
+}
+
+.hero-stat-val {
+  display: block;
+  font-family: $font-mono;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-green);
+  line-height: 1.2;
+}
+
+.hero-stat-plus {
+  font-size: 1rem;
+  color: var(--color-cyan);
+}
+
+.hero-stat-label {
+  display: block;
+  font-family: $font-mono;
+  font-size: 0.6rem;
+  color: var(--color-muted);
+  letter-spacing: 0.04em;
+  margin-top: 3px;
+}
+
+// ─── Skill tags ──────────────────────────────────────────────────────────────
+.hero-tags {
+  display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 6px;
+}
+
+.tag {
+  font-family: $font-mono;
+  font-size: 0.65rem;
+  padding: 3px 8px;
+  border-radius: $r-sm;
+  background: var(--color-tag-bg);
+  color: var(--color-tag-text);
+  border: 1px solid rgba(var(--color-green-rgb), .2);
 }
 
 // ─── Scroll hint ──────────────────────────────────────────────────────────────
@@ -308,11 +740,11 @@
   gap: 6px;
   font-family: $font-mono;
   font-size: 0.72rem;
-  color: $color-muted;
+  color: var(--color-muted);
   letter-spacing: 0.08em;
 
   &:hover {
-    color: $color-green;
+    color: var(--color-green);
   }
 
   .scroll-hint-arrow {
@@ -342,6 +774,160 @@
   }
 }
 
+.section.blog {
+  position: relative;
+  z-index: 2;
+}
+
+// Projects section slides UP over the dashboard band from below as its scroll ends
+.section.projects {
+  position: relative;
+  z-index: 3;
+  margin-top: -40vh;
+  background: linear-gradient(to bottom, transparent 0%, var(--color-bg) 200px);
+
+  @include sm {
+    margin-top: -30vh;
+  }
+}
+
+// ══════════════ HOME HERO CANVAS ══════════════
+.home-hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 520px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.home-hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 24px;
+  max-width: 680px;
+}
+
+.home-hero-cmd {
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin-bottom: 16px;
+
+  .prompt {
+    color: var(--color-green);
+    margin-right: 6px;
+  }
+}
+
+.home-hero-title {
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--color-text-bright);
+  margin-bottom: 20px;
+}
+
+.home-hero-sub {
+  font-family: $font-mono;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin-bottom: 36px;
+}
+
+.home-hero-cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+// ══════════════ HOME ABOUT ══════════════
+.home-about {
+  width: 100%;
+  background: var(--color-panel);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding: 80px 0;
+
+  @include sm {
+    padding: 56px 0;
+  }
+}
+
+.home-about-grid {
+  display: flex;
+  align-items: center;
+  gap: 56px;
+
+  @include md {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 36px;
+  }
+}
+
+.home-about-id {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+.home-about-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .ap-links {
+    margin-left: 0;
+  }
+}
+
+.home-about-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: saturate(.8);
+  flex-shrink: 0;
+}
+
+.home-about-bio {
+  flex: 1;
+  padding-left: 56px;
+  border-left: 1px solid var(--color-border);
+
+  @include md {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  p {
+    font-family: $font-sans;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    color: var(--color-text);
+    margin-bottom: 1.4em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 // ══════════════ POSTS GRID ══════════════
 .posts-grid {
   display: grid;
@@ -366,15 +952,15 @@
 
   &:hover {
     transform: translateY(-4px);
-    border-color: rgba(45, 255, 158, .4);
-    box-shadow: $shadow-panel, $glow-green;
+    border-color: rgba(var(--color-green-rgb), .4);
+    box-shadow: var(--shadow-panel), var(--glow-green);
   }
 }
 
 .post-card-img-link {
   display: block;
   overflow: hidden;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .post-card-img {
@@ -404,9 +990,9 @@
   font-size: 0.68rem;
   text-transform: lowercase;
   letter-spacing: 0.04em;
-  color: $color-amber;
-  border: 1px solid rgba(255, 180, 84, .3);
-  background: rgba(255, 180, 84, .08);
+  color: var(--color-amber);
+  border: 1px solid rgba(var(--color-amber-rgb), .3);
+  background: rgba(var(--color-amber-rgb), .08);
   padding: 2px 8px;
   border-radius: $r-sm;
   margin-bottom: 12px;
@@ -419,10 +1005,10 @@
   margin-bottom: 10px;
 
   a {
-    color: $color-text-bright;
+    color: var(--color-text-bright);
 
     &:hover {
-      color: $color-green;
+      color: var(--color-green);
     }
   }
 }
@@ -430,7 +1016,7 @@
 .post-card-excerpt {
   font-family: $font-sans;
   font-size: 0.88rem;
-  color: $color-muted;
+  color: var(--color-muted);
   line-height: 1.65;
   margin-bottom: 16px;
   flex: 1;
@@ -442,8 +1028,8 @@
   gap: 6px;
   font-family: $font-mono;
   font-size: 0.74rem;
-  color: $color-muted;
-  border-top: 1px dashed $color-border;
+  color: var(--color-muted);
+  border-top: 1px dashed var(--color-border);
   padding-top: 12px;
 }
 
@@ -467,14 +1053,14 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  color: $color-text;
+  color: var(--color-text);
   transition: transform $transition, border-color $transition, box-shadow $transition;
 
   &:hover {
     transform: translateY(-4px);
-    border-color: rgba(56, 225, 255, .4);
-    box-shadow: $shadow-panel, $glow-cyan;
-    color: $color-text;
+    border-color: rgba(var(--color-cyan-rgb), .4);
+    box-shadow: var(--shadow-panel), var(--glow-cyan);
+    color: var(--color-text);
   }
 
   &--private {
@@ -485,8 +1071,8 @@
 .project-card-img-wrap {
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border-bottom: 1px solid $color-border;
-  background: $color-bg-soft;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-soft);
 }
 
 .project-card-img {
@@ -508,14 +1094,14 @@
 .project-card-title {
   font-family: $font-mono;
   font-size: 1rem;
-  color: $color-text-bright;
+  color: var(--color-text-bright);
   margin-bottom: 8px;
 }
 
 .project-card-desc {
   font-family: $font-sans;
   font-size: 0.85rem;
-  color: $color-muted;
+  color: var(--color-muted);
   line-height: 1.6;
 }
 
@@ -526,7 +1112,7 @@
   padding: 12px 18px 16px;
   font-family: $font-mono;
   font-size: 0.8rem;
-  color: $color-cyan;
+  color: var(--color-cyan);
 }
 
 .project-card-arrow {
@@ -540,5 +1126,5 @@
 }
 
 .project-card-private {
-  color: $color-muted;
+  color: var(--color-muted);
 }

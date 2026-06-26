@@ -10,6 +10,36 @@
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var isTouch = window.matchMedia && window.matchMedia('(hover: none)').matches;
 
+  // ─── Theme management ──────────────────────────────────────────────────────
+  function getEffectiveTheme() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'dark' || attr === 'light') return attr;
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ? 'dark' : 'light';
+  }
+
+  function setTheme(mode) {
+    if (mode === 'auto') {
+      localStorage.removeItem('theme');
+      document.documentElement.removeAttribute('data-theme');
+    } else {
+      localStorage.setItem('theme', mode);
+      document.documentElement.setAttribute('data-theme', mode);
+    }
+    updateThemeButton();
+  }
+
+  function toggleTheme() {
+    setTheme(getEffectiveTheme() === 'dark' ? 'light' : 'dark');
+  }
+
+  function updateThemeButton() {
+    var btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    var isDark = getEffectiveTheme() === 'dark';
+    btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+
   // ─── Nav: sticky shadow + mobile toggle + search overlay ──────────────────
   var navbar = document.getElementById('navbar');
   var toggle = document.getElementById('navToggle');
@@ -18,11 +48,17 @@
   var searchOverlay = document.getElementById('searchOverlay');
   var searchClose = document.getElementById('searchClose');
   var searchInput = document.getElementById('search');
+  var themeBtn = document.getElementById('themeToggle');
 
   if (navbar) {
     window.addEventListener('scroll', function () {
       navbar.classList.toggle('nav--scrolled', window.scrollY > 10);
     }, { passive: true });
+  }
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', toggleTheme);
+    updateThemeButton();
   }
 
   if (toggle && menu) {
@@ -36,6 +72,13 @@
         toggle.setAttribute('aria-expanded', 'false');
       });
     });
+    // close mobile menu when theme button is clicked
+    if (themeBtn) {
+      themeBtn.addEventListener('click', function () {
+        menu.classList.remove('nav-menu--open');
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+    }
   }
 
   if (searchOpen && searchOverlay) {
@@ -121,7 +164,6 @@
     bio.textContent = '';
     var caret = document.createElement('span');
     caret.className = 'type-caret';
-    caret.textContent = '█';
     bio.appendChild(caret);
 
     function finish() {
@@ -130,7 +172,6 @@
       bio.textContent = full;
       var c = document.createElement('span');
       c.className = 'type-caret';
-      c.textContent = '█';
       bio.appendChild(c);
       window.removeEventListener('scroll', finish);
       window.removeEventListener('click', finish);
@@ -160,13 +201,14 @@
     var log = document.getElementById('bootLog');
     if (!boot || !log) { if (then) then(); return; }
 
+    // Each line: array of [className, text] pairs. className='' → plain text node.
     var lines = [
-      '<span class="muted">visitor@vault</span>:~$ ./mount --secure /dev/vault',
-      '<span class="ok">[  OK  ]</span> decrypting payload .................. done',
-      '<span class="ok">[  OK  ]</span> loading modules: glitch crt webgl threatmap',
-      '<span class="warn">[ WARN ]</span> intrusion detection ............... passive',
-      '<span class="ok">[  OK  ]</span> spawning shell for visitor@vault',
-      '<span class="ok">access granted</span> █'
+      [['muted','visitor@vault'], ['','':~$ ./mount --secure /dev/vault']],
+      [['ok','[  OK  ]'], ['', ' decrypting payload .................. done']],
+      [['ok','[  OK  ]'], ['', ' loading modules: glitch crt webgl threatmap']],
+      [['warn','[ WARN ]'], ['', ' intrusion detection ............... passive']],
+      [['ok','[  OK  ]'], ['', ' spawning shell for visitor@vault']],
+      [['ok','access granted'], ['', ' █']]
     ];
 
     if (reduceMotion) {
@@ -184,7 +226,21 @@
         }, 280);
         return;
       }
-      log.innerHTML += lines[idx] + '\n';
+      var row = document.createElement('span');
+      var parts = lines[idx];
+      for (var pi = 0; pi < parts.length; pi++) {
+        var cls = parts[pi][0], txt = parts[pi][1];
+        if (cls) {
+          var sp = document.createElement('span');
+          sp.className = cls;
+          sp.appendChild(document.createTextNode(txt));
+          row.appendChild(sp);
+        } else {
+          row.appendChild(document.createTextNode(txt));
+        }
+      }
+      row.appendChild(document.createTextNode('\n'));
+      log.appendChild(row);
       idx++;
       setTimeout(next, 180 + Math.random() * 120);
     }
@@ -207,7 +263,17 @@
       a.href = '#' + h.id;
       a.className = 'heading-anchor';
       a.setAttribute('aria-hidden', 'true');
-      a.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '16'); svg.setAttribute('height', '16');
+      svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '2');
+      svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+      var p1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p1.setAttribute('d', 'M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71');
+      var p2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p2.setAttribute('d', 'M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71');
+      svg.appendChild(p1); svg.appendChild(p2);
+      a.appendChild(svg);
       h.appendChild(a);
     });
   }
@@ -224,29 +290,56 @@
       'home': '/', '~': '/', '/': '/', '..': '/', 'root': '/',
       'about': '/#about', 'whoami': '/#about', 'me': '/#about',
       'projects': '/#projects', 'tools': '/#projects',
-      'posts': '/posts/', 'logs': '/posts/', 'blog': '/posts/', 'articles': '/posts/',
+      'posts': '/posts/', 'blog': '/posts/', 'articles': '/posts/',
       'search': '/search/', 'grep': '/search/'
     };
 
-    // Reflect current location in the prompt path
+    // Reflect current location in the prompt path (kept SHORT so it never
+    // overflows the bar — long slugs used to push the input off-screen)
     if (pathEl) {
       var p = window.location.pathname;
-      if (p.indexOf('/posts') === 0) pathEl.textContent = '~/logs';
+      if (p === '/') pathEl.textContent = '~';
+      else if (p.indexOf('/posts') === 0) pathEl.textContent = '~/posts';
       else if (p.indexOf('/search') === 0) pathEl.textContent = '~/search';
-      else if (p !== '/') pathEl.textContent = '~' + p.replace(/\/$/, '');
+      else if (p.indexOf('/about') === 0) pathEl.textContent = '~/about';
+      else pathEl.textContent = '~/posts';
     }
 
+    // Click anywhere on the prompt focuses the input (type from any page)
+    form.addEventListener('click', function (e) { if (e.target !== input) input.focus(); });
+
     var hideTimer;
-    function show(html, sticky) {
-      out.innerHTML = html;
+
+    // Build a <span> with a class and text
+    function sp(cls, text) {
+      var el = document.createElement('span');
+      if (cls) el.className = cls;
+      el.appendChild(document.createTextNode(text));
+      return el;
+    }
+    // Build an <a> link
+    function lnk(href, text) {
+      var el = document.createElement('a');
+      el.href = href;
+      el.appendChild(document.createTextNode(text));
+      return el;
+    }
+
+    function show(frag, sticky) {
+      while (out.firstChild) out.removeChild(out.firstChild);
+      if (frag instanceof Node) {
+        out.appendChild(frag);
+      } else {
+        out.appendChild(document.createTextNode(String(frag)));
+      }
       out.classList.add('is-active');
       clearTimeout(hideTimer);
       if (!sticky) hideTimer = setTimeout(function () { out.classList.remove('is-active'); }, 6500);
     }
+
     function go(url) { window.location.href = url; }
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    function runCmd() {
       var raw = input.value.trim();
       if (!raw) return;
       var parts = raw.split(/\s+/);
@@ -262,49 +355,92 @@
       if (cmd === 'cd') {
         var dest = (parts[1] || '~').toLowerCase().replace(/^\.?\//, '').replace(/\/$/, '') || '~';
         if (ROUTES[dest] !== undefined) { go(ROUTES[dest]); return; }
-        show('<span class="err">cd: ' + escapeHtml(parts[1] || '') + ': no such directory</span>');
+        var f0 = document.createDocumentFragment();
+        f0.appendChild(sp('err', 'cd: ' + (parts[1] || '') + ': no such directory'));
+        show(f0);
         return;
       }
       // bare target (e.g. "about", "posts")
       if (ROUTES[cmd] !== undefined && parts.length === 1) { go(ROUTES[cmd]); return; }
 
+      var frag = document.createDocumentFragment();
       switch (cmd) {
-        case 'help':
-          show('<span class="muted">available commands:</span><br>' +
-            '<span class="ok">cd</span> &lt;dir&gt; · <span class="ok">ls</span> · ' +
-            '<span class="ok">grep</span> &lt;term&gt; · <span class="ok">pwd</span> · ' +
-            '<span class="ok">clear</span><br>' +
-            '<span class="muted">dirs:</span> ' +
-            '<a href="/#about">about</a> <a href="/#projects">projects</a> ' +
-            '<a href="/posts/">logs</a> <a href="/search/">search</a>', true);
+        case 'help': {
+          frag.appendChild(sp('muted', 'available commands:'));
+          frag.appendChild(document.createElement('br'));
+          frag.appendChild(sp('ok', 'cd')); frag.appendChild(document.createTextNode(' <dir> · '));
+          frag.appendChild(sp('ok', 'ls')); frag.appendChild(document.createTextNode(' · '));
+          frag.appendChild(sp('ok', 'grep')); frag.appendChild(document.createTextNode(' <term> · '));
+          frag.appendChild(sp('ok', 'pwd')); frag.appendChild(document.createTextNode(' · '));
+          frag.appendChild(sp('ok', 'theme')); frag.appendChild(document.createTextNode(' <dark|light|auto> · '));
+          frag.appendChild(sp('ok', 'clear'));
+          frag.appendChild(document.createElement('br'));
+          frag.appendChild(sp('muted', 'dirs: '));
+          frag.appendChild(lnk('/#about', 'about')); frag.appendChild(document.createTextNode(' '));
+          frag.appendChild(lnk('/#projects', 'projects')); frag.appendChild(document.createTextNode(' '));
+          frag.appendChild(lnk('/posts/', 'posts')); frag.appendChild(document.createTextNode(' '));
+          frag.appendChild(lnk('/search/', 'search'));
+          show(frag, true);
           break;
-        case 'ls':
-          show('<a href="/#about">about/</a>&nbsp;&nbsp; <a href="/#projects">projects/</a>&nbsp;&nbsp; ' +
-            '<a href="/posts/">logs/</a>&nbsp;&nbsp; <a href="/search/">search/</a>', true);
+        }
+        case 'ls': {
+          frag.appendChild(lnk('/#about', 'about/')); frag.appendChild(document.createTextNode('  '));
+          frag.appendChild(lnk('/#projects', 'projects/')); frag.appendChild(document.createTextNode('  '));
+          frag.appendChild(lnk('/posts/', 'posts/')); frag.appendChild(document.createTextNode('  '));
+          frag.appendChild(lnk('/search/', 'search/'));
+          show(frag, true);
           break;
+        }
         case 'pwd':
-          show('<span class="ok">' + escapeHtml(window.location.pathname) + '</span>');
+          show(sp('ok', window.location.pathname));
           break;
         case 'whoami':
-          show('<span class="ok">visitor</span>');
+          show(sp('ok', 'visitor'));
           break;
         case 'hostname':
-          show('<span class="ok">' + escapeHtml(window.location.hostname || 'thesecurityvault') + '</span>');
+          show(sp('ok', window.location.hostname || 'thesecurityvault'));
           break;
         case 'echo':
-          show(escapeHtml(arg));
+          show(document.createTextNode(arg));
           break;
         case 'clear':
           out.classList.remove('is-active');
           break;
         case 'sudo':
-          show('<span class="err">visitor is not in the sudoers file. This incident will be reported.</span>');
+          show(sp('err', 'visitor is not in the sudoers file. This incident will be reported.'));
           break;
-        default:
-          show('<span class="err">bash: ' + escapeHtml(cmd) + ': command not found</span> ' +
-            '<span class="muted">— try \'help\'</span>');
+        case 'theme': {
+          var mode = (arg || '').toLowerCase();
+          if (mode === 'dark' || mode === 'light' || mode === 'auto' || mode === 'system') {
+            var actual = mode === 'system' ? 'auto' : mode;
+            setTheme(actual);
+            show(sp('ok', 'theme set to ' + actual));
+          } else if (mode === '') {
+            frag.appendChild(sp('ok', 'current theme: ' + getEffectiveTheme()));
+            frag.appendChild(document.createTextNode(' '));
+            frag.appendChild(sp('muted', '— usage: theme <dark|light|auto>'));
+            show(frag);
+          } else {
+            frag.appendChild(sp('err', 'unknown theme: ' + mode));
+            frag.appendChild(document.createTextNode(' '));
+            frag.appendChild(sp('muted', '— try dark, light, or auto'));
+            show(frag);
+          }
+          break;
+        }
+        default: {
+          frag.appendChild(sp('err', 'bash: ' + cmd + ': command not found'));
+          frag.appendChild(document.createTextNode(' '));
+          frag.appendChild(sp('muted', "— try 'help'"));
+          show(frag);
+        }
       }
       input.value = '';
+    }
+
+    // Run on Enter (no <form>, so the page never reloads)
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); runCmd(); }
     });
 
     out.addEventListener('click', function (e) {
@@ -317,51 +453,62 @@
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  // ─── Background preview switcher ──────────────────────────────────────────
-  function initBgSwitch() {
-    var sel = document.getElementById('bgSelect');
-    if (!sel) return;
-    var current = 'matrix';
-    try {
-      var canvasEl = document.getElementById('bg-canvas');
-      current = localStorage.getItem('tsv-bg') || (canvasEl && canvasEl.getAttribute('data-bg')) || 'matrix';
-    } catch (e) {}
-    sel.value = current;
-    sel.addEventListener('change', function () {
-      var m = sel.value;
-      try { localStorage.setItem('tsv-bg', m); } catch (e) {}
-      // reload so the engine re-initialises in the chosen mode
-      window.location.href = window.location.pathname + '?bg=' + m + window.location.hash;
-    });
-  }
+  // ─── Floating TOC ─────────────────────────────────────────────────────────
+  function initTOC() {
+    var panel = document.getElementById('tocPanel');
+    var nav = document.getElementById('tocNav');
+    if (!panel || !nav) return;
 
-  // ─── Parallax (subtle; respects reduced-motion) ───────────────────────────
-  function initParallax() {
-    if (reduceMotion) return;
-    var nodes = document.querySelectorAll('[data-parallax]');
-    if (!nodes.length) return;
-    var ticking = false;
-    function apply() {
-      var y = window.scrollY;
-      nodes.forEach(function (n) {
-        var f = parseFloat(n.getAttribute('data-parallax')) || 0;
-        n.style.transform = 'translate3d(0,' + (y * f).toFixed(1) + 'px,0)';
+    var headings = document.querySelectorAll('.prose h2, .prose h3, .prose h4');
+    if (headings.length < 2) { panel.style.display = 'none'; return; }
+
+    var items = [];
+    headings.forEach(function (h) {
+      if (!h.id) return;
+      var a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.className = 'toc-link toc-link--' + h.tagName.toLowerCase();
+      // Get text without the heading-anchor icon appended by initContentEnhancements
+      var clone = h.cloneNode(true);
+      var icon = clone.querySelector('.heading-anchor');
+      if (icon) icon.remove();
+      a.textContent = clone.textContent.trim();
+      a.title = a.textContent;
+      nav.appendChild(a);
+      items.push({ id: h.id, el: h, link: a });
+    });
+
+    var activeId = null;
+    function setActive(id) {
+      if (id === activeId) return;
+      activeId = id;
+      items.forEach(function (item) {
+        item.link.classList.toggle('is-active', item.id === id);
       });
-      ticking = false;
     }
-    window.addEventListener('scroll', function () {
-      if (!ticking) { requestAnimationFrame(apply); ticking = true; }
-    }, { passive: true });
-    apply();
+
+    var OFFSET = 80; // nav height + buffer
+
+    function onScroll() {
+      var current = items[0] && items[0].id;
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].el.getBoundingClientRect().top < OFFSET) {
+          current = items[i].id;
+        }
+      }
+      if (current) setActive(current);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   }
 
   // ─── Boot ─────────────────────────────────────────────────────────────────
   function start() {
     initContentEnhancements();
+    initTOC();
     initGlitch();
     initNavTerm();
-    initBgSwitch();
-    initParallax();
     var isHome = document.documentElement.getAttribute('data-page') === 'home';
     function go() { initReveals(); if (isHome) typeBio(); }
     if (document.getElementById('boot')) { runBoot(go); } else { go(); }

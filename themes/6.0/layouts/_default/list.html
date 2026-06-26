@@ -5,8 +5,10 @@
 <div class="archive" data-scene="archive">
   <div class="container">
     <header class="archive-header" data-reveal="up">
-      <p class="section-cmd"><span class="prompt">$</span> ls -la /var/log/vault/{{ if .IsHome }}all{{ else }}{{ .Title | urlize }}{{ end }}/</p>
-      <h1 class="archive-title glitch" data-text="{{ if .IsHome }}All Logs{{ else }}{{ .Title }}{{ end }}">{{ if .IsHome }}All Logs{{ else }}{{ .Title }}{{ end }}</h1>
+      <p class="section-cmd"><span class="prompt">$</span> ls -la /var/log/vault/{{ if .IsHome }}all{{ else }}{{ .Title
+        | urlize }}{{ end }}/</p>
+      <h1 class="archive-title glitch" data-text="{{ if .IsHome }}All Posts{{ else }}{{ .Title }}{{ end }}">{{ if
+        .IsHome }}All Posts{{ else }}{{ .Title }}{{ end }}</h1>
       <p class="archive-sub">// {{ len $all }} entries on application security, vulnerabilities and research</p>
     </header>
 
@@ -15,7 +17,6 @@
       {{ $postPermalink := $p.Permalink }}
       <article class="post-card" data-reveal="up" data-reveal-delay="{{ mul (mod $i 3) 70 }}">
         <div class="term-bar" aria-hidden="true">
-          <span class="dot dot--r"></span><span class="dot dot--y"></span><span class="dot dot--g"></span>
           <span class="term-title">{{ $p.Date.Format "2006-01-02" }}.md</span>
         </div>
         {{ with $p.Params.preview }}

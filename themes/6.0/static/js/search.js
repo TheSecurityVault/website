@@ -1,179 +1,233 @@
 /**
- * Search functionality for The Security Vault (theme 5.0)
- * Uses lunr.js for client-side full-text search.
- * Handles both:
- *   1. The search overlay (navbar search button)
- *   2. The /search page (full-page search)
+ * search.js — client-side search (lunr.js).
+ * Handles both the search overlay and the /search page.
+ * No innerHTML — all DOM built via createElement/appendChild.
  */
-
 (function () {
   'use strict';
 
-  // Build the lunr index once
-  let idx = null;
-  function buildIndex() {
-    if (idx || !window.searchIndex) return;
-    idx = lunr(function () {
-      this.ref('id');
-      this.field('title', { boost: 15 });
-      this.field('tags');
-      this.field('content', { boost: 10 });
+  try {
+    var idx = null;
 
-      for (const key in window.searchIndex) {
-        this.add({
-          id: key,
-          title: window.searchIndex[key].title,
-          tags: (window.searchIndex[key].tags || []).join(' '),
-          content: window.searchIndex[key].content
-        });
-      }
-    });
-  }
-
-  function getResults(query) {
-    if (!query || query.trim().length < 2) return [];
-    buildIndex();
-    if (!idx) return [];
-    try {
-      return idx.search(query.trim() + '*');
-    } catch (e) {
-      return idx.search(query.trim());
+    function buildIndex() {
+      if (idx || !window.searchIndex) return;
+      idx = lunr(function () {
+        this.ref('id');
+        this.field('title', { boost: 15 });
+        this.field('tags');
+        this.field('content', { boost: 10 });
+        for (var key in window.searchIndex) {
+          this.add({
+            id: key,
+            title: window.searchIndex[key].title,
+            tags: (window.searchIndex[key].tags || []).join(' '),
+            content: window.searchIndex[key].content
+          });
+        }
+      });
     }
-  }
 
-  // ─── Overlay search ──────────────────────────────────────────────────────────
-  const overlayInput = document.getElementById('search');
-  const overlayResults = document.getElementById('search-results');
+    function getResults(query) {
+      if (!query || query.trim().length < 2) return [];
+      buildIndex();
+      if (!idx) return [];
+      var results;
+      try { results = idx.search(query.trim() + '*'); }
+      catch (e) { results = idx.search(query.trim()); }
+      results.sort(function (a, b) {
+        var da = (window.searchIndex[a.ref] || {}).date || 0;
+        var db = (window.searchIndex[b.ref] || {}).date || 0;
+        return db - da;
+      });
+      return results;
+    }
 
-  if (overlayInput && overlayResults) {
-    overlayInput.addEventListener('input', function () {
-      const q = this.value.trim();
-      if (!q) { overlayResults.innerHTML = ''; return; }
+    // ── helpers ─────────────────────────────────────────────────────────────────
+    function stripTags(str) {
+      return String(str).replace(/<[^>]*>/g, '');
+    }
 
-      const results = getResults(q);
+    function escapeRegExp(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    // Build an excerpt with <mark> highlights. Returns a DocumentFragment.
+    function buildExcerptFrag(item, query) {
+      var term    = query.trim().toLowerCase();
+      var content = stripTags(item.content || '');
+      var i       = content.toLowerCase().indexOf(term);
+      var frag    = document.createDocumentFragment();
+
+      if (i !== -1) {
+        var R      = 120;
+        var start  = Math.max(0, i - R);
+        var end    = Math.min(content.length, i + term.length + R);
+        var snippet = content.slice(start, end);
+        if (start > 0) frag.appendChild(document.createTextNode('…'));
+
+        // Split snippet around all case-insensitive matches and highlight them
+        var re    = new RegExp('(' + escapeRegExp(term) + ')', 'gi');
+        var parts = snippet.split(re);
+        parts.forEach(function (part) {
+          if (part.toLowerCase() === term) {
+            var mark = document.createElement('mark');
+            mark.textContent = part;
+            frag.appendChild(mark);
+          } else {
+            frag.appendChild(document.createTextNode(part));
+          }
+        });
+        if (end < content.length) frag.appendChild(document.createTextNode('…'));
+      } else {
+        frag.appendChild(document.createTextNode(stripTags(item.summary || '').slice(0, 250)));
+      }
+      return frag;
+    }
+
+    // ── OVERLAY ──────────────────────────────────────────────────────────────────
+    var overlayInput   = document.querySelector('.search-overlay-input');
+    var overlayResults = document.querySelector('.search-overlay-results');
+
+    if (overlayInput && overlayResults) {
+      overlayInput.addEventListener('input', function () {
+        var q = this.value.trim();
+        // clear results
+        while (overlayResults.firstChild) overlayResults.removeChild(overlayResults.firstChild);
+        if (!q) return;
+
+        var results = getResults(q);
+        if (!results.length) {
+          var empty = document.createElement('p');
+          empty.style.cssText = 'padding:16px 20px;color:var(--color-muted);font-size:.875rem;';
+          empty.textContent = 'No results found.';
+          overlayResults.appendChild(empty);
+          return;
+        }
+
+        results.slice(0, 8).forEach(function (r) {
+          var item = window.searchIndex[r.ref];
+          if (!item) return;
+
+          var a = document.createElement('a');
+          a.href = item.url;
+          a.className = 'search-result-item';
+
+          if (item.preview) {
+            var img = document.createElement('img');
+            img.src = item.preview;
+            img.alt = '';
+            img.className = 'search-result-img';
+            img.loading = 'lazy';
+            a.appendChild(img);
+          }
+
+          var info = document.createElement('div');
+
+          var title = document.createElement('div');
+          title.className = 'search-result-title';
+          title.textContent = item.title;
+          info.appendChild(title);
+
+          var summary = document.createElement('div');
+          summary.className = 'search-result-summary';
+          summary.textContent = stripTags(item.summary || '');
+          info.appendChild(summary);
+
+          a.appendChild(info);
+          overlayResults.appendChild(a);
+        });
+      });
+
+      overlayInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+          e.preventDefault();
+          window.location.href = '/search?q=' + encodeURIComponent(this.value.trim());
+        }
+      });
+    }
+
+    // ── SEARCH PAGE ──────────────────────────────────────────────────────────────
+    var searchPageInput   = document.querySelector('.search-page-input');
+    var searchPageResults = document.querySelector('.search-page-results');
+
+    if (searchPageInput && searchPageResults) {
+      var qParam = new URLSearchParams(window.location.search).get('q');
+      if (qParam) {
+        searchPageInput.value = qParam;
+        renderPageResults(qParam, searchPageResults);
+      }
+      searchPageInput.addEventListener('input', function () {
+        renderPageResults(this.value, searchPageResults);
+      });
+    }
+
+    function renderPageResults(query, container) {
+      while (container.firstChild) container.removeChild(container.firstChild);
+      if (!query || query.trim().length < 2) return;
+
+      var results = getResults(query);
       if (!results.length) {
-        overlayResults.innerHTML = '<p style="padding:16px 20px;color:#64748B;font-size:.875rem;">No results found.</p>';
+        var empty = document.createElement('p');
+        empty.className = 'search-empty';
+        empty.style.display = 'block';
+        empty.textContent = 'No results found for "' + query + '".';
+        container.appendChild(empty);
         return;
       }
 
-      const html = results.slice(0, 8).map(function (r) {
-        const item = window.searchIndex[r.ref];
-        if (!item) return '';
-        const img = item.preview
-          ? `<img src="${item.preview}" alt="" class="search-result-img" loading="lazy">`
-          : '';
-        return `<a href="${item.url}" class="search-result-item">
-          ${img}
-          <div>
-            <div class="search-result-title">${escapeHtml(item.title)}</div>
-            <div class="search-result-summary">${escapeHtml(stripTags(item.summary || ''))}</div>
-          </div>
-        </a>`;
-      }).join('');
+      results.forEach(function (r) {
+        var item = window.searchIndex[r.ref];
+        if (!item) return;
 
-      overlayResults.innerHTML = html;
-    });
+        var article = document.createElement('article');
+        article.className = 'post-card';
 
-    // Navigate to search page on Enter
-    overlayInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim()) {
-        e.preventDefault();
-        window.location = '/search?q=' + encodeURIComponent(this.value.trim());
-      }
-    });
-  }
+        if (item.preview) {
+          var imgLink = document.createElement('a');
+          imgLink.href = item.url;
+          imgLink.className = 'post-card-img-link';
+          imgLink.tabIndex = -1;
+          imgLink.setAttribute('aria-hidden', 'true');
+          var img = document.createElement('img');
+          img.src = item.preview;
+          img.alt = '';
+          img.className = 'post-card-img';
+          img.loading = 'lazy';
+          imgLink.appendChild(img);
+          article.appendChild(imgLink);
+        }
 
-  // ─── Search page ─────────────────────────────────────────────────────────────
-  const pageInput = document.getElementById('search'); // reused id on search page
-  const pageResults = document.getElementById('search-results');
+        var body = document.createElement('div');
+        body.className = 'post-card-body';
 
-  // The search page check: if we have a .search-page-input, wire up differently
-  const searchPageInput = document.querySelector('.search-page-input');
-  const searchPageResults = pageResults;
+        var h3 = document.createElement('h3');
+        h3.className = 'post-card-title';
+        var titleLink = document.createElement('a');
+        titleLink.href = item.url;
+        titleLink.textContent = item.title;
+        h3.appendChild(titleLink);
+        body.appendChild(h3);
 
-  if (searchPageInput && searchPageResults) {
-    // Populate from URL query param on load
-    const qParam = new URLSearchParams(window.location.search).get('q');
-    if (qParam) {
-      searchPageInput.value = qParam;
-      renderPageResults(qParam, searchPageResults);
+        var excerpt = document.createElement('p');
+        excerpt.className = 'post-card-excerpt';
+        excerpt.appendChild(buildExcerptFrag(item, query));
+        body.appendChild(excerpt);
+
+        var meta = document.createElement('div');
+        meta.className = 'post-card-meta';
+        var readMore = document.createElement('a');
+        readMore.href = item.url;
+        readMore.className = 'btn btn--ghost btn--sm';
+        readMore.textContent = 'Read more →';
+        meta.appendChild(readMore);
+        body.appendChild(meta);
+
+        article.appendChild(body);
+        container.appendChild(article);
+      });
     }
 
-    searchPageInput.addEventListener('input', function () {
-      renderPageResults(this.value, searchPageResults);
-    });
+  } catch (e) {
+    if (typeof console !== 'undefined') console.warn('[search]', e);
   }
-
-  function renderPageResults(query, container) {
-    if (!query || query.trim().length < 2) { container.innerHTML = ''; return; }
-    const results = getResults(query);
-
-    if (!results.length) {
-      container.innerHTML = '<p class="search-empty" style="display:block">No results found for "' + escapeHtml(query) + '".</p>';
-      return;
-    }
-
-    const html = results.map(function (r) {
-      const item = window.searchIndex[r.ref];
-      if (!item) return '';
-      const img = item.preview
-        ? `<a href="${item.url}" class="post-card-img-link" tabindex="-1" aria-hidden="true"><img src="${item.preview}" alt="" class="post-card-img" loading="lazy"></a>`
-        : '';
-      const excerpt = buildExcerpt(item, query);
-      return `<article class="post-card">
-        ${img}
-        <div class="post-card-body">
-          <h3 class="post-card-title"><a href="${item.url}">${escapeHtml(item.title)}</a></h3>
-          <p class="post-card-excerpt">${excerpt}</p>
-          <div class="post-card-meta"><a href="${item.url}" class="btn btn--ghost btn--sm">Read more →</a></div>
-        </div>
-      </article>`;
-    }).join('');
-
-    container.innerHTML = html;
-  }
-
-  // Find the query term in content and return a highlighted snippet.
-  // Falls back to the article summary when no match is found in body text.
-  function buildExcerpt(item, query) {
-    const term = query.trim().toLowerCase();
-    const content = stripTags(item.content || '');
-    const idx = content.toLowerCase().indexOf(term);
-
-    if (idx !== -1) {
-      const snippetRadius = 120;
-      const start = Math.max(0, idx - snippetRadius);
-      const end = Math.min(content.length, idx + term.length + snippetRadius);
-      const prefix = start > 0 ? '…' : '';
-      const suffix = end < content.length ? '…' : '';
-      const snippet = content.slice(start, end);
-      // Highlight all occurrences of the term (case-insensitive)
-      const highlighted = snippet.replace(
-        new RegExp('(' + escapeRegExp(term) + ')', 'gi'),
-        '<mark>$1</mark>'
-      );
-      return prefix + highlighted + suffix;
-    }
-
-    // Term not found verbatim — show summary (lunr may have matched a stemmed form)
-    return escapeHtml(stripTags(item.summary || '').slice(0, 250));
-  }
-
-  function escapeRegExp(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
-
-  // ─── Helpers ─────────────────────────────────────────────────────────────────
-  function escapeHtml(str) {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-
-  function stripTags(str) {
-    return String(str).replace(/<[^>]*>/g, '');
-  }
-
 })();

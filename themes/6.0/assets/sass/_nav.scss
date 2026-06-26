@@ -10,14 +10,14 @@
   z-index: 100;
   display: flex;
   align-items: center;
-  background: rgba(4, 6, 10, .55);
+  background: var(--nav-bg);
   border-bottom: 1px solid transparent;
   backdrop-filter: blur(8px);
   transition: background $transition, border-color $transition;
 
   &--scrolled {
-    background: rgba(4, 6, 10, .85);
-    border-bottom-color: $color-border;
+    background: var(--nav-bg-scrolled);
+    border-bottom-color: var(--color-border);
   }
 }
 
@@ -25,6 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: nowrap;
   width: 100%;
 }
 
@@ -35,13 +36,13 @@
   font-family: $font-mono;
   font-size: 0.98rem;
   font-weight: 700;
-  color: $color-text-bright;
+  color: var(--color-text-bright);
   white-space: nowrap;
   flex: none;
 
   .nav-logo {
-    color: $color-green;
-    filter: drop-shadow(0 0 6px rgba(45, 255, 158, .5));
+    color: #0d9488;
+    filter: drop-shadow(0 0 6px rgba(13, 148, 136, .5));
   }
 
   .nav-brand-name {
@@ -49,7 +50,7 @@
   }
 
   &:hover {
-    color: $color-green;
+    color: var(--color-green);
   }
 
   @include sm {
@@ -57,48 +58,86 @@
   }
 }
 
-// ─── Interactive terminal (type a command to navigate) ──────────────────────────
-.nav-term {
+// Brand group keeps logo + visitor@vault together on the left
+.nav-brand-group {
   display: flex;
   align-items: center;
-  gap: 0;
-  flex: 1 1 auto;
-  max-width: 440px;
-  margin: 0 24px;
-  position: relative;
-  font-family: $font-mono;
-  font-size: 0.8rem;
-  padding: 7px 12px;
-  background: rgba(45, 255, 158, .04);
-  border: 1px solid $color-border;
-  border-radius: $r-sm;
-  transition: border-color $transition, box-shadow $transition;
+  gap: 10px;
+  flex: none;
+}
 
-  &:focus-within {
-    border-color: rgba(45, 255, 158, .45);
-    box-shadow: $glow-green;
+.nav-brand-user {
+  font-family: $font-mono;
+  font-size: 0.78rem;
+  color: var(--color-green);
+  opacity: 0.6;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity $transition;
+
+  &:hover {
+    opacity: 1;
   }
 
-  @include md {
+  @include sm {
     display: none;
   }
 }
 
-.nav-term-user {
-  color: $color-green;
-}
+// ─── Interactive terminal (type a command to navigate) ──────────────────────────
+.nav-term {
+  display: none; // hidden until opened via visitor@vault click
+  align-items: center;
+  gap: 0;
+  flex: 1 1 auto;
+  max-width: 440px;
+  margin: 0 16px;
+  position: relative;
+  font-family: $font-mono;
+  font-size: 0.8rem;
+  padding: 7px 12px;
+  background: rgba(var(--color-green-rgb), .04);
+  border: 1px solid var(--color-border);
+  border-radius: $r-sm;
+  white-space: nowrap;
+  overflow: visible;
+  cursor: text;
+  transition: border-color $transition, box-shadow $transition;
 
-.nav-term-colon {
-  color: $color-muted;
+  &.nav-term--open {
+    display: flex;
+
+    &:focus-within {
+      border-color: rgba(var(--color-green-rgb), .45);
+      box-shadow: var(--glow-green);
+    }
+  }
+
+  // SSH password mode: hide $, mask typed characters
+  &.nav-term--ssh-pw {
+    .nav-term-dollar { display: none; }
+    .nav-term-input {
+      color: transparent;
+      caret-color: var(--color-green);
+    }
+  }
+
+  @include sm {
+    display: none !important;
+  }
 }
 
 .nav-term-path {
-  color: $color-cyan;
+  color: var(--color-cyan);
+  margin-right: 1px;
 }
 
 .nav-term-dollar {
-  color: $color-muted;
-  margin: 0 6px 0 1px;
+  color: var(--color-muted);
+  margin: 0 6px 0 0;
   order: 0;
 }
 
@@ -114,13 +153,13 @@
   background: transparent;
   border: none;
   outline: none;
-  color: $color-text-bright;
+  color: var(--color-text-bright);
   font-family: $font-mono;
   font-size: 0.8rem;
-  caret-color: $color-green;
+  caret-color: var(--color-green);
 
   &::placeholder {
-    color: $color-muted;
+    color: var(--color-muted);
     opacity: .8;
   }
 }
@@ -136,16 +175,18 @@
   position: absolute;
   top: calc(100% + 8px);
   left: 0;
-  right: 0;
+  min-width: 320px;
   font-family: $font-mono;
   font-size: 0.76rem;
   line-height: 1.7;
-  color: $color-text;
-  background: rgba(7, 12, 19, .98);
-  border: 1px solid $color-border;
+  white-space: normal;
+  word-break: break-word;
+  color: var(--color-text);
+  background: var(--term-out-bg);
+  border: 1px solid var(--color-border);
   border-radius: $r-sm;
   padding: 10px 13px;
-  box-shadow: $shadow-panel;
+  box-shadow: var(--shadow-panel);
   display: none;
 
   &.is-active {
@@ -153,23 +194,23 @@
   }
 
   a {
-    color: $color-cyan;
+    color: var(--color-cyan);
 
     &:hover {
-      color: $color-green;
+      color: var(--color-green);
     }
   }
 
   .err {
-    color: $color-magenta;
+    color: var(--color-magenta);
   }
 
   .ok {
-    color: $color-green;
+    color: var(--color-green);
   }
 
   .muted {
-    color: $color-muted;
+    color: var(--color-muted);
   }
 }
 
@@ -182,23 +223,23 @@
 .nav-link {
   font-family: $font-mono;
   font-size: 0.82rem;
-  color: $color-text;
+  color: var(--color-text);
   padding: 7px 11px;
   border-radius: $r-sm;
   border: 1px solid transparent;
   transition: all $transition;
 
   .nav-link-key {
-    color: $color-muted;
+    color: var(--color-muted);
   }
 
   &:hover {
-    color: $color-green;
-    border-color: rgba(45, 255, 158, .3);
-    background: rgba(45, 255, 158, .06);
+    color: var(--color-green);
+    border-color: rgba(var(--color-green-rgb), .3);
+    background: rgba(var(--color-green-rgb), .06);
 
     .nav-link-key {
-      color: $color-green;
+      color: var(--color-green);
     }
   }
 }
@@ -209,17 +250,45 @@
   gap: 6px;
   font-family: $font-mono;
   font-size: 0.82rem;
-  color: $color-cyan;
+  color: var(--color-cyan);
   background: transparent;
-  border: 1px solid rgba(56, 225, 255, .3);
+  border: 1px solid rgba(var(--color-cyan-rgb), .3);
   border-radius: $r-sm;
   padding: 6px 11px;
   cursor: pointer;
   transition: all $transition;
 
   &:hover {
-    background: rgba(56, 225, 255, .1);
-    box-shadow: $glow-cyan;
+    background: rgba(var(--color-cyan-rgb), .1);
+    box-shadow: var(--glow-cyan);
+  }
+}
+
+// ─── Theme toggle button ───────────────────────────────────────────────────────
+.nav-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: $r-sm;
+  cursor: pointer;
+  transition: all $transition;
+  color: var(--color-muted);
+  flex: none;
+
+  svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+  }
+
+  &:hover {
+    color: var(--color-amber);
+    border-color: rgba(var(--color-amber-rgb), .5);
+    background: rgba(var(--color-amber-rgb), .08);
   }
 }
 
@@ -232,7 +301,7 @@
   width: 40px;
   height: 36px;
   background: transparent;
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   border-radius: $r-sm;
   cursor: pointer;
   padding: 0 9px;
@@ -241,7 +310,7 @@
     display: block;
     height: 2px;
     width: 100%;
-    background: $color-green;
+    background: var(--color-green);
     transition: transform $transition, opacity $transition;
   }
 }
@@ -259,8 +328,8 @@
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    background: rgba(7, 12, 19, .97);
-    border-bottom: 1px solid $color-border;
+    background: var(--menu-bg);
+    border-bottom: 1px solid var(--color-border);
     padding: 12px 16px 18px;
     transform: translateY(-12px);
     opacity: 0;
@@ -282,6 +351,21 @@
     width: 100%;
     justify-content: flex-start;
   }
+
+  .nav-theme-btn {
+    width: 100%;
+    height: 44px;
+    justify-content: flex-start;
+    padding: 0 12px;
+    gap: 8px;
+    border-radius: $r-sm;
+
+    &::after {
+      content: attr(data-label);
+      font-family: $font-mono;
+      font-size: 0.82rem;
+    }
+  }
 }
 
 // ─── Search overlay ────────────────────────────────────────────────────────────
@@ -293,7 +377,7 @@
   align-items: flex-start;
   justify-content: center;
   padding: 12vh 20px 20px;
-  background: rgba(2, 4, 7, .8);
+  background: var(--search-overlay-bg);
   backdrop-filter: blur(6px);
   opacity: 0;
   visibility: hidden;
@@ -317,13 +401,13 @@
   align-items: center;
   gap: 10px;
   padding: 14px 16px;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .search-overlay-prompt,
 .search-page-prompt {
   font-family: $font-mono;
-  color: $color-green;
+  color: var(--color-green);
   font-size: 0.85rem;
   font-weight: 700;
   white-space: nowrap;
@@ -334,28 +418,28 @@
   background: transparent;
   border: none;
   outline: none;
-  color: $color-text-bright;
+  color: var(--color-text-bright);
   font-family: $font-mono;
   font-size: 1rem;
 
   &::placeholder {
-    color: $color-muted;
+    color: var(--color-muted);
   }
 }
 
 .search-overlay-close {
   font-family: $font-mono;
   font-size: 0.75rem;
-  color: $color-muted;
+  color: var(--color-muted);
   background: transparent;
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   border-radius: $r-sm;
   padding: 4px 8px;
   cursor: pointer;
 
   &:hover {
-    color: $color-green;
-    border-color: $color-green;
+    color: var(--color-green);
+    border-color: var(--color-green);
   }
 }
 
@@ -369,11 +453,11 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-bottom: 1px solid $color-border-soft;
+  border-bottom: 1px solid var(--color-border-soft);
   transition: background $transition;
 
   &:hover {
-    background: rgba(45, 255, 158, .05);
+    background: rgba(var(--color-green-rgb), .05);
   }
 }
 
@@ -382,22 +466,125 @@
   height: 52px;
   object-fit: cover;
   border-radius: $r-sm;
-  border: 1px solid $color-border;
+  border: 1px solid var(--color-border);
   flex: none;
 }
 
 .search-result-title {
-  color: $color-text-bright;
+  color: var(--color-text-bright);
   font-size: 0.92rem;
   font-weight: 600;
 }
 
 .search-result-summary {
-  color: $color-muted;
+  color: var(--color-muted);
   font-size: 0.8rem;
   font-family: $font-sans;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+// ─── Vault Unlocked — CTF success overlay ─────────────────────────────────────
+.vault-unlocked {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, .82);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity $transition, visibility $transition;
+
+  &--open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.vault-unlocked-inner {
+  width: 100%;
+  max-width: 560px;
+  background: var(--term-out-bg);
+  border: 1px solid rgba(var(--color-green-rgb), .4);
+  border-radius: $r-sm;
+  box-shadow: 0 0 40px rgba(var(--color-green-rgb), .15), var(--shadow-panel);
+  overflow: hidden;
+}
+
+.vault-unlocked-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  background: rgba(var(--color-green-rgb), .06);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.vault-unlocked-title {
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  margin-left: 6px;
+}
+
+.vault-unlocked-body {
+  padding: 18px 20px 10px;
+  font-family: $font-mono;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  max-height: 60vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+@keyframes vaultLineIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.vault-ul-line {
+  margin: 0 0 2px;
+  animation: vaultLineIn 0.2s ease;
+}
+
+.vault-ul-ok   { color: var(--color-green); }
+.vault-ul-muted { color: var(--color-muted); }
+.vault-ul-warn  { color: var(--color-amber); }
+
+.vault-ul-art {
+  font-family: $font-mono;
+  font-size: 0.6rem;
+  line-height: 1.3;
+  color: var(--color-green);
+  margin: 10px 0 14px;
+  white-space: pre;
+  overflow-x: auto;
+  filter: drop-shadow(0 0 8px rgba(var(--color-green-rgb), .5));
+  animation: vaultLineIn 0.4s ease;
+  user-select: text;
+}
+
+.vault-unlocked-close {
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  font-family: $font-mono;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  cursor: pointer;
+  text-align: center;
+  transition: color $transition;
+
+  &:hover {
+    color: var(--color-green);
+  }
 }

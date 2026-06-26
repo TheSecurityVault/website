@@ -15,7 +15,7 @@
   }
 
   pre::-webkit-scrollbar-thumb {
-    background: rgba(45, 255, 158, .25);
+    background: rgba(var(--color-green-rgb), .25);
     border-radius: 4px;
   }
 }
@@ -27,16 +27,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: $color-bg;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: $color-border;
+  background: var(--color-border);
   border-radius: 6px;
-  border: 2px solid $color-bg;
+  border: 2px solid var(--color-bg);
 
   &:hover {
-    background: $color-green-dim;
+    background: var(--color-green-dim);
   }
 }
 

@@ -15,17 +15,17 @@
   background: transparent;
   border: none;
   outline: none;
-  color: $color-text-bright;
+  color: var(--color-text-bright);
   font-family: $font-mono;
   font-size: 1.05rem;
 
   &::placeholder {
-    color: $color-muted;
+    color: var(--color-muted);
   }
 }
 
 .search-page-caret {
-  color: $color-green;
+  color: var(--color-green);
   animation: blink 1.05s steps(1) infinite;
 }
 
@@ -37,13 +37,13 @@
 
 .search-empty {
   font-family: $font-mono;
-  color: $color-muted;
+  color: var(--color-muted);
   padding: 20px 0;
 }
 
 mark {
-  background: rgba(255, 180, 84, .25);
-  color: $color-amber;
+  background: rgba(var(--color-amber-rgb), .25);
+  color: var(--color-amber);
   padding: 0 2px;
   border-radius: 2px;
 }

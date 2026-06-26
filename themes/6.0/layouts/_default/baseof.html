@@ -6,64 +6,12 @@
 </head>
 
 <body>
-  {{/* ── Background scene (mode: matrix | graph | terrain | tunnel | globe) ── */}}
-  <canvas id="bg-canvas" data-bg="{{ .Site.Params.background | default " matrix" }}" aria-hidden="true"></canvas>
-
   {{/* ── CRT / scanline / vignette overlay (pure CSS, non-interactive) ── */}}
   <div class="crt" aria-hidden="true">
     <div class="crt-scanlines"></div>
     <div class="crt-flicker"></div>
     <div class="crt-vignette"></div>
   </div>
-
-  {{ if and .IsHome .Site.Params.bootSequence }}
-  {{/* ── Boot sequence (home only; auto-skips on reduced-motion) ── */}}
-  <div class="boot" id="boot" aria-hidden="true">
-    <pre class="boot-log" id="bootLog"></pre>
-  </div>
-  {{ end }}
-
-  {{ if .Site.Params.bgSwitcher }}
-  {{/* ── Background previewer (set params.bgSwitcher: false to hide in prod) ── */}}
-  <div class="bg-switch" id="bgSwitch" aria-label="Background preview switcher">
-    <span class="bg-switch-label">▸ bg</span>
-    <select id="bgSelect" aria-label="Choose background">
-      <optgroup label="The Vault">
-        <option value="vault">vault dial</option>
-        <option value="lock">lock picking</option>
-      </optgroup>
-      <optgroup label="Threat / SOC">
-        <option value="c2">c2 console</option>
-        <option value="attackmap">attack map</option>
-        <option value="radar">radar sweep</option>
-        <option value="siem">siem log feed</option>
-      </optgroup>
-      <optgroup label="Crypto / data">
-        <option value="decrypt">decryption</option>
-        <option value="crack">hash crack</option>
-        <option value="blockchain">blockchain</option>
-      </optgroup>
-      <optgroup label="Hardware / low-level">
-        <option value="circuit">circuit board</option>
-        <option value="overflow">buffer overflow</option>
-      </optgroup>
-      <optgroup label="Terminal / glitch">
-        <option value="matrix">matrix rain</option>
-        <option value="hex">hex dump</option>
-        <option value="pentest">pentest session</option>
-        <option value="glitch">datamosh</option>
-      </optgroup>
-      <optgroup label="3D scenes">
-        <option value="morph">morph cloud</option>
-        <option value="wave">wave grid</option>
-        <option value="graph">network graph</option>
-        <option value="terrain">terrain</option>
-        <option value="tunnel">data tunnel</option>
-        <option value="globe">threat globe</option>
-      </optgroup>
-    </select>
-  </div>
-  {{ end }}
 
   {{- partial "header.html" . -}}
 

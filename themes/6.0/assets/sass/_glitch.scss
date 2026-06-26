@@ -5,8 +5,8 @@
 .glitch {
   position: relative;
   display: inline-block;
-  color: $color-text-bright;
-  text-shadow: 0 0 1px rgba(45, 255, 158, .4);
+  color: var(--color-text-bright);
+  text-shadow: 0 0 1px rgba(var(--color-green-rgb), .4);
 }
 
 .glitch::before,
@@ -19,13 +19,13 @@
 }
 
 .glitch::before {
-  color: $color-magenta;
+  color: var(--color-magenta);
   z-index: -1;
   animation: glitch-x 3.4s infinite linear alternate-reverse;
 }
 
 .glitch::after {
-  color: $color-cyan;
+  color: var(--color-cyan);
   z-index: -2;
   animation: glitch-y 2.6s infinite linear alternate-reverse;
 }
@@ -107,11 +107,17 @@
   }
 }
 
-// ─── Blinking caret ──────────────────────────────────────────────────────────────
+// ─── Blinking caret (always a thin bar, focused or not) ────────────────────────────
 .caret,
-.nav-caret {
+.nav-caret,
+.type-caret,
+.search-page-caret {
   display: inline-block;
-  color: $color-green;
+  width: 2px;
+  height: 1.05em;
+  background: var(--color-green);
+  vertical-align: text-bottom;
+  margin-left: 1px;
   animation: blink 1.05s steps(1) infinite;
 }
 
@@ -131,7 +137,9 @@
 @media (prefers-reduced-motion: reduce) {
 
   .caret,
-  .nav-caret {
+  .nav-caret,
+  .type-caret,
+  .search-page-caret {
     animation: none;
     opacity: .8;
   }
