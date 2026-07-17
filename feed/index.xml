@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Copyright 2019-{year} The Security Vault. All rights reserved.</copyright>
-    <lastBuildDate>Tue, 02 Jun 2026 15:37:27 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://thesecurityvault.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hiding Malicious Code in a Rails Project</title>
+      <link>https://thesecurityvault.com/hiding-malicious-code-in-a-rails-project/</link>
+      <pubDate>Fri, 17 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://thesecurityvault.com/hiding-malicious-code-in-a-rails-project/</guid>
+      <description>&lt;p&gt;Rails is one of those frameworks that almost everyone in the web development world has an opinion about. The people who love it praise the convention-over-configuration philosophy, the integrated tooling, the speed of going from idea to working application. The people who dislike it complain about the magic, the overhead, the opinionated structure. Both views are have their merits.&lt;/p&gt;&#xA;&lt;p&gt;But there&amp;rsquo;s one thing that&amp;rsquo;s hard to dispute: the developer experience of working with Rails is fantastic. It&amp;rsquo;s arguably the most complete web framework available today. Run &lt;code&gt;rails new&lt;/code&gt; and you get database integration, background jobs, email, caching, asset pipelines, and a test suite all wired together and working before you&amp;rsquo;ve written a single line of your own code. For a developer picking up a new Rails project, or reviewing one as part of a job interview, that completeness is great.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Protecting developers from supply chain attacks</title>
       <link>https://thesecurityvault.com/protecting-developers-from-supply-chain-attacks/</link>
